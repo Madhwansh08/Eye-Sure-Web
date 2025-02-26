@@ -7,6 +7,7 @@ import {
   Cog6ToothIcon,
 } from "@heroicons/react/24/outline";
 import LogoImage from "../../assets/logo.png";
+import { useNavigate } from "react-router-dom";
 
 // --- Mocks for Redux, auth, toast, theme toggle, and navigation ---
 
@@ -28,11 +29,7 @@ const toast = {
 const ThemeToggle = () => <button className="text-white">Toggle Theme</button>;
 
 // Mock useNavigate hook from react-router-dom
-const useNavigate = () => {
-  return (path) => {
-    console.log("Navigate to:", path);
-  };
-};
+
 
 // --- Header Component ---
 
@@ -222,7 +219,7 @@ const Header = () => {
           <div className="hidden lg:flex lg:gap-x-12 items-center">
             {/* Navigation items defined inline */}
             <AnimatedTab onClick={() => navigate("/about")}>About</AnimatedTab>
-            <AnimatedTab onClick={() => navigate("/contact")}>Retina Analysis</AnimatedTab>
+            <AnimatedTab onClick={() => navigate("/upload")}>Retina Analysis</AnimatedTab>
             {auth?.user ? (
               <>
                 <AnimatedTab onClick={() => navigate("/dashboard")}>Dashboard</AnimatedTab>

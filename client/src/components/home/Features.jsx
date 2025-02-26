@@ -112,10 +112,10 @@ const OverlayCopy = ({ subheading, heading, imgHeight }) => {
       // Removed h-screen so the overlay only covers the image area
       className="absolute left-0 top-0 w-full flex-col items-center justify-center text-white flex"
     >
-      <p className="mb-2 text-center text-xl md:mb-4 md:text-3xl">
+      {/* <p className="mb-2 text-center uppercase text-xl md:mb-4 md:text-3xl">
         {subheading}
-      </p>
-      <p className="text-center text-4xl font-bold md:text-7xl">{heading}</p>
+      </p> */}
+      <p className="text-center uppercase text-4xl font-bold md:text-7xl">{heading}</p>
     </motion.div>
   );
 };
