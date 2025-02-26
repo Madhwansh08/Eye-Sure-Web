@@ -1,0 +1,46 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    /* Background Colors */
+    --primary-bg: #ffffff;       /* Light mode primary background */
+    --secondary-bg: #f7fafc;      /* Light mode secondary background */
+    /* Text Colors */
+    --primary-text: #ffffff;     /* Light mode primary text color */
+    --secondary-text: #718096;    /* Light mode secondary text color */
+    /* Font Family: Updated to Poppins */
+    --font-family: 'Poppins', sans-serif;
+  }
+
+  /* Apply the font-family globally */
+  html, body {
+    font-family: var(--font-family);
+  }
+
+  /* Dark mode overrides (applied when a parent element has the .dark class) */
+  .dark {
+    --primary-bg: #040811;       /* Dark mode primary background */
+    --secondary-bg: #c5865c;      /* Dark mode secondary background */
+    --primary-text: #C5865C;      /* Dark mode primary text color */
+    --secondary-text: #fdfdfd;    /* Dark mode secondary text color */
+  }
+}
+
+/* Create utility classes that use the custom properties */
+@layer utilities {
+  .bg-primary {
+    background-color: var(--primary-bg);
+  }
+  .bg-secondary {
+    background-color: var(--secondary-bg);
+  }
+  .text-primary {
+    color: var(--primary-text);
+  }
+  .text-secondary {
+    color: var(--secondary-text);
+  }
+  .font-custom {
+    font-family: var(--font-family);
+  }
+}
