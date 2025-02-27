@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { loginUser } from '../../redux/slices/authSlice';
 import { useNavigate } from 'react-router-dom';
+import {toast} from 'react-toastify'
 
 const Login = () => {
   const dispatch = useDispatch();
@@ -16,6 +17,7 @@ const Login = () => {
     e.preventDefault();
     const resultAction = await dispatch(loginUser(formData));
     if (loginUser.fulfilled.match(resultAction)) {
+      toast.success('Login successful');
       navigate('/');
     } else {
       console.error('Login failed:', resultAction.payload);

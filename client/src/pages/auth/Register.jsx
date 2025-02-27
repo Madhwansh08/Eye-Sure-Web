@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { registerUser } from '../../redux/slices/authSlice';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 const Register = () => {
   const dispatch = useDispatch();
@@ -17,6 +18,7 @@ const Register = () => {
     const resultAction = await dispatch(registerUser(formData));
     if (registerUser.fulfilled.match(resultAction)) {
       // Optionally, redirect to login or automatically log in the user.
+      toast.success('Registration successful');
       navigate('/login');
     } else {
       console.error('Registration failed:', resultAction.payload);

@@ -104,7 +104,7 @@ const Analysis = () => {
               <img
                 src={leftImage}
                 alt="Left Eye"
-                className="w-64 h-64 object-contain border"
+                className="w-64 h-64 object-contain border-2 "
               />
             )}
             {rightImage && (

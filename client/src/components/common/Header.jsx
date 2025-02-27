@@ -11,6 +11,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { logoutUser } from "../../redux/slices/authSlice";
 import ThemeToggle from "./ThemeToggle";
+import {toast} from 'react-toastify'
 
 const Header = () => {
   const dispatch = useDispatch();
@@ -48,6 +49,7 @@ const Header = () => {
   const handleLogout = async () => {
     try {
       await dispatch(logoutUser());
+      toast.success("Logout successful");
       navigate("/");
       setIsDropdownOpen(false);
     } catch (error) {

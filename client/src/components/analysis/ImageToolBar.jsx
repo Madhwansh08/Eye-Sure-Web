@@ -85,7 +85,7 @@ const ImageToolBar = ({ onToggle, onAdjust }) => {
     <>
       <div
         ref={toolbarRef}
-        className="fixed bottom-10 left-1/2 transform -translate-x-1/2 z-50 flex items-end space-x-6 px-6 py-3 bg-white rounded-full shadow-lg"
+        className="fixed bottom-10 left-1/2 transform -translate-x-1/2 z-50 flex items-end space-x-6 px-6 py-3 bg-[#030811]/80 rounded-full shadow-lg"
       >
         <motion.button
           onClick={() => toggleFilter("brightness")}

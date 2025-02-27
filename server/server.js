@@ -31,6 +31,10 @@ app.get('/', (req, res) => {
 const authRoutes = require('./routes/authRoutes');
 app.use('/api/auth', authRoutes);
 
+
+const imageRoutes= require('./routes/imageRoutes');
+app.use('/api/image', imageRoutes);
+
 // Start the server
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
