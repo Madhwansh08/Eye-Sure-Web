@@ -1,22 +1,35 @@
 const express = require('express');
 const cors = require('cors');
+const cookieParser = require('cookie-parser');
+require('dotenv').config(); // Load environment variables
+
+// Connect to MongoDB
+const connectDB = require('./config/db');
+connectDB();
+
 const app = express();
-const port = 6000;
+const port = process.env.PORT || 9000;
+
+
 
 // Middleware
-app.use(cors());
+app.use(cors(
+    {
+        origin: "http://localhost:5173",
+        credentials: true
+    }
+));
 app.use(express.json());
+app.use(cookieParser());
 
-// Routes
+// Simple home route
 app.get('/', (req, res) => {
-  res.send('Hello World!');
+  res.send('Hello Eye Sure!');
 });
 
-app.post('/uploadimages', (req, res) => {
-  const { leftImage, rightImage } = req.body;
-  // Mock response for image upload
-  res.json({ message: 'Images successfully uploaded!', leftImage, rightImage });
-});
+// Authentication routes
+const authRoutes = require('./routes/authRoutes');
+app.use('/api/auth', authRoutes);
 
 // Start the server
 app.listen(port, () => {

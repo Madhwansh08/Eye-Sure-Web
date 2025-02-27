@@ -8,34 +8,13 @@ import {
 } from "@heroicons/react/24/outline";
 import LogoImage from "../../assets/logo.png";
 import { useNavigate } from "react-router-dom";
-
-// --- Mocks for Redux, auth, toast, theme toggle, and navigation ---
-
-// Mock useDispatch: no-op function
-const useDispatch = () => () => {};
-
-// Mock useSelector: returns a dummy auth object
-const useSelector = () => ({
-  user: { name: "John Doe", email: "john.doe@example.com" },
-  profilePicture: null,
-});
-
-// Mock toast: simply logs the message
-const toast = {
-  success: (msg) => console.log("Toast:", msg),
-};
-
-// Mock ThemeToggle component
-const ThemeToggle = () => <button className="text-white">Toggle Theme</button>;
-
-// Mock useNavigate hook from react-router-dom
-
-
-// --- Header Component ---
+import { useDispatch, useSelector } from "react-redux";
+import { logoutUser } from "../../redux/slices/authSlice";
+import ThemeToggle from "./ThemeToggle";
 
 const Header = () => {
   const dispatch = useDispatch();
-  const auth = useSelector();
+  const { user } = useSelector((state) => state.auth);
   const navigate = useNavigate();
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -43,7 +22,6 @@ const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
-  // Listen for window resize and scroll events
   useEffect(() => {
     const handleResize = () => {
       setIsDesktop(window.innerWidth >= 1024);
@@ -67,17 +45,18 @@ const Header = () => {
   const toggleMenu = () => setIsMenuOpen((prev) => !prev);
   const toggleDropdown = () => setIsDropdownOpen((prev) => !prev);
 
-  const handleLogout = () => {
-    // Mock clearing auth actions
-    toast.success("User Logged Out");
-    navigate("/");
-    setIsDropdownOpen(false);
+  const handleLogout = async () => {
+    try {
+      await dispatch(logoutUser());
+      navigate("/");
+      setIsDropdownOpen(false);
+    } catch (error) {
+      console.error("Logout error:", error);
+    }
   };
 
-  // Animated tab component for desktop nav links
   const AnimatedTab = ({ children, onClick }) => {
     const [isHovered, setIsHovered] = useState(false);
-
     return (
       <div
         className="relative cursor-pointer px-3 py-2"
@@ -107,7 +86,6 @@ const Header = () => {
     );
   };
 
-  // Avatar dropdown for logged-in users
   const AvatarDropdown = () => {
     const dropdownRef = useRef(null);
 
@@ -135,14 +113,18 @@ const Header = () => {
             if (e.key === "Enter" || e.key === " ") toggleDropdown();
           }}
         >
-          {auth?.profilePicture ? (
-            <img
-              src={auth.profilePicture}
-              alt="Profile"
-              className="w-10 h-10 rounded-full object-cover"
-            />
+          {user ? (
+            user.profilePicture ? (
+              <img
+                src={user.profilePicture}
+                alt="Profile"
+                className="w-10 h-10 rounded-full object-cover"
+              />
+            ) : (
+              <span>{user.name?.[0]?.toUpperCase() || "U"}</span>
+            )
           ) : (
-            <span>{auth?.user?.name?.[0]?.toUpperCase() || "U"}</span>
+            <span>U</span>
           )}
         </div>
         <AnimatePresence>
@@ -155,22 +137,22 @@ const Header = () => {
               transition={{ duration: 0.2 }}
             >
               <div className="flex items-center space-x-3 mb-4">
-                {auth?.profilePicture ? (
+                {user && user.profilePicture ? (
                   <img
-                    src={auth.profilePicture}
+                    src={user.profilePicture}
                     alt="Profile"
                     className="w-12 h-12 rounded-full object-cover"
                   />
                 ) : (
                   <div className="w-12 h-12 bg-gray-800 rounded-full flex items-center justify-center text-white">
-                    {auth?.user?.name?.[0]?.toUpperCase() || "U"}
+                    {user?.name?.[0]?.toUpperCase() || "U"}
                   </div>
                 )}
                 <div className="flex flex-col">
                   <p className="font-semibold text-sm text-white">
-                    {auth?.user?.name || "Unknown User"}
+                    {user?.name || "Unknown User"}
                   </p>
-                  <p className="text-xs text-gray-400">{auth?.user?.email}</p>
+                  <p className="text-xs text-gray-400">{user?.email}</p>
                 </div>
               </div>
               <hr className="mb-3 border-gray-600" />
@@ -217,16 +199,18 @@ const Header = () => {
         </div>
         {isDesktop ? (
           <div className="hidden lg:flex lg:gap-x-12 items-center">
-            {/* Navigation items defined inline */}
             <AnimatedTab onClick={() => navigate("/about")}>About</AnimatedTab>
             <AnimatedTab onClick={() => navigate("/upload")}>Retina Analysis</AnimatedTab>
-            {auth?.user ? (
+            {user ? (
               <>
                 <AnimatedTab onClick={() => navigate("/dashboard")}>Dashboard</AnimatedTab>
                 <AvatarDropdown />
               </>
             ) : (
-              <AnimatedTab onClick={() => navigate("/login")}>Log in</AnimatedTab>
+              <>
+                <AnimatedTab onClick={() => navigate("/login")}>Log in</AnimatedTab>
+                {/* <AnimatedTab onClick={() => navigate("/register")}>Register</AnimatedTab> */}
+              </>
             )}
           </div>
         ) : (
@@ -278,25 +262,25 @@ const Header = () => {
                 </button>
               </div>
               <div className="mt-6">
-                {auth?.user ? (
+                {user ? (
                   <>
                     <div className="flex items-center space-x-3 mb-4">
-                      {auth?.profilePicture ? (
+                      {user && user.profilePicture ? (
                         <img
-                          src={auth.profilePicture}
+                          src={user.profilePicture}
                           alt="Profile"
                           className="w-12 h-12 rounded-full object-cover"
                         />
                       ) : (
                         <div className="w-12 h-12 bg-gray-700 rounded-full flex items-center justify-center text-white">
-                          {auth?.user?.name?.[0]?.toUpperCase() || "U"}
+                          {user.name?.[0]?.toUpperCase() || "U"}
                         </div>
                       )}
                       <div className="flex flex-col">
                         <p className="font-semibold text-sm text-white">
-                          {auth?.user?.name || "Unknown User"}
+                          {user?.name || "Unknown User"}
                         </p>
-                        <p className="text-xs text-gray-400">{auth?.user?.email}</p>
+                        <p className="text-xs text-gray-400">{user?.email}</p>
                       </div>
                     </div>
                     <button
@@ -329,15 +313,26 @@ const Header = () => {
                     <hr className="mb-4 border-gray-600" />
                   </>
                 ) : (
-                  <button
-                    onClick={() => {
-                      navigate("/login");
-                      setIsMenuOpen(false);
-                    }}
-                    className="block w-full rounded-lg px-4 py-2 mb-4 text-base font-semibold text-white hover:bg-gray-700"
-                  >
-                    Log in
-                  </button>
+                  <>
+                    <button
+                      onClick={() => {
+                        navigate("/login");
+                        setIsMenuOpen(false);
+                      }}
+                      className="block w-full rounded-lg px-4 py-2 mb-4 text-base font-semibold text-white hover:bg-gray-700"
+                    >
+                      Log in
+                    </button>
+                    <button
+                      onClick={() => {
+                        navigate("/register");
+                        setIsMenuOpen(false);
+                      }}
+                      className="block w-full rounded-lg px-4 py-2 mb-4 text-base font-semibold text-white hover:bg-gray-700"
+                    >
+                      Register
+                    </button>
+                  </>
                 )}
                 <button
                   onClick={() => {

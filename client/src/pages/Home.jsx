@@ -11,19 +11,48 @@ import Research from "../components/home/Research";
 import Testimonial from "../components/home/Testimonial";
 import Demo from "../components/home/Demo";
 import Contact from "../components/home/Contact";
+import { useSelector } from "react-redux";
 import Footer from "../components/common/Footer";
 
 const Home = () => {
-    useEffect(() => {
-        AOS.init({ duration: 600, easing: "ease-in-out", once: true }); // Duration of animation and trigger once
-      }, []);
-    
-      // Setting up intersection observer to trigger count-up when section is in view
-      const { ref, inView } = useInView({
-        triggerOnce: true, // trigger only once on first scroll into view
-        threshold: 0.5, // Trigger when 50% of the element is visible
-      });
+  // Initialize AOS for animations
+  useEffect(() => {
+    AOS.init({ duration: 600, easing: "ease-in-out", once: true });
+  }, []);
 
+  // Setup intersection observer for triggering count-up animations
+  const { ref, inView } = useInView({
+    triggerOnce: true,
+    threshold: 0.5,
+  });
+
+  // Custom throttle function to limit how often a function is executed
+  const throttle = (func, delay) => {
+    let lastCall = 0;
+    return (...args) => {
+      const now = new Date().getTime();
+      if (now - lastCall < delay) return;
+      lastCall = now;
+      return func(...args);
+    };
+  };
+
+  // Throttled scroll event listener for smooth scroll handling
+  useEffect(() => {
+    const handleScroll = throttle(() => {
+      // Replace this with any smooth scroll logic you might need
+      console.log("Throttled scroll event triggered");
+    }, 100); // Adjust delay (in ms) as needed
+
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
+
+  const auth=useSelector((state)=>state.auth);
+  console.log(auth);
 
   return (
     <div className="bg-primary flex flex-col min-h-screen">
@@ -36,15 +65,13 @@ const Home = () => {
       >
         <div className="max-w-5xl px-4 mx-auto sm:px-6 lg:px-8">
           <div className="max-w-2xl mx-auto text-center">
-            <h2 className="text-3xl font-bold whitespace-nowrap leading-tight  text-secondary sm:text-4xl lg:text-6xl">
+            <h2 className="text-3xl font-bold whitespace-nowrap leading-tight text-secondary sm:text-4xl lg:text-6xl">
               Our results in numbers
             </h2>
-     
           </div>
-
           <div className="grid grid-cols-1 gap-8 mt-10 text-center lg:mt-24 sm:gap-x-8 md:grid-cols-3">
             <div>
-              <h3 className="font-bold text-7xl text-transparent  bg-clip-text bg-gradient-to-r text-primary">
+              <h3 className="font-bold text-7xl text-transparent bg-clip-text bg-gradient-to-r text-primary">
                 {inView && (
                   <CountUp start={0} end={97} duration={2.5} suffix="%" />
                 )}
@@ -85,28 +112,26 @@ const Home = () => {
       </section> */}
       <section>
         <div className="flex flex-col items-center justify-center py-5 mt-5 bg-primary sm:py-16 lg:py-24">
-          
           <h2 className="text-3xl font-bold text-center text-secondary sm:text-4xl lg:text-6xl">
             Our Features
           </h2>
         </div>
-        <Features/>
+        <Features />
       </section>
       <section>
-        <Research/>
+        <Research />
       </section>
       <section>
-        <Testimonial/>
+        <Testimonial />
       </section>
       <section>
-        <Demo/>
+        <Demo />
       </section>
       <section>
-        <Contact/>
+        <Contact />
       </section>
-     <Footer/>
+      <Footer />
     </div>
-
   );
 };
 
