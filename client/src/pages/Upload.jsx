@@ -113,13 +113,13 @@ const Upload = () => {
             <div className="flex flex-row items-start justify-center gap-8">
               {/* Left Image Upload */}
               <div className="flex flex-col items-center">
-                <label
+                <button
                   className="cursor-pointer dark:bg-[#030811] bg-[#fdfdfd] border-2 shadow-lg shadow-[#c5865c] border-[#c5865c] dark:text-[#f2ebe3] text-[#030811] py-4 px-10 rounded-full text-lg font-medium transition-all duration-300 hover:shadow-lg hover:shadow-[#c5865c]/50 flex items-center gap-2"
                   onClick={() => openFilePicker("left")}
                 >
                   Upload Left Image
                   <TfiUpload className="dark:text-[#f2ebe3] text-[#030811] m-1 pl-1 text-xl" />
-                </label>
+                </button>
                 <input
                   type="file"
                   ref={leftInputRef}
@@ -138,13 +138,13 @@ const Upload = () => {
 
               {/* Right Image Upload */}
               <div className="flex flex-col items-center">
-                <label
+                <button
                   className="cursor-pointer dark:bg-[#030811] bg-[#fdfdfd] border-2 shadow-lg shadow-[#c5865c] border-[#c5865c] dark:text-[#f2ebe3] text-[#030811] py-4 px-10 rounded-full text-lg font-medium transition-all duration-300 hover:shadow-lg hover:shadow-[#c5865c]/50 flex items-center gap-2"
                   onClick={() => openFilePicker("right")}
                 >
                   Upload Right Image
                   <TfiUpload className="dark:text-[#f2ebe3] text-[#030811] m-1 pl-1 text-xl" />
-                </label>
+                </button>
                 <input
                   type="file"
                   ref={rightInputRef}
