@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
 import Header from "../components/common/Header";
@@ -14,13 +14,16 @@ import {
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import API_URL from "../utils/config";
+import DetailModal from "../components/upload/DetailModal";
 
 const Upload = () => {
   const dispatch = useDispatch();
-  const navigate=useNavigate();
+  const navigate = useNavigate();
   const { croppingImage, croppingSide, leftImage, rightImage } = useSelector(
     (state) => state.images
   );
+  
+  const [showDetailModal, setShowDetailModal] = useState(false);
 
   const leftInputRef = useRef(null);
   const rightInputRef = useRef(null);
@@ -38,9 +41,7 @@ const Upload = () => {
   const handleFileChange = async (e, side) => {
     const file = e.target.files[0];
     if (file) {
-      // Convert file to Base64
       const base64String = await convertFileToBase64(file);
-      // Dispatch base64 to Redux
       dispatch(setCroppingImage({ image: base64String, side }));
     }
   };
@@ -54,7 +55,6 @@ const Upload = () => {
   };
 
   const handleCropSave = (croppedUrl) => {
-    // croppedUrl is the final cropped image (object URL or base64)
     if (croppingSide === "left") {
       dispatch(setLeftImage(croppedUrl));
     } else if (croppingSide === "right") {
@@ -68,49 +68,59 @@ const Upload = () => {
   };
 
   const handleAnalyze = async () => {
-    // Validation: Ensure both images are present
     if (!leftImage || !rightImage) {
       alert("Please upload and crop both images before analyzing.");
       return;
     }
-    
+  
     try {
-      // Create a FormData instance and append both images under the key "file"
-      const formData = new FormData();
+      // Create separate FormData instances for each image.
+      const formDataLeft = new FormData();
+      const formDataRight = new FormData();
   
       // Convert Base64 images to Blob objects.
       const leftBlob = await (await fetch(leftImage)).blob();
       const rightBlob = await (await fetch(rightImage)).blob();
   
-      // Append both files using the same key ("file") as required by your Node API.
-      formData.append("file", leftBlob, "left_image.jpg");
-      formData.append("file", rightBlob, "right_image.jpg");
+      formDataLeft.append("file", leftBlob, "left_image.jpg");
+      formDataRight.append("file", rightBlob, "right_image.jpg");
   
-      // Send POST request to your Node server endpoint.
-      const response = await axios.post(`${API_URL}/api/image/upload`, formData, {
-        headers: { "Content-Type": "multipart/form-data" ,
-        "Access-Control-Allow-Origin": "*",
-
-         },
-         withCredentials: true
-
-       
-      });
+      // Make API calls concurrently.
+      const [leftResponse, rightResponse] = await Promise.all([
+        axios.post(`${API_URL}/api/image/upload`, formDataLeft, {
+          headers: { "Content-Type": "multipart/form-data" },
+          withCredentials: true,
+        }),
+        axios.post(`${API_URL}/api/image/upload`, formDataRight, {
+          headers: { "Content-Type": "multipart/form-data" },
+          withCredentials: true,
+        }),
+      ]);
   
-      // Assuming the API returns an object like { prediction: "0" } or { prediction: "1" }
-      const { prediction } = response.data;
-      console.log("Prediction Result:", prediction);
+      // Convert predictions to string and trim
+      const leftPrediction = String(leftResponse.data.prediction).trim();
+      const rightPrediction = String(rightResponse.data.prediction).trim();
   
-      if (prediction.trim() === "0") {
-        toast.error("Invalid images uploaded");
-        navigate('/analysis');
-    
+      console.log("Left Prediction:", leftPrediction);
+      console.log("Right Prediction:", rightPrediction);
+  
+      if (leftPrediction === "0") {
+        toast.error("Left eye: Invalid image uploaded");
       } else {
-        toast.success("Images successfully uploaded!");
-        // Open DetailModal by setting state (or navigate, as needed)
+        toast.success("Left eye: Valid image");
+      }
+  
+      if (rightPrediction === "0") {
+        toast.error("Right eye: Invalid image uploaded");
+      } else {
+        toast.success("Right eye: Valid image");
+      }
+  
+      // If at least one image is valid, show the DetailModal; otherwise, navigate to the analysis page.
+      if (leftPrediction !== "0" || rightPrediction !== "0") {
         setShowDetailModal(true);
-        // Optionally, navigate to the analysis page if that is desired:
-        // navigate('/analysis');
+      } else {
+        navigate("/analysis");
       }
     } catch (error) {
       console.error("Error uploading images:", error);
@@ -129,18 +139,12 @@ const Upload = () => {
           Kindly Upload Both Images
         </p>
 
-        {/* Two-column layout */}
         <div className="flex flex-row w-full mt-5 px-5 gap-5">
-          {/* Left Column: Instruction Slider */}
           <div className="w-1/2">
             <InstructionSlider />
           </div>
-
-          {/* Right Column: Upload Buttons side by side */}
           <div className="w-1/2 flex flex-col items-center gap-4">
-            {/* Row for the two upload sections */}
             <div className="flex flex-row items-start justify-center gap-8">
-              {/* Left Image Upload */}
               <div className="flex flex-col items-center">
                 <button
                   className="cursor-pointer bg-primary border-2 shadow-lg shadow-[#7162d7] border-[#7162d7] text-secondary py-4 px-10 rounded-full text-lg font-medium transition-all duration-300 hover:shadow-lg hover:shadow-[#7162d7]/50 flex items-center gap-2"
@@ -164,8 +168,6 @@ const Upload = () => {
                   />
                 )}
               </div>
-
-              {/* Right Image Upload */}
               <div className="flex flex-col items-center">
                 <button
                   className="cursor-pointer bg-primary border-2 shadow-lg shadow-[#7162d7] border-[#7162d7] text-secondary py-4 px-10 rounded-full text-lg font-medium transition-all duration-300 hover:shadow-lg hover:shadow-[#7162d7]/50 flex items-center gap-2"
@@ -190,8 +192,6 @@ const Upload = () => {
                 )}
               </div>
             </div>
-
-            {/* Show Analyze button only if both images exist */}
             {leftImage && rightImage && (
               <button
                 onClick={handleAnalyze}
@@ -203,16 +203,16 @@ const Upload = () => {
           </div>
         </div>
 
-        {/* Crop Modal (if a base64 string is set for cropping) */}
         {croppingImage && (
           <CropModal
-            image={croppingImage} // base64 string
+            image={croppingImage}
             side={croppingSide}
             onCropSave={handleCropSave}
             onClose={handleClose}
           />
         )}
       </div>
+      {showDetailModal && <DetailModal onClose={() => setShowDetailModal(false)} />}
     </div>
   );
 };

@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const reportSchema = new Schema({
+
   leftFundusImage: {
     type: String,
     required: true,
@@ -14,23 +15,25 @@ const reportSchema = new Schema({
   },
   reannotationLabel: {
     type: String,
-    required: true,
     trim: true
   },
   reannotationCoordinates: {
     type: [Number],
-    required: true
   },
   explainableAiLeftFundusImage: {
     type: String,
-    required: true,
     trim: true
   },
   explainableAiRightFundusImage: {
     type: String,
-    required: true,
     trim: true
-  }
+  },
+  patientId: {
+    type: Schema.Types.ObjectId,
+    ref: 'Patient',
+    required: true
+  },
 }, { timestamps: true });
 
-module.exports = reportSchema;
+// Compile the schema into a model and export it.
+module.exports = mongoose.model('Report', reportSchema);

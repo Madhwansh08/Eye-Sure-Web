@@ -35,6 +35,14 @@ app.use('/api/auth', authRoutes);
 const imageRoutes= require('./routes/imageRoutes');
 app.use('/api/image', imageRoutes);
 
+
+const patientRoutes= require('./routes/patientRoutes');
+app.use('/api/patient', patientRoutes);
+
+
+const reportRoutes=require('./routes/reportRoutes')
+app.use('/api/report', reportRoutes); 
+
 // Start the server
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);

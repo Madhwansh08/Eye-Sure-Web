@@ -1,96 +1,83 @@
 // src/components/DetailModal.jsx
 import React, { useState } from "react";
 import { motion } from "framer-motion";
+import { FiPlus, FiUser } from "react-icons/fi";
+import PatientModal from "./PatientModal";
+import ExistingPatientModal from "./ExistingPatientModal";
+import axios from "axios";
+import API_URL from "../../utils/config";
+import { toast } from "react-toastify";
 
 const DetailModal = ({ onClose }) => {
-  const [patientId, setPatientId] = useState("");
-  const [age, setAge] = useState("");
-  const [patientName, setPatientName] = useState("");
-  const [gender, setGender] = useState("");
+  const [showPatientModal, setShowPatientModal] = useState(false);
+  const [showExistingPatientModal, setShowExistingPatientModal] = useState(false);
+  const [generatedPatientId, setGeneratedPatientId] = useState("");
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const formData = { patientId, age, patientName, gender };
-    console.log("Submitted details:", formData);
-    // Here you could send formData to your backend
-    onClose();
+  const handleNewPatient = async () => {
+    try {
+      const response = await axios.post(`${API_URL}/api/patient/create`, {}, { withCredentials: true });
+      const newPatientId = response.data.patientId;
+      console.log("New patient ID:", newPatientId);
+      setGeneratedPatientId(newPatientId);
+      setShowPatientModal(true);
+    } catch (error) {
+      console.error("Error creating new patient:", error);
+      toast.error("Failed to create new patient");
+    }
+  };
+
+  const handleExistingPatient = () => {
+    setShowExistingPatientModal(true);
   };
 
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50"
-    >
+    <>
       <motion.div
-        initial={{ scale: 0.8 }}
-        animate={{ scale: 1 }}
-        className="bg-white p-8 rounded-lg shadow-lg w-96"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-70"
       >
-        <h2 className="text-2xl font-bold mb-4">Patient Details</h2>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium">Patient ID</label>
-            <input
-              type="text"
-              value={patientId}
-              onChange={(e) => setPatientId(e.target.value)}
-              className="mt-1 w-full border rounded px-3 py-2"
-              required
-            />
+        <motion.div
+          initial={{ scale: 0.8 }}
+          animate={{ scale: 1 }}
+          className="bg-primary p-10 rounded-lg shadow-lg w-full max-w-2xl"
+        >
+          <div className="flex flex-row space-x-8">
+            <div className="flex-1 flex flex-col items-center justify-center border-r border-gray-300 pr-8">
+              <button onClick={handleNewPatient}>
+                <FiPlus size={80} className="text-white hover:text-[#5c60c6]" />
+              </button>
+              <h3 className="mt-6 text-3xl font-bold text-white">New Patient</h3>
+            </div>
+            <div className="flex-1 flex flex-col items-center justify-center pl-8">
+              <button onClick={handleExistingPatient}>
+                <FiUser size={80} className="text-white hover:text-[#5c60c6]" />
+              </button>
+              <h3 className="mt-6 text-3xl font-bold text-white">Existing Patient</h3>
+            </div>
           </div>
-          <div>
-            <label className="block text-sm font-medium">Age</label>
-            <input
-              type="number"
-              value={age}
-              onChange={(e) => setAge(e.target.value)}
-              className="mt-1 w-full border rounded px-3 py-2"
-              required
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium">Patient Name</label>
-            <input
-              type="text"
-              value={patientName}
-              onChange={(e) => setPatientName(e.target.value)}
-              className="mt-1 w-full border rounded px-3 py-2"
-              required
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium">Gender</label>
-            <select
-              value={gender}
-              onChange={(e) => setGender(e.target.value)}
-              className="mt-1 w-full border rounded px-3 py-2"
-              required
-            >
-              <option value="">Select...</option>
-              <option value="male">Male</option>
-              <option value="female">Female</option>
-              <option value="other">Other</option>
-            </select>
-          </div>
-          <div className="flex justify-end space-x-4">
+          <div className="flex justify-end mt-8">
             <button
-              type="button"
               onClick={onClose}
-              className="px-4 py-2 rounded bg-gray-300 text-gray-800 hover:bg-gray-400 transition"
+              className="px-4 py-3 rounded-full bg-secondary text-secondary transition"
             >
-              Cancel
-            </button>
-            <button
-              type="submit"
-              className="px-4 py-2 rounded bg-blue-500 text-white hover:bg-blue-600 transition"
-            >
-              Submit
+              Close
             </button>
           </div>
-        </form>
+        </motion.div>
       </motion.div>
-    </motion.div>
+      {showPatientModal && (
+        <PatientModal
+          patientId={generatedPatientId}
+          onClose={() => setShowPatientModal(false)}
+        />
+      )}
+      {showExistingPatientModal && (
+        <ExistingPatientModal
+          onClose={() => setShowExistingPatientModal(false)}
+        />
+      )}
+    </>
   );
 };
 

@@ -4,18 +4,16 @@ const FormData = require("form-data");
 
 exports.uploadImages = async (req, res) => {
   try {
-    // Check if files are present and there are at least 2 files.
-    if (!req.files || req.files.length < 2) {
-      return res.status(400).json({ message: "Please upload both images." });
+    // Check if file is present.
+    if (!req.file) {
+      return res.status(400).json({ message: "Please upload an image." });
     }
 
-    const leftFile = req.files[0];
-    const rightFile = req.files[1];
+    const file = req.file;
 
-    // Create FormData and append both files using the same field name "file"
+    // Create FormData and append the file using key "file"
     const formData = new FormData();
-    formData.append("file", leftFile.buffer, leftFile.originalname);
-    formData.append("file", rightFile.buffer, rightFile.originalname);
+    formData.append("file", file.buffer, file.originalname);
 
     // Post to the external prediction API.
     const response = await axios.post(`${process.env.AI_PREDICT_URL}/predict/`, formData, {
@@ -28,11 +26,7 @@ exports.uploadImages = async (req, res) => {
     const prediction = String(response.data.prediction).trim();
     console.log("Prediction Result:", prediction);
 
-    if (prediction === "0") {
-      return res.status(200).json({ prediction: "0" });
-    } else {
-      return res.status(200).json({ prediction });
-    }
+    return res.status(200).json({ prediction });
   } catch (error) {
     console.error("Error in uploadImages:", error);
     return res.status(500).json({ message: "Server error" });

@@ -6,6 +6,6 @@ const { uploadImages } = require("../controllers/imageController");
 const authMiddleware = require("../middleware/authMiddleware");
 
 // Use authMiddleware if needed.
-router.post("/upload", authMiddleware, upload.array("file", 2), uploadImages);
+router.post("/upload", authMiddleware, upload.single("file"), uploadImages);
 
 module.exports = router;

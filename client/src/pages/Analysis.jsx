@@ -1,25 +1,22 @@
 // src/pages/Analysis.jsx
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Header from "../components/common/Header";
-import { useSelector } from "react-redux";
 import AnnotationToolBar from "../components/analysis/AnnotationToolBar";
 import ImageToolBar from "../components/analysis/ImageToolBar";
 import KonvaCanvas from "../components/analysis/KonvaCanvas";
 import { FiArrowLeft, FiArrowRight } from "react-icons/fi";
+import axios from "axios";
+import { useParams } from "react-router-dom";
+import API_URL from "../utils/config";
 
 const Analysis = () => {
-  const leftImage = useSelector((state) => state.images.leftImage);
-  const rightImage = useSelector((state) => state.images.rightImage);
+  const { reportId } = useParams();
 
-  // Prepare images array for the carousel.
-  const imagesData = [
-    { side: "left", src: leftImage },
-    { side: "right", src: rightImage },
-  ].filter((item) => item.src);
-
+  // Declare hooks unconditionally at the top level.
+  const [report, setReport] = useState(null);
+  const [loading, setLoading] = useState(true);
   const [carouselIndex, setCarouselIndex] = useState(0);
   const [toolbarMode, setToolbarMode] = useState("annotation"); // "annotation" or "image"
-  // State for image adjustments. (In a real app, you might store these per image.)
   const [adjustments, setAdjustments] = useState({
     brightness: 0,
     contrast: 0,
@@ -27,6 +24,44 @@ const Analysis = () => {
     negative: false,
     zoom: 1,
   });
+
+  useEffect(() => {
+    const fetchReport = async () => {
+      try {
+        const response = await axios.get(`${API_URL}/api/report/${reportId}`, {
+          withCredentials: true,
+        });
+        setReport(response.data.report);
+      } catch (error) {
+        console.error("Error fetching report:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (reportId) {
+      fetchReport();
+    } else {
+      setLoading(false);
+    }
+  }, [reportId]);
+
+  if (loading) {
+    return (
+      <div className="flex flex-col bg-primary h-screen items-center justify-center">
+        <Header />
+        <p className="text-white text-2xl mt-8">Loading report...</p>
+      </div>
+    );
+  }
+
+  console.log(report);
+
+  // Prepare images array for the carousel.
+  const imagesData = [
+    { side: "left", src: report?.leftFundusImage },
+    { side: "right", src: report?.rightFundusImage },
+  ].filter((item) => item.src);
 
   const toggleToolbar = () => {
     setToolbarMode((prev) => (prev === "annotation" ? "image" : "annotation"));
@@ -43,7 +78,6 @@ const Analysis = () => {
   return (
     <div className="flex flex-col bg-primary h-screen overflow-hidden relative">
       <Header />
-
       {toolbarMode === "annotation" ? (
         <AnnotationToolBar onToggle={toggleToolbar} />
       ) : (
@@ -100,20 +134,7 @@ const Analysis = () => {
         <div className="flex-1 bg-primary p-4 rounded shadow flex flex-col items-center overflow-auto">
           <h2 className="text-3xl mt-20 text-secondary font-bold mb-4">Analysis Results</h2>
           <div className="flex flex-col gap-4">
-            {leftImage && (
-              <img
-                src={leftImage}
-                alt="Left Eye"
-                className="w-64 h-64 object-contain border-2 "
-              />
-            )}
-            {rightImage && (
-              <img
-                src={rightImage}
-                alt="Right Eye"
-                className="w-64 h-64 object-contain border"
-              />
-            )}
+            {/* Make sure leftImage and rightImage are defined or handled appropriately */}
           </div>
           <p className="mt-4 text-lg text-secondary text-center">
             The images above show detailed analysis of the retina. Additional insights and recommendations will be provided after further evaluation.
