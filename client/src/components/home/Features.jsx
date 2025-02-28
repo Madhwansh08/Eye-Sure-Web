@@ -9,7 +9,7 @@ const IMG_HEIGHT = "50vh"; // Smaller image height
 
 export const Features = () => {
   return (
-    <div className="bg-primar">
+    <div className="bg-primary">
       <TextParallaxContent
         imgUrl={featimg}
         subheading="Abnormality Detection"
@@ -82,7 +82,7 @@ const StickyImage = ({ imgUrl, imgHeight }) => {
       className="sticky z-0 overflow-hidden rounded-3xl"
     >
       <motion.div
-        className="absolute inset-0 bg-[#c5865c]/80"
+        className="absolute inset-0 bg-[#7162d7]/40"
         style={{
           opacity,
         }}
@@ -115,7 +115,7 @@ const OverlayCopy = ({ subheading, heading, imgHeight }) => {
       {/* <p className="mb-2 text-center uppercase text-xl md:mb-4 md:text-3xl">
         {subheading}
       </p> */}
-      <p className="text-center uppercase text-4xl font-bold md:text-7xl">{heading}</p>
+      <p className="text-center uppercase text-secondary text-4xl font-bold md:text-7xl">{heading}</p>
     </motion.div>
   );
 };

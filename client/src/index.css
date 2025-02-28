@@ -3,13 +3,18 @@
 @layer base {
   :root {
     /* Background Colors */
-    --primary-bg: #ffffff;       /* Light mode primary background */
-    --secondary-bg: #f7fafc;      /* Light mode secondary background */
-    /* Text Colors */
-    --primary-text: #ffffff;     /* Light mode primary text color */
-    --secondary-text: #718096;    /* Light mode secondary text color */
-    /* Font Family: Updated to Poppins */
+    --primary-bg: #ffffff;          /* Light mode primary background */
+    --secondary-bg: #e0e0e0;        /* Light mode secondary background */
+    
+    /* Light Mode Text Colors */
+    --primary-text: #030811;        /* Light mode primary text color */
+    --secondary-text: #000000;      /* Light mode secondary text color */
+    
+    /* Font Family */
     --font-family: 'Poppins', sans-serif;
+    
+    /* Gradient for Primary Text (Global) */
+    --primary-text-gradient: linear-gradient(90deg, #1C90BF, #7162D7, #B73DEB);
   }
 
   /* Apply the font-family globally */
@@ -17,12 +22,20 @@
     font-family: var(--font-family);
   }
 
-  /* Dark mode overrides (applied when a parent element has the .dark class) */
+  /* Dark Mode Overrides (Text & Background) */
   .dark {
-    --primary-bg: #040811;       /* Dark mode primary background */
-    --secondary-bg: #c5865c;      /* Dark mode secondary background */
-    --primary-text: #C5865C;      /* Dark mode primary text color */
-    --secondary-text: #fdfdfd;    /* Dark mode secondary text color */
+    --primary-bg: #030811;          /* Dark mode primary background */
+    --secondary-bg: #7162D7;        /* Dark mode secondary background */
+    
+    --primary-text: #7162D7;        /* Dark mode primary text color */
+    --secondary-text: #fdfdfd;      /* Dark mode secondary text color */
+  }
+
+  /* Apply gradient to text (Global for both modes) */
+  .gradient-text {
+    background: var(--primary-text-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
   }
 }
 

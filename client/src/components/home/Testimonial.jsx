@@ -7,7 +7,7 @@ export default function Testimonial() {
       {/* First Testimonial */}
       <div className="flex-1 pr-4">
         <figure className="mt-10 flex flex-col justify-between">
-          <blockquote className="text-xl/8 font-semibold text-pretty text-[#030811]">
+          <blockquote className="text-xl/8 font-semibold text-pretty text-secondary">
             <p>
               “Amet amet eget scelerisque tellus sit neque faucibus non eleifend. Integer eu praesent at a.
               Ornare arcu gravida natoque erat et cursus tortor consequat at. Vulputate gravida sociis enim nullam
@@ -21,14 +21,14 @@ export default function Testimonial() {
               className="w-14 h-14 rounded-full bg-gray-50"
             />
             <div className="text-base">
-              <div className="font-semibold text-[#030811]">Judith Black</div>
+              <div className="font-semibold text-secondary">Judith Black</div>
             </div>
           </figcaption>
         </figure>
       </div>
 
       {/* Second Testimonial */}
-      <div className="flex-1 pl-4 border-l border-[#030811]/80">
+      {/* <div className="flex-1 pl-4 border-l border-[#030811]/80">
         <figure className="mt-10 flex flex-col justify-between">
           <blockquote className="text-xl/8 font-semibold text-pretty text-gray-900">
             <p>
@@ -48,14 +48,14 @@ export default function Testimonial() {
             </div>
           </figcaption>
         </figure>
-      </div>
+      </div> */}
     </div>
   );
 
   return (
-    <section className="bg-secondary py-24 sm:py-32">
+    <section className="bg-primary py-24 sm:py-32">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
-        <h1 className="text-4xl font-semibold text-center text-[#03081] uppercase sm:text-4xl mb-10 lg:text-6xl">
+        <h1 className="text-4xl font-semibold text-secondary text-center text-[#03081] uppercase sm:text-4xl mb-10 lg:text-6xl">
           What our doctors say
         </h1>
         {/* Overflow-hidden container to mask the moving content */}

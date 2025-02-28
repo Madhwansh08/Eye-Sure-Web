@@ -42,14 +42,14 @@ export default function InstructionSlider() {
       </div>
       <motion.nav
         aria-label="Progress"
-        className="dark:bg-[#030811] bg-[#fdfdfd] p-4 rounded-lg "
+        className="bg-primary p-4 rounded-lg "
       >
         <ol className="space-y-6">
           {steps.map((step, index) => (
             <motion.li
               key={step.name}
               className={`relative flex items-center ${
-                index <= currentStep ? "dark:text-[#f2ebe3] text-[#030811]" : "text-gray-500"
+                index <= currentStep ? "text-primary" : "text-gray-500"
               }`}
               initial={{ opacity: 0, x: 50 }}
               animate={{
@@ -60,12 +60,12 @@ export default function InstructionSlider() {
             >
               <span
                 className={`flex items-center justify-center w-10 h-10 rounded-full px-4 border-2 ${
-                  currentStep === index ? "dark:text-[#f2ebe3] text-[#030811]" : "dark:border-gray-300 border-[#030811]"
+                  currentStep === index ? "text-primary" : "dark:border-gray-300 border-[#030811]"
                 }`}
               >
                 <span
                   className={`text-xl font-bold ${
-                    currentStep === index ? "dark:text-[#f2ebe3] text-[#030811]" : "text-gray-500"
+                    currentStep === index ? "text-primary" : "text-gray-500"
                   }`}
                 >
                   {index + 1}
@@ -74,7 +74,7 @@ export default function InstructionSlider() {
               <span className="ml-4">
                 <span
                   className={`text-xl font-medium ${
-                    currentStep === index ? "dark:text-[#f2ebe3] text-[#030811]" : "text-gray-200"
+                    currentStep === index ? "text-primary" : "text-gray-200"
                   }`}
                 >
                   {step.name}

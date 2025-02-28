@@ -75,7 +75,7 @@ export const Contact = () => {
   };
 
   return (
-    <div className="flex items-center justify-center bg-secondary px-8 py-24 dark:text-[#030811] text-[#f2ebe3]">
+    <div className="flex items-center justify-center bg-primary px-8 py-24 text-secondary">
       <BlockInTextCard
         tag="Contact Us"
         text={
@@ -98,7 +98,7 @@ export const Contact = () => {
               <div className="absolute inset-y-0 left-0 -z-10 w-full overflow-hidden bg-[#030811] ring-1 ring-gray-900/10 lg:w-1/2">
                 <svg
                   aria-hidden="true"
-                  className="absolute inset-0 size-full stroke-[#5c60c6]/10"
+                  className="absolute inset-0 size-full stroke-[#5c60c6]/30"
                 >
                   <defs>
                     <pattern
@@ -285,7 +285,7 @@ const BlockInTextCard = ({ tag, text, examples, onContactClick }) => {
       </div>
       <button
         onClick={onContactClick}
-        className="w-full rounded-full border dark:border-[#030811] border-[#fdfdfd] py-2 text-sm font-medium transition-colors hover:bg-[#030811] hover:text-[#f2ebe3]"
+        className="w-full rounded-full border border-[#7162d7] py-2 text-sm font-medium transition-colors "
       >
         Contact Support
       </button>

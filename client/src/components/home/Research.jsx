@@ -5,7 +5,7 @@ const Research = () => {
   return (
     <div className="bg-secondary">
       <div className="flex h-48 items-center justify-center">
-        <span className="font-semibold text-8xl uppercase text-[#030811]">
+        <span className="font-semibold text-8xl uppercase text-secondary">
           Coming Up Next
         </span>
       </div>
@@ -39,7 +39,7 @@ const Card = ({ card }) => {
   return (
     <div
       key={card.id}
-      className="group relative h-[800px] w-[700px] overflow-hidden bg-secondary flex flex-col rounded-lg shadow-lg"
+      className="group relative h-[800px] w-[700px] overflow-hidden bg-secondary flex flex-col rounded-lg "
     >
       {/* Image section */}
       <div className="relative h-3/4 w-full overflow-hidden">

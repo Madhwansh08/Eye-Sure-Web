@@ -103,6 +103,8 @@ const Upload = () => {
   
       if (prediction.trim() === "0") {
         toast.error("Invalid images uploaded");
+        navigate('/analysis');
+    
       } else {
         toast.success("Images successfully uploaded!");
         // Open DetailModal by setting state (or navigate, as needed)
@@ -119,11 +121,11 @@ const Upload = () => {
   return (
     <div className="bg-primary flex flex-col min-h-screen">
       <Header />
-      <div className="flex flex-col items-center mt-20 pt-10 max-h-screen dark:bg-[#030811] bg-[#fdfdfd] text-[#f2ebe3] relative">
-        <h1 className="text-center text-8xl font-bold mb-8 mx-auto dark:text-[#f2ebe3] text-[#030811]">
-          <span className="text-primary">Retina</span> Analysis
+      <div className="flex flex-col items-center mt-20 pt-10 max-h-screen bg-primary text-secondary relative">
+        <h1 className="text-center text-8xl font-bold mb-8 mx-auto text-secondary">
+          <span className="gradient-text">Retina</span> Analysis
         </h1>
-        <p className="text-center text-3xl font-semibold mb-8 mx-auto mt-2 dark:text-[#f2ebe3] text-[#030811]">
+        <p className="text-center text-3xl font-semibold mb-8 mx-auto mt-2 text-primary">
           Kindly Upload Both Images
         </p>
 
@@ -141,11 +143,11 @@ const Upload = () => {
               {/* Left Image Upload */}
               <div className="flex flex-col items-center">
                 <button
-                  className="cursor-pointer dark:bg-[#030811] bg-[#fdfdfd] border-2 shadow-lg shadow-[#c5865c] border-[#c5865c] dark:text-[#f2ebe3] text-[#030811] py-4 px-10 rounded-full text-lg font-medium transition-all duration-300 hover:shadow-lg hover:shadow-[#c5865c]/50 flex items-center gap-2"
+                  className="cursor-pointer bg-primary border-2 shadow-lg shadow-[#7162d7] border-[#7162d7] text-secondary py-4 px-10 rounded-full text-lg font-medium transition-all duration-300 hover:shadow-lg hover:shadow-[#7162d7]/50 flex items-center gap-2"
                   onClick={() => openFilePicker("left")}
                 >
                   Upload Left Image
-                  <TfiUpload className="dark:text-[#f2ebe3] text-[#030811] m-1 pl-1 text-xl" />
+                  <TfiUpload className="text-secondary m-1 pl-1 text-xl" />
                 </button>
                 <input
                   type="file"
@@ -166,11 +168,11 @@ const Upload = () => {
               {/* Right Image Upload */}
               <div className="flex flex-col items-center">
                 <button
-                  className="cursor-pointer dark:bg-[#030811] bg-[#fdfdfd] border-2 shadow-lg shadow-[#c5865c] border-[#c5865c] dark:text-[#f2ebe3] text-[#030811] py-4 px-10 rounded-full text-lg font-medium transition-all duration-300 hover:shadow-lg hover:shadow-[#c5865c]/50 flex items-center gap-2"
+                  className="cursor-pointer bg-primary border-2 shadow-lg shadow-[#7162d7] border-[#7162d7] text-secondary py-4 px-10 rounded-full text-lg font-medium transition-all duration-300 hover:shadow-lg hover:shadow-[#7162d7]/50 flex items-center gap-2"
                   onClick={() => openFilePicker("right")}
                 >
                   Upload Right Image
-                  <TfiUpload className="dark:text-[#f2ebe3] text-[#030811] m-1 pl-1 text-xl" />
+                  <TfiUpload className="text-secondary m-1 pl-1 text-xl" />
                 </button>
                 <input
                   type="file"
@@ -193,7 +195,7 @@ const Upload = () => {
             {leftImage && rightImage && (
               <button
                 onClick={handleAnalyze}
-                className="bg-secondary text-white py-3 px-8 rounded-full text-lg font-semibold hover:bg-secondary/90 transition"
+                className="bg-secondary text-secondary py-3 px-8 rounded-full text-lg font-semibold hover:bg-secondary/90 transition"
               >
                 Analyze
               </button>

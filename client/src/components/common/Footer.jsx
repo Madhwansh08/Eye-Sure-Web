@@ -5,17 +5,17 @@ import LogoImage from "../../assets/logo.png";
 
 const Footer = () => {
   return (
-    <section className="py-10 dark:bg-[#030811] bg-[#5c60c6] sm:pt-16 lg:pt-24">
+    <section className="py-10 bg-primary sm:pt-16 lg:pt-24">
       <div className="px-4 mx-auto sm:px-6 lg:px-8 max-w-7xl">
         <div className="grid grid-cols-1 gap-x-5 gap-y-12 md:grid-cols-3 md:gap-x-12">
           <div>
-            <p className="text-base dark:text-gray-500 text-[#fdfdfd]">Company</p>
+            <p className="text-base text-secondary">Company</p>
             <ul className="mt-8 space-y-4">
               <li>
                 <a
                   href="/about"
                   title="About"
-                  className="text-base dark:text-[#F2EBE3] text-[#fdfdfd] transition-all duration-200 hover:text-opacity-80 focus:text-opacity-80"
+                  className="text-base text-secondary transition-all duration-200 hover:text-opacity-80 focus:text-opacity-80"
                 >
                   {" "}
                   About{" "}
@@ -25,7 +25,7 @@ const Footer = () => {
                 <a
                   href="/features"
                   title="Features"
-                  className="text-base dark:text-[#F2EBE3] text-[#fdfdfd] transition-all duration-200 hover:text-opacity-80 focus:text-opacity-80"
+                  className="text-base text-secondary transition-all duration-200 hover:text-opacity-80 focus:text-opacity-80"
                 >
                   {" "}
                   Features{" "}
@@ -36,7 +36,7 @@ const Footer = () => {
                 <a
                   href="/career"
                   title="Career"
-                  className="text-base dark:text-[#F2EBE3] text-[#fdfdfd] transition-all duration-200 hover:text-opacity-80 focus:text-opacity-80"
+                  className="text-base text-secondary transition-all duration-200 hover:text-opacity-80 focus:text-opacity-80"
                 >
                   {" "}
                   Career{" "}
@@ -45,13 +45,13 @@ const Footer = () => {
             </ul>
           </div>
           <div>
-            <p className="text-base dark:text-gray-500 text-[#f2ebe3]">Help</p>
+            <p className="text-base text-secondary">Help</p>
             <ul className="mt-8 space-y-4">
               <li>
                 <a
                   href="/customer-support"
                   title="Customer Support"
-                  className="text-base dark:text-[#F2EBE3] text-[#fdfdfd] transition-all duration-200 hover:text-opacity-80 focus:text-opacity-80"
+                  className="text-base text-secondary transition-all duration-200 hover:text-opacity-80 focus:text-opacity-80"
                 >
                   {" "}
                   Customer Support{" "}
@@ -62,7 +62,7 @@ const Footer = () => {
                 <a
                   href="/terms-conditions"
                   title="Terms & Conditions"
-                  className="text-base dark:text-[#F2EBE3] text-[#fdfdfd] transition-all duration-200 hover:text-opacity-80 focus:text-opacity-80"
+                  className="text-base text-secondary transition-all duration-200 hover:text-opacity-80 focus:text-opacity-80"
                 >
                   {" "}
                   Terms &amp; Conditions{" "}
@@ -72,7 +72,7 @@ const Footer = () => {
                 <a
                   href="/privacy-policy"
                   title="Privacy Policy"
-                  className="text-base dark:text-[#F2EBE3] text-[#fdfdfd] transition-all duration-200 hover:text-opacity-80 focus:text-opacity-80"
+                  className="text-base text-secondary transition-all duration-200 hover:text-opacity-80 focus:text-opacity-80"
                 >
                   {" "}
                   Privacy Policy{" "}
@@ -81,13 +81,13 @@ const Footer = () => {
             </ul>
           </div>
           <div>
-            <p className="text-base dark:text-gray-500 text-[#f2ebe3]">Experts Involved</p>
+            <p className="text-base text-secondary">Experts Involved</p>
             <ul className="mt-8 space-y-4">
               <li>
                 <a
                   href="/free-ebooks"
                   title="Free eBooks"
-                  className="text-base text-[#F2EBE3] transition-all duration-200 hover:text-opacity-80 focus:text-opacity-80"
+                  className="text-base text-secondary transition-all duration-200 hover:text-opacity-80 focus:text-opacity-80"
                 >
                   {" "}
                   Radiologists{" "}
@@ -97,7 +97,7 @@ const Footer = () => {
                 <a
                   href="/demo-tutorial"
                   title="Demo Tutorial"
-                  className="text-base text-[#F2EBE3] transition-all duration-200 hover:text-opacity-80 focus:text-opacity-80"
+                  className="text-base text-secondary transition-all duration-200 hover:text-opacity-80 focus:text-opacity-80"
                 >
                   {" "}
                   Pulmonary Specialist{" "}
@@ -108,7 +108,7 @@ const Footer = () => {
                 <a
                   href="/youtube-playlist"
                   title="YouTube Playlist"
-                  className="text-base text-[#F2EBE3] transition-all duration-200 hover:text-opacity-80 focus:text-opacity-80"
+                  className="text-base text-secondary transition-all duration-200 hover:text-opacity-80 focus:text-opacity-80"
                 >
                   {" "}
                   IIT Professors{" "}
@@ -125,7 +125,7 @@ const Footer = () => {
               <a
                 href="/valid-path"
                 title="valid-path"
-                className="flex items-center justify-center text-[#F2EBE3] transition-all duration-200 bg-transparent border border-gray-700 rounded-full w-7 h-7 focus:bg-blue-600 hover:bg-blue-600 hover:border-blue-600 focus:border-blue-600"
+                className="flex items-center justify-center text-secondary transition-all duration-200 bg-transparent border border-gray-700 rounded-full w-7 h-7 focus:bg-blue-600 hover:bg-blue-600 hover:border-blue-600 focus:border-blue-600"
               >
                 <svg
                   className="w-4 h-4"
@@ -141,7 +141,7 @@ const Footer = () => {
               <button
                 type="button"
                 title="Facebook"
-                className="flex items-center justify-center text-[#F2EBE3] transition-all duration-200 bg-transparent border border-gray-700 rounded-full w-7 h-7 focus:bg-blue-600 hover:bg-blue-600 hover:border-blue-600 focus:border-blue-600"
+                className="flex items-center justify-center text-secondary transition-all duration-200 bg-transparent border border-gray-700 rounded-full w-7 h-7 focus:bg-blue-600 hover:bg-blue-600 hover:border-blue-600 focus:border-blue-600"
               >
                 <svg
                   className="w-4 h-4"
@@ -157,7 +157,7 @@ const Footer = () => {
               <button
                 type="button"
                 title="Instagram"
-                className="flex items-center justify-center text-[#F2EBE3] transition-all duration-200 bg-transparent border border-gray-700 rounded-full w-7 h-7 focus:bg-blue-600 hover:bg-blue-600 hover:border-blue-600 focus:border-blue-600"
+                className="flex items-center justify-center text-secondary transition-all duration-200 bg-transparent border border-gray-700 rounded-full w-7 h-7 focus:bg-blue-600 hover:bg-blue-600 hover:border-blue-600 focus:border-blue-600"
               >
                 <svg
                   className="w-4 h-4"
@@ -172,7 +172,7 @@ const Footer = () => {
               </button>
             </li>
           </ul>
-          <p className="w-full mt-8 text-sm text-center text-[#f2ebe3] md:mt-0 md:w-auto md:order-2">
+          <p className="w-full mt-8 text-sm text-center text-secondary md:mt-0 md:w-auto md:order-2">
             © Copyright 2025, All Rights Reserved by Merai
           </p>
         </div>

@@ -61,7 +61,7 @@ const Header = () => {
     const [isHovered, setIsHovered] = useState(false);
     return (
       <div
-        className="relative cursor-pointer px-3 py-2"
+        className="relative cursor-pointer px-3 py-2 text-secondary"
         role="button"
         tabIndex={0}
         onMouseEnter={() => setIsHovered(true)}
@@ -72,14 +72,14 @@ const Header = () => {
         }}
       >
         <motion.div
-          className="absolute inset-0 rounded-md bg-secondary z-0"
+          className="absolute inset-0 rounded-md text-secondary bg-secondary z-0"
           initial={{ opacity: 0, scale: 0.8 }}
           animate={isHovered ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.8 }}
           transition={{ duration: 0.3, ease: "easeInOut" }}
         />
         <motion.span
-          className="relative z-10 text-sm font-semibold text-white"
-          animate={{ color: isHovered ? "#ffffff" : "#F2EBE3" }}
+          className="relative z-10 text-sm font-semibold text-secondary"
+          // animate={{ color: isHovered ? "#ffffff" : "#F2EBE3" }}
           transition={{ duration: 0.3, ease: "easeInOut" }}
         >
           {children}
@@ -132,7 +132,7 @@ const Header = () => {
         <AnimatePresence>
           {isDropdownOpen && (
             <motion.div
-              className="absolute right-0 mt-2 w-60 bg-gray-900 rounded-md shadow-lg z-50 p-4"
+              className="absolute right-0 mt-2 w-60 bg-primary rounded-md shadow-lg z-50 p-4"
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
@@ -146,12 +146,12 @@ const Header = () => {
                     className="w-12 h-12 rounded-full object-cover"
                   />
                 ) : (
-                  <div className="w-12 h-12 bg-gray-800 rounded-full flex items-center justify-center text-white">
+                  <div className="w-12 h-12 bg-secondary rounded-full flex items-center justify-center text-secondary">
                     {user?.name?.[0]?.toUpperCase() || "U"}
                   </div>
                 )}
                 <div className="flex flex-col">
-                  <p className="font-semibold text-sm text-white">
+                  <p className="font-semibold text-sm text-secondary">
                     {user?.name || "Unknown User"}
                   </p>
                   <p className="text-xs text-gray-400">{user?.email}</p>
@@ -164,7 +164,7 @@ const Header = () => {
                   navigate("/dashboard");
                   setIsDropdownOpen(false);
                 }}
-                className="flex items-center space-x-2 px-4 py-2 w-full text-sm text-white hover:bg-secondary"
+                className="flex items-center space-x-2 px-4 py-2 w-full text-sm text-secondary hover:bg-secondary"
               >
                 <Cog6ToothIcon className="w-5 h-5" />
                 <span>Profile Settings</span>
@@ -172,7 +172,7 @@ const Header = () => {
               <button
                 aria-label="Logout"
                 onClick={handleLogout}
-                className="flex items-center space-x-2 px-4 py-2 w-full text-sm text-white hover:bg-gray-700"
+                className="flex items-center space-x-2 px-4 py-2 w-full text-sm text-secondary hover:bg-[#5c60c6]"
               >
                 <ArrowRightStartOnRectangleIcon className="h-5 w-5" />
                 <span>Logout</span>
@@ -196,11 +196,11 @@ const Header = () => {
       <nav className="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8" aria-label="Global">
         <div className="flex flex-1">
           <button onClick={() => navigate("/")} className="-m-1.5 p-1.5" aria-label="Navigate to home">
-            <img className="h-10 w-auto hover:animate-pulse" src={LogoImage} alt="Logo" />
+            <img className="h-10 w-auto hover:animate-pulse " src={LogoImage} alt="Logo" />
           </button>
         </div>
         {isDesktop ? (
-          <div className="hidden lg:flex lg:gap-x-12 items-center">
+          <div className="hidden lg:flex lg:gap-x-12 text-secondary items-center">
             <AnimatedTab onClick={() => navigate("/about")}>About</AnimatedTab>
             <AnimatedTab onClick={() => navigate("/upload")}>Retina Analysis</AnimatedTab>
             {user ? (
