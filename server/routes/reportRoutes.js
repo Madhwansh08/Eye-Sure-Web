@@ -1,7 +1,7 @@
 // routes/reportRoutes.js
 const express = require("express");
 const router = express.Router();
-const { uploadReport, getReportById } = require("../controllers/reportController");
+const { uploadReport, getReportById , getRecentReports } = require("../controllers/reportController");
 const authMiddleware = require("../middleware/authMiddleware");
 const upload = require("../config/multer");
 
@@ -17,6 +17,8 @@ router.post(
 );
 
 router.get('/:reportId', authMiddleware , getReportById);
+
+router.get('/recent/reports', authMiddleware, getRecentReports);
 
 
 module.exports = router;

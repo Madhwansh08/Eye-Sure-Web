@@ -44,46 +44,46 @@ const PatientModal = ({ onClose, patientId }) => {
         <motion.div
           initial={{ scale: 0.8 }}
           animate={{ scale: 1 }}
-          className="bg-white p-10 rounded-lg shadow-lg w-full max-w-2xl"
+          className="bg-primary p-10 rounded-lg shadow-lg w-full border-2 border-[#5c60c6] max-w-2xl"
         >
-          <h2 className="text-2xl font-bold mb-6">New Patient Details</h2>
+          <h2 className="text-2xl font-bold mb-6 text-secondary">New Patient Details</h2>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="block text-sm font-medium">Patient ID</label>
+              <label className="block text-sm font-medium text-secondary">Patient ID</label>
               <input
                 type="text"
                 value={patientId}
                 disabled
-                className="mt-1 w-full border rounded px-3 py-2 bg-gray-100 cursor-not-allowed"
+                className="mt-1 w-full border rounded px-3 py-2 text-secondary cursor-not-allowed"
                 required
               />
             </div>
             <div>
-              <label className="block text-sm font-medium">Age</label>
+              <label className="block text-sm font-medium text-secondary">Age</label>
               <input
                 type="number"
                 value={age}
                 onChange={(e) => setAge(e.target.value)}
-                className="mt-1 w-full border rounded px-3 py-2"
+                className="mt-1 w-full border rounded px-3 py-2 text-secondary"
                 required
               />
             </div>
             <div>
-              <label className="block text-sm font-medium">Patient Name</label>
+              <label className="block text-sm font-medium text-secondary">Patient Name</label>
               <input
                 type="text"
                 value={patientName}
                 onChange={(e) => setPatientName(e.target.value)}
-                className="mt-1 w-full border rounded px-3 py-2"
+                className="mt-1 w-full border rounded px-3 py-2 text-secondary"
                 required
               />
             </div>
             <div>
-              <label className="block text-sm font-medium">Gender</label>
+              <label className="block text-sm font-medium text-secondary">Gender</label>
               <select
                 value={gender}
                 onChange={(e) => setGender(e.target.value)}
-                className="mt-1 w-full border rounded px-3 py-2"
+                className="mt-1 w-full border rounded text-secondary px-3 py-2"
                 required
               >
                 <option value="">Select...</option>

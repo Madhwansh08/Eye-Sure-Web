@@ -23,8 +23,22 @@ const reportSchema = new Schema({
   explainableAiLeftFundusImage: {
     type: String,
     trim: true
-  },
+  }, 
   explainableAiRightFundusImage: {
+    type: String,
+    trim: true
+  },
+  contorLeftFundusImage: { type: String, trim: true },
+  contorRightFundusImage: { type: String, trim: true },
+  contorLeftVCDR: { type: Number },
+  contorRightVCDR: { type: Number },
+  contorLeftGlaucomaStatus: { type: String, trim: true },
+  contorRightGlaucomaStatus: { type: String, trim: true },
+  leftEyeClahe:{
+    type: String,
+    trim: true
+  },
+  rightEyeClahe:{
     type: String,
     trim: true
   },

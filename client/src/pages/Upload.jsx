@@ -1,3 +1,4 @@
+// src/pages/Upload.jsx
 import React, { useRef, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
@@ -15,6 +16,8 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import API_URL from "../utils/config";
 import DetailModal from "../components/upload/DetailModal";
+import { MdTableRows } from "react-icons/md";
+import RecentReportsDrawer from "../components/upload/RecentReportsDrawer";
 
 const Upload = () => {
   const dispatch = useDispatch();
@@ -24,6 +27,7 @@ const Upload = () => {
   );
   
   const [showDetailModal, setShowDetailModal] = useState(false);
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
   const leftInputRef = useRef(null);
   const rightInputRef = useRef(null);
@@ -116,7 +120,7 @@ const Upload = () => {
         toast.success("Right eye: Valid image");
       }
   
-      // If at least one image is valid, show the DetailModal; otherwise, navigate to the analysis page.
+      // If at least one image is valid, show the DetailModal; otherwise, navigate to analysis page.
       if (leftPrediction !== "0" || rightPrediction !== "0") {
         setShowDetailModal(true);
       } else {
@@ -129,9 +133,25 @@ const Upload = () => {
   };
 
   return (
-    <div className="bg-primary flex flex-col min-h-screen">
+    <div className="bg-primary flex flex-col min-h-screen relative">
       <Header />
-      <div className="flex flex-col items-center mt-20 pt-10 max-h-screen bg-primary text-secondary relative">
+
+      {/* Drawer Toggle Button */}
+      <button
+        onClick={() => setIsDrawerOpen(!isDrawerOpen)}
+        className="fixed right-4 bottom-4 z-50 p-3 bg-white rounded-full shadow-lg"
+      >
+        <MdTableRows size={28} className="text-primary" />
+      </button>
+
+      {isDrawerOpen && (
+        <RecentReportsDrawer
+          isOpen={isDrawerOpen}
+          onClose={() => setIsDrawerOpen(false)}
+        />
+      )}
+
+      <div className="flex flex-col items-center mt-20 pt-10 bg-primary text-secondary relative">
         <h1 className="text-center text-8xl font-bold mb-8 mx-auto text-secondary">
           <span className="gradient-text">Retina</span> Analysis
         </h1>

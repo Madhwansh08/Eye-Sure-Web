@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
+const morgan=require('morgan');
 require('dotenv').config(); // Load environment variables
 
 // Connect to MongoDB
@@ -19,6 +20,7 @@ app.use(cors(
         credentials: true
     }
 ));
+app.use(morgan('dev'));
 app.use(express.json());
 app.use(cookieParser());
 

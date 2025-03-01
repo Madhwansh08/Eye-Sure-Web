@@ -35,7 +35,7 @@ const DetailModal = ({ onClose }) => {
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-70"
+        className="fixed inset-0 flex items-center justify-center z-50 bg-black/70 backdrop-blur-sm bg-opacity-70"
       >
         <motion.div
           initial={{ scale: 0.8 }}
@@ -45,15 +45,15 @@ const DetailModal = ({ onClose }) => {
           <div className="flex flex-row space-x-8">
             <div className="flex-1 flex flex-col items-center justify-center border-r border-gray-300 pr-8">
               <button onClick={handleNewPatient}>
-                <FiPlus size={80} className="text-white hover:text-[#5c60c6]" />
+                <FiPlus size={80} className="text-secondary hover:text-[#5c60c6]" />
               </button>
-              <h3 className="mt-6 text-3xl font-bold text-white">New Patient</h3>
+              <h3 className="mt-6 text-3xl font-bold text-secondary">New Patient</h3>
             </div>
             <div className="flex-1 flex flex-col items-center justify-center pl-8">
               <button onClick={handleExistingPatient}>
-                <FiUser size={80} className="text-white hover:text-[#5c60c6]" />
+                <FiUser size={80} className="text-secondary hover:text-[#5c60c6]" />
               </button>
-              <h3 className="mt-6 text-3xl font-bold text-white">Existing Patient</h3>
+              <h3 className="mt-6 text-3xl font-bold text-secondary">Existing Patient</h3>
             </div>
           </div>
           <div className="flex justify-end mt-8">

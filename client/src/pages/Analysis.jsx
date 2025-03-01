@@ -96,7 +96,7 @@ const Analysis = () => {
         </div>
 
         {/* Middle Column: Konva Canvas + Carousel */}
-        <div className="flex-1 bg-[#1b1b1b] p-4 rounded shadow flex flex-col items-center justify-center">
+        <div className="flex-1 bg-primary p-4 rounded shadow flex flex-col items-center justify-center">
           {imagesData.length > 0 ? (
             <div className="relative" style={{ width: "800px", height: "800px" }}>
               <KonvaCanvas
