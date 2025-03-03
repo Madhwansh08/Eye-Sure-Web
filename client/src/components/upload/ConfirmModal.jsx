@@ -55,22 +55,22 @@ const ConfirmModal = ({ onCancel, patientId }) => {
         <motion.div
           initial={{ scale: 0.8 }}
           animate={{ scale: 1 }}
-          className="bg-white p-10 rounded-lg shadow-lg w-full max-w-md"
+          className="bg-primary p-10 border-2 border-[#5c60c6] rounded-lg shadow-lg w-full max-w-md"
         >
-          <h2 className="text-2xl font-bold mb-4 text-center">Start Analysis?</h2>
-          <p className="mb-6 text-center">
+          <h2 className="text-2xl font-bold mb-4 text-center text-secondary">Start Analysis?</h2>
+          <p className="mb-6 text-center text-secondary">
             Would you like to start the analysis of the images?
           </p>
           <div className="flex justify-end space-x-4">
             <button
               onClick={onCancel}
-              className="px-4 py-2 rounded bg-gray-300 text-gray-800 hover:bg-gray-400 transition"
+              className="px-4 py-2 rounded-full bg-gray-300 text-gray-800 hover:bg-gray-400 transition"
             >
               Cancel
             </button>
             <button
               onClick={handleSave}
-              className="px-4 py-2 rounded bg-blue-500 text-white hover:bg-blue-600 transition"
+              className="px-4 py-2 rounded-full bg-blue-500 text-white hover:bg-blue-600 transition"
             >
               Save
             </button>

@@ -162,6 +162,24 @@ const uploadToClaheModel = async (patientId, file) => {
 };
 
 
+const uploadToPredictionModel=async(patientId , file)=>{
+  try {
+    const formData=new FormData();
+    formData.append('file',file.buffer,file.originalname);
+    const response=await axios.post(
+      `${process.env.AI_DR_URL}/predict/`,
+      formData,
+      {headers:formData.getHeaders()}
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error uploading to Prediction model:", error);
+    return res.status(500).json({ message: "Server error" });
+  }
+}
+
+
+
 exports.uploadReport = async (req, res) => {
   try {
   
@@ -203,6 +221,10 @@ exports.uploadReport = async (req, res) => {
     const rightClaheURL = await uploadToClaheModel(patientId, rightFile);
 
 
+    const leftPrediction=await uploadToPredictionModel(patientId,leftFile);
+    const rightPrediction=await uploadToPredictionModel(patientId,rightFile);
+
+
     const newReport = new Report({
       leftFundusImage: leftURL,    // original fundus image in S3
       rightFundusImage: rightURL,  // original fundus image in S3
@@ -221,6 +243,9 @@ exports.uploadReport = async (req, res) => {
 
       leftEyeClahe: leftClaheURL,
       rightEyeClahe: rightClaheURL,
+
+      leftFundusPrediction: leftPrediction,
+      rightFundusPrediction: rightPrediction,
 
       patientId: patientId
     });
