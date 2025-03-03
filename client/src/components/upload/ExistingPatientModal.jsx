@@ -5,28 +5,14 @@ import axios from "axios";
 import API_URL from "../../utils/config";
 import { toast } from "react-toastify";
 import ConfirmModal from "./ConfirmModal";
+import AsyncSelect from "react-select/async";
 
 const ExistingPatientModal = ({ onClose }) => {
-  const [patientList, setPatientList] = useState([]);
   const [selectedPatientId, setSelectedPatientId] = useState("");
   const [age, setAge] = useState("");
   const [patientName, setPatientName] = useState("");
   const [gender, setGender] = useState("");
   const [showConfirmModal, setShowConfirmModal] = useState(false);
-
-  // Fetch the list of patients for the current doctor.
-  useEffect(() => {
-    const fetchPatients = async () => {
-      try {
-        const response = await axios.get(`${API_URL}/api/patient/doctor`, { withCredentials: true });
-        setPatientList(response.data.patients);
-      } catch (error) {
-        console.error("Error fetching patients:", error);
-        toast.error("Failed to fetch patients");
-      }
-    };
-    fetchPatients();
-  }, []);
 
   // When a patient is selected, fetch its details.
   useEffect(() => {
@@ -55,11 +41,39 @@ const ExistingPatientModal = ({ onClose }) => {
       toast.success("Patient updated successfully!");
       // Open ConfirmModal without immediately closing this modal.
       setShowConfirmModal(true);
-      // Optionally, if you want to close this modal, you can call onClose() after a short delay.
-      // setTimeout(() => onClose(), 500);
     } catch (error) {
       console.error("Error updating patient:", error);
       toast.error("Failed to update patient");
+    }
+  };
+
+  // Load options for the AsyncSelect component.
+  // The API call includes a "search" parameter for server-side filtering.
+  const loadOptions = async (inputValue) => {
+    try {
+      const response = await axios.get(`${API_URL}/api/patient/doctor`, {
+        withCredentials: true,
+        params: { search: inputValue } // backend can filter by this query parameter
+      });
+      // Transform the data to match the format react-select expects.
+      return response.data.patients.map((patient) => ({
+        value: patient._id,
+        label: `${patient.name} (${patient._id})`
+      }));
+    } catch (error) {
+      console.error("Error fetching patients:", error);
+      toast.error("Failed to fetch patients");
+      return [];
+    }
+  };
+
+  // Handler for when an option is selected.
+  const handleSelectChange = (selectedOption) => {
+    if (selectedOption) {
+      setSelectedPatientId(selectedOption.value);
+    } else {
+      setSelectedPatientId("");
+      // Optionally clear the details if needed.
     }
   };
 
@@ -79,19 +93,15 @@ const ExistingPatientModal = ({ onClose }) => {
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
               <label className="block text-sm font-medium text-secondary">Select Patient</label>
-              <select
-                value={selectedPatientId}
-                onChange={(e) => setSelectedPatientId(e.target.value)}
-                className="mt-1 w-full border rounded px-3 text-secondary py-2"
-                required
-              >
-                <option value="">Select a patient</option>
-                {patientList.map((patient) => (
-                  <option key={patient._id} value={patient._id}>
-                    {patient.name} ({patient._id})
-                  </option>
-                ))}
-              </select>
+              <AsyncSelect
+                cacheOptions
+                defaultOptions
+                loadOptions={loadOptions}
+                onChange={handleSelectChange}
+                placeholder="Select a patient..."
+                classNamePrefix="react-select"
+                isClearable
+              />
             </div>
             {selectedPatientId && (
               <>

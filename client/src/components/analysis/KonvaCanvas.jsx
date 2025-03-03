@@ -4,11 +4,30 @@ import Konva from "konva";
 import { useSelector, useDispatch } from "react-redux";
 import { addAnnotation } from "../../redux/slices/annotationSlice";
 
+// Define a custom RGB filter. This filter zeroes out channels that are disabled.
+Konva.Filters.RGBChannel = function(imageData) {
+  const data = imageData.data;
+  const rEnabled = this.getAttr("rgbRed");
+  const gEnabled = this.getAttr("rgbGreen");
+  const bEnabled = this.getAttr("rgbBlue");
+  for (let i = 0; i < data.length; i += 4) {
+    // If none of the channels are enabled, make the pixel fully transparent.
+    if (!rEnabled && !gEnabled && !bEnabled) {
+      data[i + 3] = 0;
+    } else {
+      if (!rEnabled) data[i] = 0;
+      if (!gEnabled) data[i + 1] = 0;
+      if (!bEnabled) data[i + 2] = 0;
+    }
+  }
+};
+
 function useKonvaImage(src) {
   const [image, setImage] = useState(null);
   useEffect(() => {
     if (!src) return;
     const img = new window.Image();
+    img.crossOrigin = "Anonymous";
     img.src = src;
     img.onload = () => setImage(img);
   }, [src]);
@@ -53,7 +72,7 @@ const LabelModal = ({ onSubmit, onCancel }) => {
   );
 };
 
-const KonvaCanvas = ({ side, imageSrc, adjustments = {}, width = 800, height = 800 }) => {
+const KonvaCanvas = ({ side, imageSrc, adjustments = {}, width = 800, height = 800, resetPanTrigger }) => {
   const dispatch = useDispatch();
   const { currentTool, leftImageAnnotations, rightImageAnnotations } = useSelector(
     (state) => state.annotation
@@ -67,13 +86,14 @@ const KonvaCanvas = ({ side, imageSrc, adjustments = {}, width = 800, height = 8
   const [pendingAnnotation, setPendingAnnotation] = useState(null);
   const backgroundImage = useKonvaImage(imageSrc);
 
-  // Cache image so filters take effect.
+  // Cache image for performance and to apply filters.
   useEffect(() => {
     if (imageRef.current) {
       imageRef.current.cache();
     }
   }, [backgroundImage, adjustments]);
 
+  // Optionally save annotations in localStorage.
   useEffect(() => {
     if (side === "left") {
       localStorage.setItem("annotations-left", JSON.stringify(leftImageAnnotations));
@@ -81,6 +101,17 @@ const KonvaCanvas = ({ side, imageSrc, adjustments = {}, width = 800, height = 8
       localStorage.setItem("annotations-right", JSON.stringify(rightImageAnnotations));
     }
   }, [leftImageAnnotations, rightImageAnnotations, side]);
+
+  // Reset stage pan to center when resetPanTrigger changes.
+  useEffect(() => {
+    if (stageRef.current) {
+      const currentZoom = adjustments.zoom || 1;
+      const newX = (width - width * currentZoom) / 2;
+      const newY = (height - height * currentZoom) / 2;
+      stageRef.current.position({ x: newX, y: newY });
+      stageRef.current.batchDraw();
+    }
+  }, [resetPanTrigger, width, height, adjustments.zoom]);
 
   const handleMouseDown = (e) => {
     if (!currentTool) return;
@@ -171,12 +202,30 @@ const KonvaCanvas = ({ side, imageSrc, adjustments = {}, width = 800, height = 8
     setShowLabelModal(false);
   };
 
+  // Drag boundaries to keep image inside canvas.
+  const dragBoundFunc = (pos) => {
+    const scale = adjustments.zoom || 1;
+    const minX = width - width * scale;
+    const minY = height - height * scale;
+    const maxX = 0;
+    const maxY = 0;
+    let x = pos.x;
+    let y = pos.y;
+    if (x > maxX) x = maxX;
+    if (x < minX) x = minX;
+    if (y > maxY) y = maxY;
+    if (y < minY) y = minY;
+    return { x, y };
+  };
+
   return (
     <div style={{ width, height }}>
       <Stage
         ref={stageRef}
         width={width}
         height={height}
+        draggable={adjustments.zoom > 1}
+        dragBoundFunc={dragBoundFunc}
         scaleX={adjustments.zoom || 1}
         scaleY={adjustments.zoom || 1}
         onMouseDown={handleMouseDown}
@@ -195,12 +244,20 @@ const KonvaCanvas = ({ side, imageSrc, adjustments = {}, width = 800, height = 8
               filters={[
                 Konva.Filters.Brighten,
                 Konva.Filters.Contrast,
-                Konva.Filters.Saturate,
                 adjustments.negative ? Konva.Filters.Invert : undefined,
+                // Apply the custom RGBChannel filter if rgb attributes are defined.
+                adjustments.rgbRed !== undefined &&
+                adjustments.rgbGreen !== undefined &&
+                adjustments.rgbBlue !== undefined
+                  ? Konva.Filters.RGBChannel
+                  : undefined,
               ].filter(Boolean)}
               brightness={adjustments.brightness || 0}
               contrast={adjustments.contrast || 0}
-              saturate={adjustments.saturation || 0}
+              // We removed saturate; the RGBChannel filter uses rgbRed, rgbGreen, rgbBlue.
+              rgbRed={adjustments.rgbRed}
+              rgbGreen={adjustments.rgbGreen}
+              rgbBlue={adjustments.rgbBlue}
             />
           )}
           {annotations.map((ann) => (

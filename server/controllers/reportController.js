@@ -274,21 +274,34 @@ exports.uploadReport = async (req, res) => {
 
 
 exports.getReportById = async (req, res) => {
-    try {
-      const { reportId } = req.params;
-      if (!reportId) {
-        return res.status(400).json({ message: "Missing reportId" });
-      }
-      const report = await Report.findById(reportId);
-      if (!report) {
-        return res.status(404).json({ message: "Report not found" });
-      }
-      return res.status(200).json({ report });
-    } catch (error) {
-      console.error("Error fetching report:", error);
-      return res.status(500).json({ message: "Server error" });
+  try {
+    const { reportId } = req.params;
+
+    if (!reportId) {
+      return res.status(400).json({ message: "Missing reportId" });
     }
-  };
+
+    // Fetch the report and populate the patient reference
+    const report = await Report.findById(reportId);
+    if (!report) {
+      return res.status(404).json({ message: "Report not found" });
+    }
+
+    // Find the patient linked to this report
+    const patient = await Patient.findOne({ reports: reportId }).select("name age gender city contactNo");
+
+    if (!patient) {
+      return res.status(404).json({ message: "Patient not found" });
+    }
+
+    return res.status(200).json({ report, patient });
+
+  } catch (error) {
+    console.error("Error fetching report and patient details:", error);
+    return res.status(500).json({ message: "Server error" });
+  }
+};
+
 
 
 exports.getRecentReports = async (req, res) => {

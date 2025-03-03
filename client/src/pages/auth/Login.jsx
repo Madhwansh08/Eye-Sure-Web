@@ -65,7 +65,7 @@ const Login = () => {
                     required
                     value={formData.email}
                     onChange={handleChange}
-                    className="block w-full rounded-md bg-white px-4 py-2 text-lg text-secondary outline outline-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:outline-indigo-600"
+                    className="block w-full rounded-md bg-secondary px-4 py-2 text-lg text-secondary outline outline-1 outline-bg-black placeholder:text-gray-400 focus:outline focus:outline-2 focus:outline-indigo-600"
                   />
                 </div>
               </div>
@@ -84,7 +84,7 @@ const Login = () => {
                     required
                     value={formData.password}
                     onChange={handleChange}
-                    className="block w-full rounded-md bg-white px-4 py-2 text-lg text-secondary outline outline-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:outline-indigo-600"
+                    className="block w-full rounded-md bg-secondary  px-4 py-2 text-lg text-secondary outline outline-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:outline-indigo-600"
                   />
                 </div>
               </div>

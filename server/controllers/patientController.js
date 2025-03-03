@@ -36,20 +36,29 @@ exports.createPatient = async (req, res) => {
   }
 };
 
+// Updated API endpoint in your controller (e.g., patientController.js)
 exports.getPatientsByDoctor = async (req, res) => {
-    try {
-      const doctor = req.doctor;
-      if (!doctor) {
-        return res.status(401).json({ message: "Unauthorized" });
-      }
-      // Fetch patients for this doctor; return _id and name.
-      const patients = await Patient.find({ doctor: doctor._id }).select("_id name");
-      return res.status(200).json({ patients });
-    } catch (error) {
-      console.error("Error fetching patients:", error);
-      return res.status(500).json({ message: "Server error" });
+  try {
+    const doctor = req.doctor;
+    if (!doctor) {
+      return res.status(401).json({ message: "Unauthorized" });
     }
-  };
+    
+    // Build the query object. If a search term is provided, filter by name.
+    const search = req.query.search;
+    const query = { doctor: doctor._id };
+    if (search) {
+      query.name = { $regex: search, $options: "i" }; // Case-insensitive matching
+    }
+    
+    // Fetch patients for this doctor; return _id and name.
+    const patients = await Patient.find(query).select("_id name");
+    return res.status(200).json({ patients });
+  } catch (error) {
+    console.error("Error fetching patients:", error);
+    return res.status(500).json({ message: "Server error" });
+  }
+};
 
 
 
