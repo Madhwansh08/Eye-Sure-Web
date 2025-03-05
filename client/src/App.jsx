@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
 import Upload from "./pages/Upload";
 import Analysis from "./pages/Analysis";
+import Explainable from "./pages/Explainable";
 import Login from "./pages/auth/Login";
 import Register from "./pages/auth/Register";
 import PrivateRoute from "./routes/Private";
@@ -49,6 +50,21 @@ function App() {
                 </PrivateRoute>
               } 
             />
+
+
+            <Route
+              path="/explainable/:reportId"
+              element={
+                <PrivateRoute>
+                  <Explainable />
+                </PrivateRoute>
+              }
+            />
+            
+
+
+
+
             <Route 
               path="/login" 
               element={

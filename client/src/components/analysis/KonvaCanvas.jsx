@@ -1,17 +1,16 @@
+// src/components/analysis/KonvaCanvas.jsx
 import React, { useRef, useState, useEffect } from "react";
 import { Stage, Layer, Rect, Circle, Ellipse, Image as KonvaImage, Text } from "react-konva";
 import Konva from "konva";
-import { useSelector, useDispatch } from "react-redux";
-import { addAnnotation } from "../../redux/slices/annotationSlice";
 
-// Define a custom RGB filter. This filter zeroes out channels that are disabled.
-Konva.Filters.RGBChannel = function(imageData) {
+// 1) Custom Konva filter for RGB channels (unchanged)
+Konva.Filters.RGBChannel = function (imageData) {
   const data = imageData.data;
   const rEnabled = this.getAttr("rgbRed");
   const gEnabled = this.getAttr("rgbGreen");
   const bEnabled = this.getAttr("rgbBlue");
+
   for (let i = 0; i < data.length; i += 4) {
-    // If none of the channels are enabled, make the pixel fully transparent.
     if (!rEnabled && !gEnabled && !bEnabled) {
       data[i + 3] = 0;
     } else {
@@ -22,6 +21,7 @@ Konva.Filters.RGBChannel = function(imageData) {
   }
 };
 
+// 2) Custom hook to load image for Konva
 function useKonvaImage(src) {
   const [image, setImage] = useState(null);
   useEffect(() => {
@@ -34,8 +34,10 @@ function useKonvaImage(src) {
   return image;
 }
 
+// 3) Modal to collect annotation label
 const LabelModal = ({ onSubmit, onCancel }) => {
   const [labelText, setLabelText] = useState("");
+
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
       <div className="bg-white rounded-lg p-6 w-80 shadow-lg">
@@ -72,37 +74,40 @@ const LabelModal = ({ onSubmit, onCancel }) => {
   );
 };
 
-const KonvaCanvas = ({ side, imageSrc, adjustments = {}, width = 800, height = 800, resetPanTrigger }) => {
-  const dispatch = useDispatch();
-  const { currentTool, leftImageAnnotations, rightImageAnnotations } = useSelector(
-    (state) => state.annotation
-  );
-  const annotations = side === "left" ? leftImageAnnotations : rightImageAnnotations;
+// 4) Main KonvaCanvas component
+const KonvaCanvas = ({
+  side,
+  imageSrc,
+  adjustments = {},
+  width = 800,
+  height = 800,
+  resetPanTrigger,
+  currentTool,      // "rectangle", "oval", or "point"
+  annotations,      // array of annotation objects
+  setAnnotations    // function to update annotation array
+}) => {
   const stageRef = useRef(null);
   const imageRef = useRef(null);
+
+  // States for drawing a new shape
   const [isDrawing, setIsDrawing] = useState(false);
   const [newShape, setNewShape] = useState(null);
+
+  // Label modal states
   const [showLabelModal, setShowLabelModal] = useState(false);
   const [pendingAnnotation, setPendingAnnotation] = useState(null);
+
+  // Load background image
   const backgroundImage = useKonvaImage(imageSrc);
 
-  // Cache image for performance and to apply filters.
+  // Cache image if needed (brightness, contrast, etc.)
   useEffect(() => {
     if (imageRef.current) {
       imageRef.current.cache();
     }
   }, [backgroundImage, adjustments]);
 
-  // Optionally save annotations in localStorage.
-  useEffect(() => {
-    if (side === "left") {
-      localStorage.setItem("annotations-left", JSON.stringify(leftImageAnnotations));
-    } else {
-      localStorage.setItem("annotations-right", JSON.stringify(rightImageAnnotations));
-    }
-  }, [leftImageAnnotations, rightImageAnnotations, side]);
-
-  // Reset stage pan to center when resetPanTrigger changes.
+  // Reset stage pan when triggered
   useEffect(() => {
     if (stageRef.current) {
       const currentZoom = adjustments.zoom || 1;
@@ -113,71 +118,75 @@ const KonvaCanvas = ({ side, imageSrc, adjustments = {}, width = 800, height = 8
     }
   }, [resetPanTrigger, width, height, adjustments.zoom]);
 
+  // ================= Mouse Events =================
+
+  // (1) Mouse Down: create a shape depending on current tool
   const handleMouseDown = (e) => {
     if (!currentTool) return;
     const stage = e.target.getStage();
     const pointer = stage.getPointerPosition();
     setIsDrawing(true);
-    switch (currentTool) {
-      case "rectangle":
-        setNewShape({
-          type: "rectangle",
-          x: pointer.x,
-          y: pointer.y,
-          width: 0,
-          height: 0,
-          stroke: "blue",
-          strokeWidth: 2,
-          id: `rect-${Date.now()}`,
-        });
-        break;
-      case "oval":
-        setNewShape({
-          type: "oval",
-          x: pointer.x,
-          y: pointer.y,
-          radiusX: 0,
-          radiusY: 0,
-          stroke: "red",
-          strokeWidth: 2,
-          id: `oval-${Date.now()}`,
-        });
-        break;
-      case "point":
-        setNewShape({
-          type: "point",
-          x: pointer.x,
-          y: pointer.y,
-          radius: 5,
-          fill: "green",
-          id: `point-${Date.now()}`,
-        });
-        setIsDrawing(true);
-        break;
-      default:
-        break;
+
+    if (currentTool === "rectangle") {
+      setNewShape({
+        type: "rectangle",
+        x: pointer.x,
+        y: pointer.y,
+        width: 0,
+        height: 0,
+        stroke: "blue",
+        strokeWidth: 2,
+        id: `rect-${Date.now()}`
+      });
+    } else if (currentTool === "oval") {
+      setNewShape({
+        type: "oval",
+        x: pointer.x,
+        y: pointer.y,
+        radiusX: 0,
+        radiusY: 0,
+        stroke: "red",
+        strokeWidth: 2,
+        id: `oval-${Date.now()}`
+      });
+    } else if (currentTool === "point") {
+      const pointShape = {
+        type: "point",
+        x: pointer.x,
+        y: pointer.y,
+        radius: 5,
+        fill: "green",
+        id: `point-${Date.now()}`
+      };
+      // Immediately open label modal for point
+      setPendingAnnotation(pointShape);
+      setShowLabelModal(true);
+      setIsDrawing(false);
     }
   };
 
+  // (2) Mouse Move: update shape size
   const handleMouseMove = (e) => {
     if (!isDrawing || !newShape) return;
     const stage = e.target.getStage();
     const pointer = stage.getPointerPosition();
+
     if (newShape.type === "rectangle") {
       setNewShape((prev) => ({
         ...prev,
         width: pointer.x - prev.x,
-        height: pointer.y - prev.y,
+        height: pointer.y - prev.y
       }));
     } else if (newShape.type === "oval") {
       setNewShape((prev) => ({
         ...prev,
         radiusX: Math.abs(pointer.x - prev.x),
-        radiusY: Math.abs(pointer.y - prev.y),
+        radiusY: Math.abs(pointer.y - prev.y)
       }));
     }
   };
 
+  // (3) Mouse Up: finalize shape & open label modal
   const handleMouseUp = () => {
     if (!isDrawing || !newShape) {
       setIsDrawing(false);
@@ -189,26 +198,27 @@ const KonvaCanvas = ({ side, imageSrc, adjustments = {}, width = 800, height = 8
     setNewShape(null);
   };
 
+  // ================= Label Modal =================
   const handleLabelSubmit = (label) => {
     const annotatedShape = { ...pendingAnnotation, label };
-    dispatch(addAnnotation({ side, annotation: annotatedShape }));
+    setAnnotations([...annotations, annotatedShape]);
     setPendingAnnotation(null);
     setShowLabelModal(false);
   };
 
   const handleLabelCancel = () => {
-    dispatch(addAnnotation({ side, annotation: { ...pendingAnnotation, label: "" } }));
     setPendingAnnotation(null);
     setShowLabelModal(false);
   };
 
-  // Drag boundaries to keep image inside canvas.
+  // ================= Drag Boundaries =================
   const dragBoundFunc = (pos) => {
     const scale = adjustments.zoom || 1;
     const minX = width - width * scale;
     const minY = height - height * scale;
     const maxX = 0;
     const maxY = 0;
+
     let x = pos.x;
     let y = pos.y;
     if (x > maxX) x = maxX;
@@ -218,6 +228,7 @@ const KonvaCanvas = ({ side, imageSrc, adjustments = {}, width = 800, height = 8
     return { x, y };
   };
 
+  // ================= Render =================
   return (
     <div style={{ width, height }}>
       <Stage
@@ -233,6 +244,7 @@ const KonvaCanvas = ({ side, imageSrc, adjustments = {}, width = 800, height = 8
         onMouseUp={handleMouseUp}
       >
         <Layer>
+          {/* Background Image */}
           {backgroundImage && (
             <KonvaImage
               ref={imageRef}
@@ -245,61 +257,73 @@ const KonvaCanvas = ({ side, imageSrc, adjustments = {}, width = 800, height = 8
                 Konva.Filters.Brighten,
                 Konva.Filters.Contrast,
                 adjustments.negative ? Konva.Filters.Invert : undefined,
-                // Apply the custom RGBChannel filter if rgb attributes are defined.
-                adjustments.rgbRed !== undefined &&
-                adjustments.rgbGreen !== undefined &&
-                adjustments.rgbBlue !== undefined
+                (adjustments.rgbRed !== undefined &&
+                  adjustments.rgbGreen !== undefined &&
+                  adjustments.rgbBlue !== undefined)
                   ? Konva.Filters.RGBChannel
-                  : undefined,
+                  : undefined
               ].filter(Boolean)}
               brightness={adjustments.brightness || 0}
               contrast={adjustments.contrast || 0}
-              // We removed saturate; the RGBChannel filter uses rgbRed, rgbGreen, rgbBlue.
               rgbRed={adjustments.rgbRed}
               rgbGreen={adjustments.rgbGreen}
               rgbBlue={adjustments.rgbBlue}
             />
           )}
-          {annotations.map((ann) => (
-            <React.Fragment key={ann.id}>
-              {ann.type === "rectangle" && (
-                <Rect
-                  x={ann.x}
-                  y={ann.y}
-                  width={ann.width}
-                  height={ann.height}
-                  stroke={ann.stroke}
-                  strokeWidth={ann.strokeWidth || 2}
-                />
-              )}
-              {ann.type === "oval" && (
-                <Ellipse
-                  x={ann.x}
-                  y={ann.y}
-                  radiusX={ann.radiusX}
-                  radiusY={ann.radiusY}
-                  stroke={ann.stroke}
-                  strokeWidth={ann.strokeWidth || 2}
-                />
-              )}
-              {ann.type === "point" && (
-                <Circle x={ann.x} y={ann.y} radius={ann.radius} fill={ann.fill} />
-              )}
-              {ann.label !== undefined && (
-                <Text
-                  text={ann.label}
-                  x={ann.x}
-                  y={ann.type === "point" ? ann.y + 8 : ann.y - 20}
-                  fontSize={16}
-                  fill="black"
-                  fontStyle="bold"
-                />
-              )}
-            </React.Fragment>
-          ))}
-          {newShape &&
-            (newShape.type === "rectangle" || newShape.type === "oval") &&
-            (newShape.type === "rectangle" ? (
+
+          {/* Render existing annotations */}
+          {annotations.map((ann) => {
+            // Convert numeric properties
+            const x = Number(ann.x);
+            const y = Number(ann.y);
+
+            return (
+              <React.Fragment key={ann.id}>
+                {ann.type === "rectangle" && (
+                  <Rect
+                    x={x}
+                    y={y}
+                    width={Number(ann.width)}
+                    height={Number(ann.height)}
+                    stroke={ann.stroke}
+                    strokeWidth={ann.strokeWidth || 2}
+                  />
+                )}
+                {ann.type === "oval" && (
+                  <Ellipse
+                    x={x}
+                    y={y}
+                    radiusX={Number(ann.radiusX)}
+                    radiusY={Number(ann.radiusY)}
+                    stroke={ann.stroke}
+                    strokeWidth={ann.strokeWidth || 2}
+                  />
+                )}
+                {ann.type === "point" && (
+                  <Circle
+                    x={x}
+                    y={y}
+                    radius={Number(ann.radius)}
+                    fill={ann.fill}
+                  />
+                )}
+                {ann.label && (
+                  <Text
+                    text={ann.label}
+                    x={x}
+                    y={ann.type === "point" ? y + 8 : y - 20}
+                    fontSize={16}
+                    fill="black"
+                    fontStyle="bold"
+                  />
+                )}
+              </React.Fragment>
+            );
+          })}
+
+          {/* Render shape while drawing */}
+          {newShape && (newShape.type === "rectangle" || newShape.type === "oval") && (
+            newShape.type === "rectangle" ? (
               <Rect
                 x={newShape.x}
                 y={newShape.y}
@@ -317,11 +341,17 @@ const KonvaCanvas = ({ side, imageSrc, adjustments = {}, width = 800, height = 8
                 stroke={newShape.stroke}
                 strokeWidth={newShape.strokeWidth || 2}
               />
-            ))}
+            )
+          )}
         </Layer>
       </Stage>
+
+      {/* Label Modal */}
       {showLabelModal && (
-        <LabelModal onSubmit={handleLabelSubmit} onCancel={handleLabelCancel} />
+        <LabelModal
+          onSubmit={handleLabelSubmit}
+          onCancel={handleLabelCancel}
+        />
       )}
     </div>
   );

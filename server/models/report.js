@@ -1,8 +1,26 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const reportSchema = new Schema({
+const annotationSchema = new mongoose.Schema(
+  {
+    type: String,     // "rectangle", "oval", "point"
+    x: Number,
+    y: Number,
+    width: Number,    // rectangle
+    height: Number,   // rectangle
+    radiusX: Number,  // oval
+    radiusY: Number,  // oval
+    radius: Number,   // point
+    fill: String,     // point color
+    stroke: String,
+    strokeWidth: Number,
+    label: String,
+    id: String,
+  },
+  { _id: false }
+);
 
+const reportSchema = new Schema({
   leftFundusImage: {
     type: String,
     required: true,
@@ -13,17 +31,24 @@ const reportSchema = new Schema({
     required: true,
     trim: true
   },
-  reannotationLabel: {
+  analysisType: {
     type: String,
+    required: true,
     trim: true
   },
-  reannotationCoordinates: {
-    type: [Number],
+  // Change annotation fields to store an array of annotation objects
+  leftFundusAnnotationCoordinates: {
+    type: [annotationSchema],
+    default: []
+  },
+  rightFundusAnnotationCoordinates: {
+    type: [annotationSchema],
+    default: []
   },
   explainableAiLeftFundusImage: {
     type: String,
     trim: true
-  }, 
+  },
   explainableAiRightFundusImage: {
     type: String,
     trim: true
@@ -34,19 +59,27 @@ const reportSchema = new Schema({
   contorRightVCDR: { type: Number },
   contorLeftGlaucomaStatus: { type: String, trim: true },
   contorRightGlaucomaStatus: { type: String, trim: true },
-  leftEyeClahe:{
+  leftEyeClahe: {
     type: String,
     trim: true
   },
-  rightEyeClahe:{
+  rightEyeClahe: {
     type: String,
     trim: true
   },
-  leftFundusPrediction:{
+  leftFundusPrediction: {
     type: Schema.Types.Mixed,
   },
-  rightFundusPrediction:{
+  rightFundusPrediction: {
     type: Schema.Types.Mixed,
+  },
+  leftFundusArmdPrediction: {
+    type: String,
+    trim: true
+  },
+  rightFundusArmdPrediction: {
+    type: String,
+    trim: true
   },
   patientId: {
     type: Schema.Types.ObjectId,
@@ -55,5 +88,5 @@ const reportSchema = new Schema({
   },
 }, { timestamps: true });
 
-// Compile the schema into a model and export it.
+// Compile and export the model
 module.exports = mongoose.model('Report', reportSchema);

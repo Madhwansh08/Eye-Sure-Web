@@ -1,10 +1,7 @@
 // src/components/analysis/AnnotationToolBar.jsx
 import React from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { setTool, undoAnnotation, redoAnnotation, resetAnnotations } from "../../redux/slices/annotationSlice";
 import { FiSquare, FiCircle, FiTarget, FiSave, FiToggleRight, FiRefreshCw } from "react-icons/fi";
 import { CiUndo, CiRedo } from "react-icons/ci";
-import axios from "axios";
 import { motion } from "framer-motion";
 
 const buttonVariants = {
@@ -15,36 +12,23 @@ const buttonVariants = {
   tap: { scale: 0.9 },
 };
 
-const AnnotationToolBar = ({ onToggle, activeSide = "left" }) => {
-  const dispatch = useDispatch();
-  const currentTool = useSelector((state) => state.annotation.currentTool);
-  const annotationState = useSelector((state) => state.annotation);
-
+const AnnotationToolBar = ({ onToggle, currentTool, setCurrentTool, onSaveAnnotations }) => {
+  // Handle tool selection
   const handleSetTool = (tool) => {
-    dispatch(setTool(tool));
+    setCurrentTool(tool);
   };
 
-  const handleSaveAnnotations = async () => {
-    try {
-      const response = await axios.post("/saveAnnotations", annotationState);
-      console.log("Annotations saved:", response.data);
-      alert("Annotations saved successfully!");
-    } catch (error) {
-      console.error("Error saving annotations:", error);
-      alert("Failed to save annotations");
-    }
-  };
-
+  // Placeholder functions for undo, redo, reset if needed.
   const handleUndo = () => {
-    dispatch(undoAnnotation({ side: activeSide }));
+    // Implement undo functionality if desired.
   };
 
   const handleRedo = () => {
-    dispatch(redoAnnotation({ side: activeSide }));
+    // Implement redo functionality if desired.
   };
 
   const handleReset = () => {
-    dispatch(resetAnnotations());
+    // Implement reset functionality if desired.
   };
 
   return (
@@ -54,9 +38,7 @@ const AnnotationToolBar = ({ onToggle, activeSide = "left" }) => {
         variants={buttonVariants}
         whileHover="hover"
         whileTap="tap"
-        className={`p-2 rounded-full transition ${
-          currentTool === "rectangle" ? "bg-secondary text-[#fdfdfd]" : "bg-gray-100 hover:bg-[#030811] text-primary"
-        }`}
+        className={`p-2 rounded-full transition ${currentTool === "rectangle" ? "bg-secondary text-[#fdfdfd]" : "bg-gray-100 hover:bg-[#030811] text-primary"}`}
       >
         <FiSquare size={20} />
       </motion.button>
@@ -65,9 +47,7 @@ const AnnotationToolBar = ({ onToggle, activeSide = "left" }) => {
         variants={buttonVariants}
         whileHover="hover"
         whileTap="tap"
-        className={`p-2 rounded-full transition ${
-          currentTool === "oval" ? "bg-secondary text-[#fdfdfd]" : "bg-gray-100 hover:bg-[#030811] text-primary"
-        }`}
+        className={`p-2 rounded-full transition ${currentTool === "oval" ? "bg-secondary text-[#fdfdfd]" : "bg-gray-100 hover:bg-[#030811] text-primary"}`}
       >
         <FiCircle size={20} />
       </motion.button>
@@ -76,9 +56,7 @@ const AnnotationToolBar = ({ onToggle, activeSide = "left" }) => {
         variants={buttonVariants}
         whileHover="hover"
         whileTap="tap"
-        className={`p-2 rounded-full transition ${
-          currentTool === "point" ? "bg-secondary text-[#fdfdfd]" : "bg-gray-100 hover:bg-[#030811] text-primary"
-        }`}
+        className={`p-2 rounded-full transition ${currentTool === "point" ? "bg-secondary text-[#fdfdfd]" : "bg-gray-100 hover:bg-[#030811] text-primary"}`}
       >
         <FiTarget size={20} />
       </motion.button>
@@ -110,7 +88,7 @@ const AnnotationToolBar = ({ onToggle, activeSide = "left" }) => {
         <FiRefreshCw size={20} />
       </motion.button>
       <motion.button
-        onClick={handleSaveAnnotations}
+        onClick={onSaveAnnotations}
         variants={buttonVariants}
         whileHover="hover"
         whileTap="tap"

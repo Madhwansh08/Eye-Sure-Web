@@ -17,6 +17,7 @@ import { useNavigate } from "react-router-dom";
 import API_URL from "../utils/config";
 import DetailModal from "../components/upload/DetailModal";
 import { MdTableRows } from "react-icons/md";
+import { IoMdClose } from "react-icons/io";
 import RecentReportsDrawer from "../components/upload/RecentReportsDrawer";
 
 const Upload = () => {
@@ -141,7 +142,7 @@ const Upload = () => {
         onClick={() => setIsDrawerOpen(!isDrawerOpen)}
         className="fixed right-4 bottom-4 z-50 p-3 bg-white rounded-full shadow-lg"
       >
-        <MdTableRows size={28} className="text-primary" />
+        {isDrawerOpen ? <IoMdClose size={28}/> : <MdTableRows size={28} />}
       </button>
 
       {isDrawerOpen && (

@@ -56,4 +56,33 @@
   .font-custom {
     font-family: var(--font-family);
   }
+
+  
 }
+
+
+/* Animated Background for Explainable AI Button */
+  .bg-animated-ai {
+    background: linear-gradient(45deg, #1C90BF, #7162D7, #B73DEB, #FF8A00);
+    background-size: 300% 300%;
+    animation: animate-ai-bg 6s ease infinite;
+  }
+
+  @keyframes animate-ai-bg {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  /* Hover Background for Explainable AI Button */
+  .hover:bg-hover-ai:hover {
+    background: linear-gradient(45deg, #FF8A00, #FF3CAC, #784BA0);
+    background-size: 300% 300%;
+    animation: animate-hover-bg 4s ease infinite;
+  }
+
+  @keyframes animate-hover-bg {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }

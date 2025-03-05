@@ -31,6 +31,36 @@ const annotationSlice = createSlice({
         state.rightImageAnnotations.push(annotation);
       }
     },
+    updateAnnotation: (state, action) => {
+      // payload = { side: "left" | "right", id: string, newProps: {...} }
+      const { side, id, newProps } = action.payload;
+      if (side === "left") {
+        const index = state.leftImageAnnotations.findIndex(ann => ann.id === id);
+        if (index !== -1) {
+          state.leftImageAnnotations[index] = {
+            ...state.leftImageAnnotations[index],
+            ...newProps,
+          };
+        }
+      } else if (side === "right") {
+        const index = state.rightImageAnnotations.findIndex(ann => ann.id === id);
+        if (index !== -1) {
+          state.rightImageAnnotations[index] = {
+            ...state.rightImageAnnotations[index],
+            ...newProps,
+          };
+        }
+      }
+    },
+    deleteAnnotation: (state, action) => {
+      // payload = { side: "left" | "right", id: string }
+      const { side, id } = action.payload;
+      if (side === "left") {
+        state.leftImageAnnotations = state.leftImageAnnotations.filter(ann => ann.id !== id);
+      } else if (side === "right") {
+        state.rightImageAnnotations = state.rightImageAnnotations.filter(ann => ann.id !== id);
+      }
+    },
     undoAnnotation: (state, action) => {
       // payload = { side: "left" | "right" }
       const { side } = action.payload;
@@ -70,5 +100,13 @@ const annotationSlice = createSlice({
   },
 });
 
-export const { setTool, addAnnotation, undoAnnotation, redoAnnotation, resetAnnotations } = annotationSlice.actions;
+export const {
+  setTool,
+  addAnnotation,
+  updateAnnotation,
+  deleteAnnotation,
+  undoAnnotation,
+  redoAnnotation,
+  resetAnnotations,
+} = annotationSlice.actions;
 export default annotationSlice.reducer;
