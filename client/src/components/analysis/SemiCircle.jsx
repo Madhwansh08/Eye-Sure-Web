@@ -1,10 +1,10 @@
 import React from "react";
 
 const SemiCircle = ({ percentage }) => {
-  const radius = 60;
-  const strokeWidth = 14;
-  const circumference = Math.PI * radius;
-
+  // Set the overall dimensions for the bar.
+  const width = 300;
+  const height = 40;
+  
   // Determine criticality level based on the percentage
   const getCriticalityLevel = (pct) => {
     if (pct <= 30) return { label: "Low", color: "#10b981" }; // Green
@@ -14,77 +14,56 @@ const SemiCircle = ({ percentage }) => {
   };
 
   const { label, color } = getCriticalityLevel(percentage);
-  const dashOffset = (1 - percentage / 100) * circumference;
+  const finalScale = percentage / 100; // determines how much the bar fills
 
   return (
-    <div className="relative w-[300px] h-[160px] flex items-center justify-center">
-      <svg
-        width="200"
-        height="120"
-        viewBox="0 0 160 100"
-        xmlns="http://www.w3.org/2000/svg"
-      >
+    <div className="relative w-[300px] h-[40px] flex items-center justify-center">
+      <svg width={width} height={height} viewBox={`0 0 ${width} ${height}`} xmlns="http://www.w3.org/2000/svg">
         <defs>
-          {/* Drop shadow/glow filter using the same color */}
+          {/* Define a glow effect matching the criticality color */}
           <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
-            <feDropShadow
-              dx="0"
-              dy="0"
-              stdDeviation="6"
-              floodColor={color}
-              floodOpacity="0.5"
-            />
+            <feDropShadow dx="0" dy="0" stdDeviation="4" floodColor={color} floodOpacity="0.5" />
           </filter>
         </defs>
 
-        {/* Static background arc */}
-        <path
-          d="M20,80 A60,60 0 1,1 140,80"
-          fill="none"
-          stroke="#2d2d2d"
-          strokeWidth={strokeWidth}
-          strokeLinecap="round"
-        />
+        {/* Background bar */}
+        <rect x="0" y="5" width={width} height="30" rx="15" fill="#2d2d2d" />
 
-        {/* Animated arc with solid stroke matching the label color */}
-        <path
-          d="M20,80 A60,60 0 1,1 140,80"
-          fill="none"
-          stroke={color}
-          strokeWidth={strokeWidth}
-          strokeLinecap="round"
+        {/* Animated progress bar */}
+        <rect
+          x="0"
+          y="5"
+          width={width}
+          height="30"
+          rx="15"
+          fill={color}
           filter="url(#glow)"
-          strokeDasharray={circumference}
-          strokeDashoffset={circumference}
           style={{
-            animation: `dashAnimation 1.8s ease-out forwards`
+            transformOrigin: "0 0",
+            transform: "scaleX(0)",
+            animation: `growAnimation 1.8s ease-out forwards`
           }}
         />
 
-        {/* Keyframes for the dash animation */}
+        {/* Centered text label */}
+        <text x={width / 2} y="26" textAnchor="middle" fill="white" fontSize="16" fontWeight="bold">
+          {label}
+        </text>
+
+        {/* Keyframes for the progress bar animation */}
         <style>
           {`
-            @keyframes dashAnimation {
+            @keyframes growAnimation {
               from {
-                stroke-dashoffset: ${circumference};
+                transform: scaleX(0);
               }
               to {
-                stroke-dashoffset: ${dashOffset};
+                transform: scaleX(${finalScale});
               }
             }
           `}
         </style>
       </svg>
-
-      {/* Display only the label in the center */}
-      <div className="absolute mt-10 flex flex-col items-center">
-        <p
-          className="text-2xl font-extrabold"
-          style={{ color }}
-        >
-          {label}
-        </p>
-      </div>
     </div>
   );
 };

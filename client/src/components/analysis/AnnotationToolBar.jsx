@@ -3,32 +3,31 @@ import React from "react";
 import { FiSquare, FiCircle, FiTarget, FiSave, FiToggleRight, FiRefreshCw } from "react-icons/fi";
 import { CiUndo, CiRedo } from "react-icons/ci";
 import { motion } from "framer-motion";
+import { useDispatch } from "react-redux";
+import { undoAnnotation, redoAnnotation, resetAnnotations } from "../../redux/slices/annotationSlice";
 
 const buttonVariants = {
-  hover: {
-    scale: 1.1,
-    transition: { type: "spring", stiffness: 300, damping: 20 },
-  },
+  hover: { scale: 1.1, transition: { type: "spring", stiffness: 300, damping: 20 } },
   tap: { scale: 0.9 },
 };
 
-const AnnotationToolBar = ({ onToggle, currentTool, setCurrentTool, onSaveAnnotations }) => {
-  // Handle tool selection
+const AnnotationToolBar = ({ onToggle, currentTool, setCurrentTool, onSaveAnnotations, reportId, currentSide = "left" }) => {
+  const dispatch = useDispatch();
+
   const handleSetTool = (tool) => {
     setCurrentTool(tool);
   };
 
-  // Placeholder functions for undo, redo, reset if needed.
   const handleUndo = () => {
-    // Implement undo functionality if desired.
+    dispatch(undoAnnotation({ reportId, side: currentSide }));
   };
 
   const handleRedo = () => {
-    // Implement redo functionality if desired.
+    dispatch(redoAnnotation({ reportId, side: currentSide }));
   };
 
   const handleReset = () => {
-    // Implement reset functionality if desired.
+    dispatch(resetAnnotations({ reportId })); // resets both sides
   };
 
   return (

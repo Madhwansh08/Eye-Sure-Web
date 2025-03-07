@@ -1,4 +1,3 @@
-// src/pages/Analysis.jsx
 import React, { useEffect, useState, useRef } from "react";
 import Header from "../components/common/Header";
 import AnnotationToolBar from "../components/analysis/AnnotationToolBar";
@@ -11,36 +10,37 @@ import { AiFillOpenAI } from "react-icons/ai";
 import { useParams, useNavigate } from "react-router-dom";
 import API_URL from "../utils/config";
 import SemiCircle from "../components/analysis/SemiCircle";
+import { useDispatch, useSelector } from "react-redux";
+import { initReportState, setTool } from "../redux/slices/annotationSlice";
+import store from "../redux/store";
+import { toast } from "react-toastify";
 
 const Analysis = () => {
   const { reportId } = useParams();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
-  // Report & Patient data
   const [report, setReport] = useState(null);
   const [patient, setPatient] = useState(null);
   const [loading, setLoading] = useState(true);
-  // For image carousel
   const [carouselIndex, setCarouselIndex] = useState(0);
-  // Toggle between annotation and image toolbars
-  const [toolbarMode, setToolbarMode] = useState("annotation"); // "annotation" or "image"
-  // Image adjustment settings for Konva canvas
+  const [toolbarMode, setToolbarMode] = useState("annotation");
   const [adjustments, setAdjustments] = useState({
     brightness: 0,
     contrast: 0,
     saturation: 0,
     negative: false,
-    zoom: 1,
+    zoom: 1
   });
   const [resetPanTrigger, setResetPanTrigger] = useState(0);
   const [note, setNote] = useState("");
-  // Local annotation state per image (report-specific)
-  const [leftAnnotations, setLeftAnnotations] = useState([]);
-  const [rightAnnotations, setRightAnnotations] = useState([]);
-  // Local state for the current drawing tool (rectangle, oval, point)
-  const [currentTool, setCurrentTool] = useState("rectangle");
 
-  // Refs for draggable floating buttons
+  // Read current tool from Redux (default is null)
+  const currentTool = useSelector((state) => {
+    const data = state.annotation.byReportId[reportId];
+    return data?.currentTool;
+  });
+
   const toggleButtonRef = useRef(null);
   const backButtonRef = useRef(null);
 
@@ -48,13 +48,17 @@ const Analysis = () => {
     const fetchReport = async () => {
       try {
         const response = await axios.get(`${API_URL}/api/report/${reportId}`, {
-          withCredentials: true,
+          withCredentials: true
         });
         setReport(response.data.report);
         setPatient(response.data.patient);
-        // Initialize annotation arrays if they exist; else, remain empty.
-        setLeftAnnotations(response.data.report.leftFundusAnnotationCoordinates || []);
-        setRightAnnotations(response.data.report.rightFundusAnnotationCoordinates || []);
+        dispatch(
+          initReportState({
+            reportId,
+            leftAnnotations: response.data.report.leftFundusAnnotationCoordinates || [],
+            rightAnnotations: response.data.report.rightFundusAnnotationCoordinates || []
+          })
+        );
       } catch (error) {
         console.error("Error fetching report:", error);
       } finally {
@@ -67,7 +71,7 @@ const Analysis = () => {
     } else {
       setLoading(false);
     }
-  }, [reportId]);
+  }, [reportId, dispatch]);
 
   if (loading) {
     return (
@@ -78,14 +82,24 @@ const Analysis = () => {
     );
   }
 
-  // Prepare images array for the carousel
   const imagesData = [
     { side: "left", src: report?.leftFundusImage },
-    { side: "right", src: report?.rightFundusImage },
+    { side: "right", src: report?.rightFundusImage }
   ].filter((item) => item.src);
 
   const toggleToolbar = () => {
-    setToolbarMode((prev) => (prev === "annotation" ? "image" : "annotation"));
+    if (toolbarMode === "annotation") {
+      // When switching to image toolbar, clear the active tool.
+      dispatch(setTool({ reportId, tool: null }));
+      setToolbarMode("image");
+    } else {
+      dispatch(setTool({ reportId, tool: null }));
+      setToolbarMode("annotation");
+    }
+  };
+
+  const handleSetTool = (tool) => {
+    dispatch(setTool({ reportId, tool }));
   };
 
   const goPrev = () => {
@@ -100,22 +114,21 @@ const Analysis = () => {
     setResetPanTrigger((prev) => prev + 1);
   };
 
-  // API call to update the annotation coordinates with labels for the current report.
   const handleSaveAnnotations = async () => {
     try {
+      const state = store.getState().annotation;
+      const data = state.byReportId[reportId];
       const payload = {
-        leftFundusAnnotationCoordinates: leftAnnotations,
-        rightFundusAnnotationCoordinates: rightAnnotations,
+        leftFundusAnnotationCoordinates: data.leftImageAnnotations,
+        rightFundusAnnotationCoordinates: data.rightImageAnnotations
       };
-      const response = await axios.patch(
-        `${API_URL}/api/report/${reportId}/annotations`,
-        payload,
-        { withCredentials: true }
-      );
-      console.log("Annotations saved:", response.data);
-      alert("Annotations saved successfully!");
+      const response = await axios.patch(`${API_URL}/api/report/${reportId}/annotations`, payload, {
+        withCredentials: true
+      });
+     toast.success("Annotations saved successfully!");
+  
     } catch (error) {
-      console.error("Error saving annotations:", error);
+      toast.error("Failed to save annotations");
       alert("Failed to save annotations");
     }
   };
@@ -124,30 +137,23 @@ const Analysis = () => {
     navigate(`/explainable/${reportId}`);
   };
 
-console.log("Right annotations" , rightAnnotations);
-console.log("Left annotations" , leftAnnotations);
-
-
+  // Determine the label to show above the canvas based on current image side.
+  const currentSideLabel = imagesData[carouselIndex]?.side === "left" ? "Left Eye" : "Right Eye";
 
   return (
     <div className="flex flex-col bg-primary h-screen overflow-hidden relative">
       <Header />
-
       {toolbarMode === "annotation" ? (
         <AnnotationToolBar
           onToggle={toggleToolbar}
           currentTool={currentTool}
-          setCurrentTool={setCurrentTool}
+          setCurrentTool={handleSetTool}
           onSaveAnnotations={handleSaveAnnotations}
+          reportId={reportId}
         />
       ) : (
-        <ImageToolBar
-          onToggle={toggleToolbar}
-          onAdjust={setAdjustments}
-          onResetPan={handleResetPan}
-        />
+        <ImageToolBar onToggle={toggleToolbar} onAdjust={setAdjustments} onResetPan={handleResetPan} />
       )}
-
       <Draggable nodeRef={toggleButtonRef}>
         <button
           ref={toggleButtonRef}
@@ -157,7 +163,6 @@ console.log("Left annotations" , leftAnnotations);
           <AiFillOpenAI size={28} className="text-white" />
         </button>
       </Draggable>
-
       <div className="flex flex-row flex-1 p-8 space-x-8">
         {/* Left Column: Patient Demographics & History */}
         <div className="flex-1 bg-primary p-4 rounded-b-xl rounded-t-xl shadow overflow-auto">
@@ -167,7 +172,6 @@ console.log("Left annotations" , leftAnnotations);
           <p className="mt-2 text-lg text-secondary">Age: {patient.age}</p>
           <p className="mt-2 text-lg text-secondary">Gender: {patient.gender}</p>
           <p className="mt-2 text-lg text-secondary">City: {patient.city}</p>
-
           <div className="mt-10">
             <h3 className="text-3xl mt-5 font-semibold gradient-text">Patient History</h3>
             <table className="w-full mt-4 text-secondary border-collapse border border-gray-500">
@@ -211,12 +215,14 @@ console.log("Left annotations" , leftAnnotations);
             </button>
           </div>
         </div>
-
         {/* Middle Column: Konva Canvas + Carousel */}
         <div className="flex-1 bg-primary p-4 rounded shadow flex flex-col items-center justify-center">
+          {/* Label above the canvas */}
+          <h3 className="text-white font-semibold uppercase text-xl mb-4">{currentSideLabel}</h3>
           {imagesData.length > 0 ? (
             <div className="relative" style={{ width: "800px", height: "800px" }}>
               <KonvaCanvas
+                reportId={reportId}
                 side={imagesData[carouselIndex].side}
                 imageSrc={imagesData[carouselIndex].src}
                 width={800}
@@ -224,17 +230,6 @@ console.log("Left annotations" , leftAnnotations);
                 adjustments={adjustments}
                 resetPanTrigger={resetPanTrigger}
                 currentTool={currentTool}
-                // Pass the annotation state and setter based on side of image.
-                annotations={
-                  imagesData[carouselIndex].side === "left"
-                    ? leftAnnotations
-                    : rightAnnotations
-                }
-                setAnnotations={
-                  imagesData[carouselIndex].side === "left"
-                    ? setLeftAnnotations
-                    : setRightAnnotations
-                }
               />
               {imagesData.length > 1 && (
                 <>
@@ -259,7 +254,6 @@ console.log("Left annotations" , leftAnnotations);
             </p>
           )}
         </div>
-
         {/* Right Column: Analysis Details */}
         <div className="flex-1 bg-primary p-4 h-screen rounded shadow flex flex-col items-center overflow-auto">
           <h2 className="text-3xl mt-10 gradient-text font-bold mb-8">Analysis Results</h2>
@@ -353,7 +347,6 @@ console.log("Left annotations" , leftAnnotations);
           )}
         </div>
       </div>
-
       <Draggable nodeRef={backButtonRef}>
         <button
           ref={backButtonRef}

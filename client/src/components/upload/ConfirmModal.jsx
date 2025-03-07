@@ -86,66 +86,59 @@ const ConfirmModal = ({ onCancel, patientId }) => {
         <motion.div
           initial={{ scale: 0.8 }}
           animate={{ scale: 1 }}
-          className="bg-primary p-10 border-2 border-[#5c60c6] rounded-lg shadow-lg "
+          className="bg-primary p-8 rounded-lg shadow-lg border border-[#5c60c6]"
         >
-          {/* <h2 className="text-3xl font-bold mb-4 text-center text-secondary">
-            Start Analysis?
-          </h2>
-          <p className="mb-6 text-center text-secondary">
-            Would you like to start the analysis of the images?
-          </p> */}
-          <h1 className="text-xl font-bold mb-4 text-center text-secondary">
-            Please select the analysis Type
+          <h1 className="text-xl font-bold mb-6 text-center text-secondary">
+            Please select the analysis type
           </h1>
           {/* Analysis type toggle */}
-          <div className="flex items-center justify-center w-full mt-4 mt-5">
-        <div className="relative flex items-center bg-[#fdfdfd] border border-[#5c60c6] rounded-full overflow-hidden max-w-xl w-full shadow-md">
-          <div
-            className={`absolute top-0 left-0 h-full w-1/3 bg-gradient-to-r from-[#5c60c6] to-[#7a80e8] rounded-full transition-transform duration-500 ease-in-out ${
-              activeTab === "Glaucoma Analysis"
-                ? "translate-x-full"
-                : activeTab === "Armd Analysis"
-                ? "translate-x-[200%]"
-                : "translate-x-0"
-            }`}
-          ></div>
-          <button
-            className={`relative z-10 flex-1 min-w-max px-6 py-3 text-sm font-semibold text-center transition-colors duration-300 ${
-              activeTab === "DR Analysis"
-                ? "text-white"
-                : "text-gray-800 hover:text-[#5c60c6]"
-            }`}
-            onClick={() => setActiveTab("DR Analysis")}
-            aria-label="DR Analysis"
-          >
-            DR Analysis
-          </button>
-          <button
-            className={`relative z-10 flex-1 min-w-max px-6 py-3 text-sm font-semibold text-center transition-colors duration-300 ${
-              activeTab === "Glaucoma Analysis"
-                ? "text-white"
-                : "text-gray-800 hover:text-[#5c60c6]"
-            }`}
-            onClick={() => setActiveTab("Glaucoma Analysis")}
-            aria-label="Glaucoma Analysis"
-          >
-            Glaucoma Analysis
-          </button>
-          <button
-            className={`relative z-10 flex-1 min-w-max px-6 py-3 text-sm font-semibold text-center transition-colors duration-300 ${
-              activeTab === "Armd Analysis"
-                ? "text-white"
-                : "text-gray-800 hover:text-[#5c60c6]"
-            }`}
-            onClick={() => setActiveTab("Armd Analysis")}
-            aria-label="Armd Analysis"
-          >
-            Armd Analysis
-          </button>
-        </div>
-      </div>
-
-          <div className="flex justify-end space-x-4 mt-6">
+          <div className="flex items-center justify-center w-full mb-6">
+            <div className="relative flex items-center bg-white border border-[#5c60c6] rounded-full overflow-hidden max-w-xl w-full shadow-sm">
+              <div
+                className={`absolute top-0 left-0 h-full w-1/3 bg-[#5c60c6] rounded-full transition-transform duration-500 ease-in-out ${
+                  activeTab === "Glaucoma Analysis"
+                    ? "translate-x-full"
+                    : activeTab === "Armd Analysis"
+                    ? "translate-x-[200%]"
+                    : "translate-x-0"
+                }`}
+              ></div>
+              <button
+                className={`relative z-10 flex-1 px-4 py-2 text-sm font-semibold transition-colors duration-300 ${
+                  activeTab === "DR Analysis"
+                    ? "text-white"
+                    : "text-gray-800 hover:text-[#5c60c6]"
+                }`}
+                onClick={() => setActiveTab("DR Analysis")}
+                aria-label="DR Analysis"
+              >
+                DR Analysis
+              </button>
+              <button
+                className={`relative z-10 flex-1 px-4 py-2 text-sm font-semibold transition-colors duration-300 ${
+                  activeTab === "Glaucoma Analysis"
+                    ? "text-white"
+                    : "text-gray-800 hover:text-[#5c60c6]"
+                }`}
+                onClick={() => setActiveTab("Glaucoma Analysis")}
+                aria-label="Glaucoma Analysis"
+              >
+                Glaucoma Analysis
+              </button>
+              <button
+                className={`relative z-10 flex-1 px-4 py-2 text-sm font-semibold transition-colors duration-300 ${
+                  activeTab === "Armd Analysis"
+                    ? "text-white"
+                    : "text-gray-800 hover:text-[#5c60c6]"
+                }`}
+                onClick={() => setActiveTab("Armd Analysis")}
+                aria-label="Armd Analysis"
+              >
+                Armd Analysis
+              </button>
+            </div>
+          </div>
+          <div className="flex justify-end space-x-4">
             <button
               onClick={onCancel}
               className="px-4 py-2 rounded-full bg-gray-300 text-gray-800 hover:bg-gray-400 transition"
@@ -154,7 +147,7 @@ const ConfirmModal = ({ onCancel, patientId }) => {
             </button>
             <button
               onClick={handleSave}
-              className="px-4 py-2 rounded-full bg-blue-500 text-white hover:bg-blue-600 transition"
+              className="px-4 py-2 rounded-full bg-secondary text-white hover:bg-blue-600 transition"
             >
               Save
             </button>
@@ -164,7 +157,7 @@ const ConfirmModal = ({ onCancel, patientId }) => {
 
       {/* Loader Overlay */}
       {loading && (
-        <div className="fixed inset-0 flex items-center justify-center z-60 bg-black bg-opacity-50 backdrop-blur-sm">
+        <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50 backdrop-blur-sm">
           <BarLoader />
         </div>
       )}
