@@ -133,7 +133,7 @@ export const Contact = () => {
                   />
                 </svg>
               </div>
-              <h2 className="text-pretty text-4xl font-semibold tracking-tight text-primary sm:text-5xl">
+              <h2 className="text-pretty text-4xl font-semibold tracking-tight text-secondary sm:text-5xl">
                 Get in touch
               </h2>
               <p className="mt-6 text-lg/8 text-secondary">
@@ -285,7 +285,7 @@ const BlockInTextCard = ({ tag, text, examples, onContactClick }) => {
       </div>
       <button
         onClick={onContactClick}
-        className="w-full rounded-full border border-[#7162d7] py-2 text-sm font-medium transition-colors "
+        className="w-full rounded-full border border-[#387AA4] py-2 text-sm font-medium transition-colors "
       >
         Contact Support
       </button>
@@ -415,7 +415,7 @@ const DragCloseDrawer = ({ open, setOpen, children }) => {
             <div className="absolute left-0 right-0 top-0 z-10 flex justify-center bg-[#030811] p-4">
               <button
                 onPointerDown={(e) => controls.start(e)}
-                className="h-2 w-16 cursor-grab touch-none rounded-full bg-[#f2ebe3] hover:bg-[#c6715c] active:cursor-grabbing"
+                className="h-2 w-16 cursor-grab touch-none rounded-full bg-[#f2ebe3] hover:bg-[#387AA4] active:cursor-grabbing"
               />
             </div>
             <div className="relative z-0 h-full overflow-y-scroll p-4 pt-12">

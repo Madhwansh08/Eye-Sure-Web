@@ -7,30 +7,46 @@ import dashimg from "../../assets/dashboard.jpg";
 const IMG_PADDING = 20;
 const IMG_HEIGHT = "50vh"; // Smaller image height
 
+const FeatureData = [
+  {
+    id: 1,
+    imgUrl: featimg,
+    subheading: "Abnormality Detection",
+    heading: "Seamless Abnormality Detection",
+    description:
+      "AI-driven abnormalities detection in medical imaging represents a significant advancement in diagnostic accuracy and efficiency. This feature utilizes advanced algorithms and machine learning models to identify irregularities in medical images such as X-rays, MRIs, and CT scans.",
+  },
+  {
+    id: 2,
+    imgUrl: dashimg,
+    subheading: "Editing Interface",
+    heading: "Intuitive Editing Interface",
+    description:
+      "The intuitive editing interface allows users to easily manipulate and modify medical images. This feature provides a user-friendly platform for healthcare professionals to annotate, highlight, and adjust images to enhance diagnostic capabilities and improve patient care.",
+  },
+  {
+    id: 3,
+    imgUrl: dashimg,
+    subheading: "Modern Dashboard",
+    heading: "Modern UI Dashboard",
+    description:
+      "The modern UI dashboard offers a comprehensive overview of patient data, medical images, and diagnostic reports. This feature provides healthcare professionals with a centralized platform to access and manage patient information, streamline workflows, and improve collaboration among medical teams.",
+  },
+];
+
 export const Features = () => {
   return (
     <div className="bg-primary">
-      <TextParallaxContent
-        imgUrl={featimg}
-        subheading="Abnormality Detection"
-        heading="Seamless Abnormality Detection"
-      >
-        <ExampleContent />
-      </TextParallaxContent>
-      <TextParallaxContent
-        imgUrl={dashimg}
-        subheading="Editing Interface"
-        heading="Intuitive Editing Interface"
-      >
-        <ExampleContent />
-      </TextParallaxContent>
-      <TextParallaxContent
-        imgUrl={dashimg}
-        subheading="Modern Dashboard"
-        heading="Modern UI Dashboard"
-      >
-        <ExampleContent />
-      </TextParallaxContent>
+      {FeatureData.map((feature) => (
+        <TextParallaxContent
+          key={feature.id}
+          imgUrl={feature.imgUrl}
+          subheading={feature.subheading}
+          heading={feature.heading}
+        >
+          <ExampleContent description={feature.description} />
+        </TextParallaxContent>
+      ))}
     </div>
   );
 };
@@ -43,10 +59,8 @@ const TextParallaxContent = ({ imgUrl, subheading, heading, children }) => {
         paddingRight: IMG_PADDING,
       }}
     >
-      {/* Keep the container tall for the scroll effect */}
       <div className="relative" style={{ height: "100vh" }}>
         <StickyImage imgUrl={imgUrl} imgHeight={IMG_HEIGHT} />
-        {/* Pass the image height to the overlay */}
         <OverlayCopy
           heading={heading}
           subheading={subheading}
@@ -75,17 +89,15 @@ const StickyImage = ({ imgUrl, imgHeight }) => {
         backgroundImage: `url(${imgUrl})`,
         backgroundSize: "cover",
         backgroundPosition: "center",
-        height: imgHeight, // Use the smaller height
+        height: imgHeight,
         top: IMG_PADDING,
         scale,
       }}
       className="sticky z-0 overflow-hidden rounded-3xl"
     >
       <motion.div
-        className="absolute inset-0 bg-[#7162d7]/40"
-        style={{
-          opacity,
-        }}
+        className="absolute inset-0 bg-[#387AA4]/40"
+        style={{ opacity }}
       />
     </motion.div>
   );
@@ -107,35 +119,24 @@ const OverlayCopy = ({ subheading, heading, imgHeight }) => {
       style={{
         y,
         opacity,
-        height: imgHeight, // Restrict the overlay to the image's height
+        height: imgHeight,
       }}
-      // Removed h-screen so the overlay only covers the image area
       className="absolute left-0 top-0 w-full flex-col items-center justify-center text-white flex"
     >
-      {/* <p className="mb-2 text-center uppercase text-xl md:mb-4 md:text-3xl">
-        {subheading}
-      </p> */}
-      <p className="text-center uppercase text-secondary text-4xl font-bold md:text-7xl">{heading}</p>
+      <p className="text-center uppercase text-secondary text-4xl font-bold md:text-7xl">
+        {heading}
+      </p>
     </motion.div>
   );
 };
 
-const ExampleContent = () => (
+const ExampleContent = ({ description }) => (
   <div className="mx-auto grid max-w-5xl grid-cols-1 gap-8 px-4 pb-24 pt-12 md:grid-cols-12">
     <h2 className="col-span-1 text-3xl text-secondary font-bold md:col-span-4">
-      Feature 1
+      Feature Description
     </h2>
     <div className="col-span-1 md:col-span-8">
-      <p className="mb-4 text-xl text-secondary md:text-2xl">
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Quasi,
-        blanditiis soluta eius quam modi aliquam quaerat odit deleniti minima
-        maiores voluptate est ut saepe accusantium maxime doloremque nulla
-        consectetur possimus.
-      </p>
-      <p className="mb-8 text-xl text-secondary md:text-2xl">
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusantium
-        reiciendis blanditiis aliquam aut fugit sint.
-      </p>
+      <p className="mb-4 text-xl text-secondary md:text-2xl">{description}</p>
     </div>
   </div>
 );

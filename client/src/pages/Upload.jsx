@@ -156,7 +156,7 @@ const Upload = () => {
         <h1 className="text-center text-8xl font-bold mb-8 mx-auto text-secondary">
           <span className="gradient-text">Retina</span> Analysis
         </h1>
-        <p className="text-center text-3xl font-semibold mb-8 mx-auto mt-2 text-primary">
+        <p className="text-center text-3xl font-semibold mb-8 mx-auto mt-2 text-secondary">
           Kindly Upload Both Images
         </p>
 
@@ -168,7 +168,7 @@ const Upload = () => {
             <div className="flex flex-row items-start justify-center gap-8">
               <div className="flex flex-col items-center">
                 <button
-                  className="cursor-pointer bg-primary border-2 shadow-lg shadow-[#7162d7] border-[#7162d7] text-secondary py-4 px-10 rounded-full text-lg font-medium transition-all duration-300 hover:shadow-lg hover:shadow-[#7162d7]/50 flex items-center gap-2"
+                  className="cursor-pointer bg-primary border-2 shadow-lg shadow-[#387AA4] border-[#387AA4] text-secondary py-4 px-10 rounded-full text-lg font-medium transition-all duration-300 hover:shadow-lg hover:shadow-[#7162d7]/50 flex items-center gap-2"
                   onClick={() => openFilePicker("left")}
                 >
                   Upload Left Image
@@ -191,7 +191,7 @@ const Upload = () => {
               </div>
               <div className="flex flex-col items-center">
                 <button
-                  className="cursor-pointer bg-primary border-2 shadow-lg shadow-[#7162d7] border-[#7162d7] text-secondary py-4 px-10 rounded-full text-lg font-medium transition-all duration-300 hover:shadow-lg hover:shadow-[#7162d7]/50 flex items-center gap-2"
+                  className="cursor-pointer bg-primary border-2 shadow-lg shadow-[#387AA4] border-[#387AA4] text-secondary py-4 px-10 rounded-full text-lg font-medium transition-all duration-300 hover:shadow-lg hover:shadow-[#7162d7]/50 flex items-center gap-2"
                   onClick={() => openFilePicker("right")}
                 >
                   Upload Right Image

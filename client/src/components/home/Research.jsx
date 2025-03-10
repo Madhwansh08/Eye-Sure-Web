@@ -51,7 +51,7 @@ const Card = ({ card }) => {
       </div>
       {/* Descriptive text section */}
       <div className="relative h-1/4 w-full bg-primary p-4">
-        <h3 className="text-4xl font-bold text-primary">{card.title}</h3>
+        <h3 className="text-4xl font-bold text-secondary">{card.title}</h3>
         <p className="mt-2 text-xl text-secondary">
           Detailed descriptive text for {card.title}. You can add more information here to explain the content further.
         </p>

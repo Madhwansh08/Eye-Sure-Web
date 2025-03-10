@@ -14,7 +14,7 @@
     --font-family: 'Poppins', sans-serif;
     
     /* Gradient for Primary Text (Global) */
-    --primary-text-gradient: linear-gradient(90deg, #1C90BF, #7162D7, #B73DEB);
+    --primary-text-gradient: linear-gradient(90deg, #1C90BF, #387AA4, rgb(100, 176, 179));
   }
 
   /* Apply the font-family globally */
@@ -25,9 +25,9 @@
   /* Dark Mode Overrides (Text & Background) */
   .dark {
     --primary-bg: #030811;          /* Dark mode primary background */
-    --secondary-bg: #7162D7;        /* Dark mode secondary background */
+    --secondary-bg: #387AA4;        /* Dark mode secondary background */
     
-    --primary-text: #7162D7;        /* Dark mode primary text color */
+    --primary-text: #387AA4;        /* Dark mode primary text color */
     --secondary-text: #fdfdfd;      /* Dark mode secondary text color */
   }
 

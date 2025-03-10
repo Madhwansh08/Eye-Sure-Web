@@ -218,7 +218,7 @@ const Analysis = () => {
         {/* Middle Column: Konva Canvas + Carousel */}
         <div className="flex-1 bg-primary p-4 rounded shadow flex flex-col items-center justify-center">
           {/* Label above the canvas */}
-          <h3 className="text-white font-semibold uppercase text-xl mb-4">{currentSideLabel}</h3>
+          <h3 className="text-white font-semibold uppercase text-xl ">{currentSideLabel}</h3>
           {imagesData.length > 0 ? (
             <div className="relative" style={{ width: "800px", height: "800px" }}>
               <KonvaCanvas

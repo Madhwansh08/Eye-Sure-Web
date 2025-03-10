@@ -78,7 +78,7 @@ const RecentReportsDrawer = ({ isOpen, onClose }) => {
                 {reports.map((report) => (
                   <tr
                     key={report._id}
-                    className="hover:bg-[#5c60c6] cursor-pointer"
+                    className="hover:bg-[#387AA4] cursor-pointer"
                     onClick={() => handleRowClick(report._id)}
                   >
                     <td className="px-4 py-2 border text-sm text-secondary">{report._id}</td>
