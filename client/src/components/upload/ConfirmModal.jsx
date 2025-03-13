@@ -86,16 +86,16 @@ const ConfirmModal = ({ onCancel, patientId }) => {
         <motion.div
           initial={{ scale: 0.8 }}
           animate={{ scale: 1 }}
-          className="bg-primary p-8 rounded-lg shadow-lg border border-[#5c60c6]"
+          className="bg-primary p-8 rounded-lg shadow-lg border border-[#387AA4]"
         >
           <h1 className="text-xl font-bold mb-6 text-center text-secondary">
             Please select the analysis type
           </h1>
           {/* Analysis type toggle */}
           <div className="flex items-center justify-center w-full mb-6">
-            <div className="relative flex items-center bg-white border border-[#5c60c6] rounded-full overflow-hidden max-w-xl w-full shadow-sm">
+            <div className="relative flex items-center bg-white border border-[#387AA4] rounded-full overflow-hidden max-w-xl w-full shadow-sm">
               <div
-                className={`absolute top-0 left-0 h-full w-1/3 bg-[#5c60c6] rounded-full transition-transform duration-500 ease-in-out ${
+                className={`absolute top-0 left-0 h-full w-1/3 bg-[#387AA4] rounded-full transition-transform duration-500 ease-in-out ${
                   activeTab === "Glaucoma Analysis"
                     ? "translate-x-full"
                     : activeTab === "Armd Analysis"
@@ -107,7 +107,7 @@ const ConfirmModal = ({ onCancel, patientId }) => {
                 className={`relative z-10 flex-1 px-4 py-2 text-sm font-semibold transition-colors duration-300 ${
                   activeTab === "DR Analysis"
                     ? "text-white"
-                    : "text-gray-800 hover:text-[#5c60c6]"
+                    : "text-gray-800 hover:text-[#387AA4]"
                 }`}
                 onClick={() => setActiveTab("DR Analysis")}
                 aria-label="DR Analysis"
@@ -118,7 +118,7 @@ const ConfirmModal = ({ onCancel, patientId }) => {
                 className={`relative z-10 flex-1 px-4 py-2 text-sm font-semibold transition-colors duration-300 ${
                   activeTab === "Glaucoma Analysis"
                     ? "text-white"
-                    : "text-gray-800 hover:text-[#5c60c6]"
+                    : "text-gray-800 hover:text-[#387AA4]"
                 }`}
                 onClick={() => setActiveTab("Glaucoma Analysis")}
                 aria-label="Glaucoma Analysis"
@@ -129,7 +129,7 @@ const ConfirmModal = ({ onCancel, patientId }) => {
                 className={`relative z-10 flex-1 px-4 py-2 text-sm font-semibold transition-colors duration-300 ${
                   activeTab === "Armd Analysis"
                     ? "text-white"
-                    : "text-gray-800 hover:text-[#5c60c6]"
+                    : "text-gray-800 hover:text-[#387AA4]"
                 }`}
                 onClick={() => setActiveTab("Armd Analysis")}
                 aria-label="Armd Analysis"

@@ -26,12 +26,20 @@ const Upload = () => {
   const { croppingImage, croppingSide, leftImage, rightImage } = useSelector(
     (state) => state.images
   );
-  
+
+  // Local states to store the file names for left and right images
+  const [leftFileName, setLeftFileName] = useState("");
+  const [rightFileName, setRightFileName] = useState("");
   const [showDetailModal, setShowDetailModal] = useState(false);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
   const leftInputRef = useRef(null);
   const rightInputRef = useRef(null);
+
+  // Helper function to truncate file names if they are too long.
+  const truncateFileName = (name, maxLength = 15) => {
+    return name.length <= maxLength ? name : name.substring(0, maxLength) + '...';
+  };
 
   // Convert File -> Base64
   const convertFileToBase64 = (file) => {
@@ -47,6 +55,12 @@ const Upload = () => {
     const file = e.target.files[0];
     if (file) {
       const base64String = await convertFileToBase64(file);
+      // Store the file name locally so that we can display it after cropping
+      if (side === "left") {
+        setLeftFileName(file.name);
+      } else if (side === "right") {
+        setRightFileName(file.name);
+      }
       dispatch(setCroppingImage({ image: base64String, side }));
     }
   };
@@ -77,19 +91,19 @@ const Upload = () => {
       alert("Please upload and crop both images before analyzing.");
       return;
     }
-  
+
     try {
       // Create separate FormData instances for each image.
       const formDataLeft = new FormData();
       const formDataRight = new FormData();
-  
+
       // Convert Base64 images to Blob objects.
       const leftBlob = await (await fetch(leftImage)).blob();
       const rightBlob = await (await fetch(rightImage)).blob();
-  
+
       formDataLeft.append("file", leftBlob, "left_image.jpg");
       formDataRight.append("file", rightBlob, "right_image.jpg");
-  
+
       // Make API calls concurrently.
       const [leftResponse, rightResponse] = await Promise.all([
         axios.post(`${API_URL}/api/image/upload`, formDataLeft, {
@@ -101,26 +115,26 @@ const Upload = () => {
           withCredentials: true,
         }),
       ]);
-  
+
       // Convert predictions to string and trim
       const leftPrediction = String(leftResponse.data.prediction).trim();
       const rightPrediction = String(rightResponse.data.prediction).trim();
-  
+
       console.log("Left Prediction:", leftPrediction);
       console.log("Right Prediction:", rightPrediction);
-  
+
       if (leftPrediction === "0") {
         toast.error("Left eye: Invalid image uploaded");
       } else {
         toast.success("Left eye: Valid image");
       }
-  
+
       if (rightPrediction === "0") {
         toast.error("Right eye: Invalid image uploaded");
       } else {
         toast.success("Right eye: Valid image");
       }
-  
+
       // If at least one image is valid, show the DetailModal; otherwise, navigate to analysis page.
       if (leftPrediction !== "0" || rightPrediction !== "0") {
         setShowDetailModal(true);
@@ -154,7 +168,7 @@ const Upload = () => {
 
       <div className="flex flex-col items-center mt-20 pt-10 bg-primary text-secondary relative">
         <h1 className="text-center text-8xl font-bold mb-8 mx-auto text-secondary">
-          <span className="gradient-text">Retina</span> Analysis
+          <span className="gradient-text">Retina Analysis</span> 
         </h1>
         <p className="text-center text-3xl font-semibold mb-8 mx-auto mt-2 text-secondary">
           Kindly Upload Both Images
@@ -182,11 +196,14 @@ const Upload = () => {
                   onChange={(e) => handleFileChange(e, "left")}
                 />
                 {leftImage && (
-                  <img
-                    src={leftImage}
-                    alt="Left Preview"
-                    className="mt-2 max-w-xs border border-gray-300"
-                  />
+                  <div className="mt-2 text-center">
+                    <img
+                      src={leftImage}
+                      alt="Left Preview"
+                      className="max-w-xs border border-gray-300 my-5"
+                    />
+                    <p className="text-sm font-semibold mt-1">{truncateFileName(leftFileName)}</p>
+                  </div>
                 )}
               </div>
               <div className="flex flex-col items-center">
@@ -205,18 +222,21 @@ const Upload = () => {
                   onChange={(e) => handleFileChange(e, "right")}
                 />
                 {rightImage && (
-                  <img
-                    src={rightImage}
-                    alt="Right Preview"
-                    className="mt-2 max-w-xs border border-gray-300"
-                  />
+                  <div className="mt-2 text-center">
+                    <img
+                      src={rightImage}
+                      alt="Right Preview"
+                      className="max-w-xs border border-gray-300 my-5"
+                    />
+                    <p className="text-sm font-semibold mt-1">{truncateFileName(rightFileName)}</p>
+                  </div>
                 )}
               </div>
             </div>
             {leftImage && rightImage && (
               <button
                 onClick={handleAnalyze}
-                className="bg-secondary text-secondary py-3 px-8 rounded-full text-lg font-semibold hover:bg-secondary/90 transition"
+                className="bg-secondary text-secondary py-3 px-8 rounded-full text-lg font-semibold hover:bg-gray-800 hover:cursor-pointer transition"
               >
                 Analyze
               </button>

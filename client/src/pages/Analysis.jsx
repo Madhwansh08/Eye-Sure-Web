@@ -6,6 +6,7 @@ import KonvaCanvas from "../components/analysis/KonvaCanvas";
 import { FiArrowLeft, FiArrowRight } from "react-icons/fi";
 import Draggable from "react-draggable";
 import axios from "axios";
+import icon from '../assets/aiicon.gif'
 import { AiFillOpenAI } from "react-icons/ai";
 import { useParams, useNavigate } from "react-router-dom";
 import API_URL from "../utils/config";
@@ -24,7 +25,7 @@ const Analysis = () => {
   const [patient, setPatient] = useState(null);
   const [loading, setLoading] = useState(true);
   const [carouselIndex, setCarouselIndex] = useState(0);
-  const [toolbarMode, setToolbarMode] = useState("annotation");
+  const [toolbarMode, setToolbarMode] = useState("image");
   const [adjustments, setAdjustments] = useState({
     brightness: 0,
     contrast: 0,
@@ -154,15 +155,15 @@ const Analysis = () => {
       ) : (
         <ImageToolBar onToggle={toggleToolbar} onAdjust={setAdjustments} onResetPan={handleResetPan} />
       )}
-      <Draggable nodeRef={toggleButtonRef}>
+      {/* <Draggable nodeRef={toggleButtonRef}> */}
         <button
           ref={toggleButtonRef}
           onClick={handleExplainableAI}
           className="fixed bottom-4 right-4 z-50 p-3 rounded-full shadow-lg text-primary border border-[#5c60c6] hover:bg-hover-ai transition flex items-center bg-animated-ai"
         >
-          <AiFillOpenAI size={28} className="text-white" />
+          <img src={icon}  alt="AI" className="w-10 h-10 grayscale-[100]" />
         </button>
-      </Draggable>
+      {/* </Draggable> */}
       <div className="flex flex-row flex-1 p-8 space-x-8">
         {/* Left Column: Patient Demographics & History */}
         <div className="flex-1 bg-primary p-4 rounded-b-xl rounded-t-xl shadow overflow-auto">
@@ -198,7 +199,7 @@ const Analysis = () => {
           <div className="mt-6 relative">
             <textarea
               id="note"
-              className="w-full border-2 border-[#5c60c6] text-secondary rounded-lg px-4 pt-6 pr-16 focus:outline-none bg-transparent"
+              className="w-full border-2 border-[#387AA4] text-secondary rounded-lg px-4 pt-6 pr-16 focus:outline-none bg-transparent"
               value={note}
               placeholder="Enter Note here"
               onChange={(e) => setNote(e.target.value)}
@@ -209,7 +210,7 @@ const Analysis = () => {
                 console.log("Note Submitted:", note);
                 setNote("");
               }}
-              className="absolute right-2 bottom-2 mb-1 bg-[#5c60c6] text-white px-4 py-1 rounded-full hover:bg-[#4a4f9c] transition"
+              className="absolute right-2 bottom-2 mb-1 bg-[#387AA4] text-white px-4 py-1 rounded-full hover:bg-[#4a4f9c] transition"
             >
               Submit
             </button>
@@ -351,7 +352,7 @@ const Analysis = () => {
         <button
           ref={backButtonRef}
           onClick={() => navigate(-1)}
-          className="fixed bottom-4 left-4 z-50 p-3 bg-primary rounded-full shadow-lg text-primary border border-[#5c60c6] hover:bg-gray-200 transition flex items-center"
+          className="fixed bottom-4 left-4 z-50 p-3 bg-primary rounded-full shadow-lg text-primary border border-[#387AA4] hover:bg-gray-200 transition flex items-center"
         >
           <FiArrowLeft size={24} />
         </button>

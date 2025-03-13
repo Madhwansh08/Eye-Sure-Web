@@ -1,20 +1,23 @@
 import { motion} from "framer-motion";
 import { useState, useEffect } from "react";
 
+
+
+
 const steps = [
   {
-    name: "Upload Chest X-Ray",
-    description: "Please upload clear Chest X-ray images in supported formats (e.g., .dicom).",
+    name: "Upload Both Fundus Images",
+    description: "Please upload valid fundus images in supported formats (.png).",
     status: "complete",
   },
   {
     name: "Data Processing",
-    description: "Kindly wait while the system processes the X-ray images and patient data.",
+    description: "Kindly wait while the system processes the fundus images and patient data.",
     status: "upcoming",
   },
   {
     name: "Review Analysis",
-    description: "Manually review and edit the X-ray analysis for accuracy if needed.",
+    description: "Manually review and edit the Fundus images analysis for accuracy if needed.",
     status: "upcoming",
   },
   {

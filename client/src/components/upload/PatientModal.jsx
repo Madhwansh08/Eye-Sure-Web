@@ -44,7 +44,7 @@ const PatientModal = ({ onClose, patientId }) => {
         <motion.div
           initial={{ scale: 0.8 }}
           animate={{ scale: 1 }}
-          className="bg-primary p-10 rounded-lg shadow-lg w-full border-2 border-[#5c60c6] max-w-2xl"
+          className="bg-primary p-10 rounded-lg shadow-lg w-full border-2 border-[#387aa4] max-w-2xl"
         >
           <h2 className="text-2xl font-bold mb-6 text-secondary">New Patient Details</h2>
           <form onSubmit={handleSubmit} className="space-y-4">

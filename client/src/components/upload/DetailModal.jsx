@@ -45,13 +45,13 @@ const DetailModal = ({ onClose }) => {
           <div className="flex flex-row space-x-8">
             <div className="flex-1 flex flex-col items-center justify-center border-r border-gray-300 pr-8">
               <button onClick={handleNewPatient}>
-                <FiPlus size={80} className="text-secondary hover:text-[#5c60c6]" />
+                <FiPlus size={80} className="text-secondary hover:text-[#387AA4]" />
               </button>
               <h3 className="mt-6 text-3xl font-bold text-secondary">New Patient</h3>
             </div>
             <div className="flex-1 flex flex-col items-center justify-center pl-8">
               <button onClick={handleExistingPatient}>
-                <FiUser size={80} className="text-secondary hover:text-[#5c60c6]" />
+                <FiUser size={80} className="text-secondary hover:text-[#387AA4]" />
               </button>
               <h3 className="mt-6 text-3xl font-bold text-secondary">Existing Patient</h3>
             </div>

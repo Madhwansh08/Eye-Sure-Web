@@ -173,7 +173,7 @@ const Explainable = () => {
         {/* Left Column: Patient Demographics & History */}
         <div className="flex-1 bg-primary p-4 rounded-b-xl rounded-t-xl shadow overflow-auto">
           <div className="mt-8">
-            <h3 className="text-3xl mt-5 font-semibold gradient-text">RGB Sliders Here</h3>
+            <h3 className="text-3xl mt-5 font-semibold gradient-text">RGB Toggle</h3>
             <div className="mb-4">
               <label className="text-secondary block mb-1">Red: {adjustments.rgbRed}</label>
               <input

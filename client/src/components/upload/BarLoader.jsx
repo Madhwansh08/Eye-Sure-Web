@@ -42,7 +42,7 @@ export const BarLoader = () => {
       >
         <motion.div
           variants={variants}
-          className="h-16 w-3 dark:bg-[#5c60c6] bg-[#030811]"
+          className="h-16 w-3 dark:bg-[#387AA4] bg-[#030811]"
         />
         <motion.div
           variants={variants}
@@ -50,7 +50,7 @@ export const BarLoader = () => {
         />
         <motion.div
           variants={variants}
-          className="h-16 w-3 dark:bg-[#5c60c6] bg-[#030811]"
+          className="h-16 w-3 dark:bg-[#387AA4] bg-[#030811]"
         />
         <motion.div
           variants={variants}
@@ -58,7 +58,7 @@ export const BarLoader = () => {
         />
         <motion.div
           variants={variants}
-          className="h-16 w-3 dark:bg-[#5c60c6] bg-[#030811]"
+          className="h-16 w-3 dark:bg-[#387AA4] bg-[#030811]"
         />
       </motion.div>
       <motion.div

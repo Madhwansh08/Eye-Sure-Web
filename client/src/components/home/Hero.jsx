@@ -21,9 +21,7 @@ export default function Hero() {
               <span className="gradient-text">Eyesure</span>
             </h1>
             <p className="mt-8 text-pretty text-lg font-medium text-secondary sm:text-xl leading-8">
-              Anim aute id magna aliqua ad ad non deserunt sunt. Qui irure qui
-              lorem cupidatat commodo. Elit sunt amet fugiat veniam occaecat
-              fugiat aliqua. Anim aute id magna aliqua ad ad non deserunt sunt.
+            AI-driven tools to help healthcare professionals analyze, annotate, and report medical images with precision.
             </p>
             <div className="mt-10 flex items-center gap-x-6">
               <button className="rounded-md px-3.5 z-50 py-2.5 text-sm font-semibold bg-secondary text-secondary hover:bg-primary">

@@ -19,6 +19,10 @@ exports.registerDoctor = async (req, res) => {
 
     // Hash the password before saving
     const hashedPassword = await hashPassword(password);
+
+
+
+
     const newDoctor = new Doctor({ name, email, password: hashedPassword });
     await newDoctor.save();
 
