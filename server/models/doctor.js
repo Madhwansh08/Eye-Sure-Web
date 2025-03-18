@@ -36,7 +36,9 @@ const doctorSchema = new mongoose.Schema({
     role: {
         type: String,
         default: 'doctor'
-    }
+    },
+    resetPasswordOTP: { type: String },
+    resetPasswordExpires: { type: Date },
 });
 
 module.exports = mongoose.model('Doctor', doctorSchema);

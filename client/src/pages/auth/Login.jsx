@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { loginUser } from '../../redux/slices/authSlice';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import logoimg from '../../assets/logo.png'; 
 
@@ -128,9 +128,9 @@ const Login = () => {
                 </div>
 
                 <div className="text-base">
-                  <a href="#" className="font-semibold text-primary">
+                  <Link to='/forgot' className="font-semibold text-primary">
                     Forgot password?
-                  </a>
+                  </Link>
                 </div>
               </div>
 
