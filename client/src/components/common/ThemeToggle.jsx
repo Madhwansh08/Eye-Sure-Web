@@ -55,7 +55,7 @@ const ThemeToggle = () => {
         <motion.span
           layout
           transition={{ type: "spring", damping: 15, stiffness: 250 }}
-          className="h-full w-1/2 rounded-full bg-gradient-to-r from-violet-600 to-[#5c60c6]"
+          className="h-full w-1/2 rounded-full bg-gradient-to-r from-[#1C90BF] to-[#387AA4]"
         />
       </div>
     </div>

@@ -10,11 +10,12 @@ const PatientModal = ({ onClose, patientId }) => {
   const [age, setAge] = useState("");
   const [patientName, setPatientName] = useState("");
   const [gender, setGender] = useState("");
+  const [location , setLocation]=useState("");
   const [showConfirmModal, setShowConfirmModal] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const formData = { age, patientName, gender };
+    const formData = { age, patientName, gender , location };
     try {
       const response = await axios.put(`${API_URL}/api/patient/${patientId}`, formData, {
         withCredentials: true,
@@ -91,6 +92,16 @@ const PatientModal = ({ onClose, patientId }) => {
                 <option value="female">Female</option>
                 <option value="other">Other</option>
               </select>
+            </div>
+            <div>
+            <label className="block text-sm font-medium text-secondary">Location</label>
+              <input
+                type="text"
+                value={location}
+                onChange={(e) => setLocation(e.target.value)}
+                className="mt-1 w-full border rounded px-3 py-2 text-secondary"
+                required
+              />
             </div>
             <div className="flex justify-end space-x-4 mt-6">
               <button

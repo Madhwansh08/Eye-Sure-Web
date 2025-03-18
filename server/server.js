@@ -2,6 +2,11 @@ const express = require('express');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const morgan=require('morgan');
+const helmet=require('helmet');
+const limiter = require('express-rate-limit');
+const compression=require('compression');
+
+
 require('dotenv').config(); // Load environment variables
 
 // Connect to MongoDB
@@ -23,6 +28,16 @@ app.use(cors(
 app.use(morgan('dev'));
 app.use(express.json());
 app.use(cookieParser());
+app.use(helmet());  
+
+// Rate limiter
+const limiterMiddleware = limiter({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 1000, // limit each IP to 100 requests per windowMs
+});
+
+app.use(limiterMiddleware);
+app.use(compression());
 
 // Simple home route
 app.get('/', (req, res) => {

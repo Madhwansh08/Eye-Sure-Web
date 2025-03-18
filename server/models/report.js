@@ -81,6 +81,10 @@ const reportSchema = new Schema({
     type: String,
     trim: true
   },
+  note:{
+    type:String,
+    trim:true
+  },
   patientId: {
     type: Schema.Types.ObjectId,
     ref: 'Patient',

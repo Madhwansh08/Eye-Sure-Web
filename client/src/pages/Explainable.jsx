@@ -12,6 +12,8 @@ import API_URL from "../utils/config";
 import { useDispatch, useSelector } from "react-redux";
 import { initReportState, setTool } from "../redux/slices/annotationSlice";
 import store from "../redux/store";
+import RgbToggles from "../components/explainable/RgbToggles";
+import RightPanelToggle from "../components/explainable/RightPanelToggle";
 
 const Explainable = () => {
   const { reportId } = useParams();
@@ -34,7 +36,7 @@ const Explainable = () => {
     rgbBlue: 1
   });
   const [resetPanTrigger, setResetPanTrigger] = useState(0);
-  const [note, setNote] = useState("");
+  const [rightPanelTab , setRightPanelTab]=useState("Explainable AI")
 
   // Read current tool from Redux (default is now null)
   const currentTool = useSelector((state) => {
@@ -146,6 +148,8 @@ const Explainable = () => {
     navigate(`/explainable/${reportId}`);
   };
 
+  const currentSideLabel = imagesData[carouselIndex]?.side === "left" ? "Left Eye" : "Right Eye";
+
   return (
     <div className="flex flex-col bg-primary h-screen overflow-hidden relative">
       <Header />
@@ -172,63 +176,13 @@ const Explainable = () => {
       <div className="flex flex-row flex-1 p-8 space-x-8">
         {/* Left Column: Patient Demographics & History */}
         <div className="flex-1 bg-primary p-4 rounded-b-xl rounded-t-xl shadow overflow-auto">
-          <div className="mt-8">
-            <h3 className="text-3xl mt-5 font-semibold gradient-text">RGB Toggle</h3>
-            <div className="mb-4">
-              <label className="text-secondary block mb-1">Red: {adjustments.rgbRed}</label>
-              <input
-                type="range"
-                min="0"
-                max="1"
-                step="0.01"
-                value={adjustments.rgbRed}
-                onChange={(e) => handleRGBChange("rgbRed", e.target.value)}
-                className="w-full"
-              />
-            </div>
-            <div className="mb-4">
-              <label className="text-secondary block mb-1">Green: {adjustments.rgbGreen}</label>
-              <input
-                type="range"
-                min="0"
-                max="1"
-                step="0.01"
-                value={adjustments.rgbGreen}
-                onChange={(e) => handleRGBChange("rgbGreen", e.target.value)}
-                className="w-full"
-              />
-            </div>
-            <div className="mb-4">
-              <label className="text-secondary block mb-1">Blue: {adjustments.rgbBlue}</label>
-              <input
-                type="range"
-                min="0"
-                max="1"
-                step="0.01"
-                value={adjustments.rgbBlue}
-                onChange={(e) => handleRGBChange("rgbBlue", e.target.value)}
-                className="w-full"
-              />
-            </div>
-          </div>
+         <RgbToggles adjustments={adjustments} handleRGBChange={handleRGBChange}/>
 
-          <div className="mt-5">
-            <h3 className="text-3xl mt-5 font-semibold gradient-text">Clahe Images</h3>
-            <div className="grid grid-cols-2 gap-4 mt-4">
-              <div className="flex flex-col items-center">
-                <img src={report.leftEyeClahe} alt="Left Clahe" className="mb-2" />
-                <h3 className="text-lg font-semibold gradient-text">Left Eye Clahe</h3>
-              </div>
-              <div className="flex flex-col items-center">
-                <img src={report.rightEyeClahe} alt="Right Clahe" className="mb-2" />
-                <h3 className="text-lg font-semibold gradient-text">Right Eye Clahe</h3>
-              </div>
-            </div>
-          </div>
         </div>
 
         {/* Middle Column: Image Canvas */}
         <div className="flex-1 bg-primary p-4 rounded shadow flex flex-col items-center justify-center">
+        <h3 className="text-secondary font-semibold uppercase text-xl ">{currentSideLabel}</h3>
           {imagesData.length > 0 ? (
             <div className="relative" style={{ width: "800px", height: "800px" }}>
               <KonvaCanvas
@@ -265,48 +219,74 @@ const Explainable = () => {
           )}
         </div>
 
-        {/* Right Column: Explainable AI */}
-        <div className="flex-1 bg-primary p-4 h-screen rounded shadow flex flex-col items-center justify-center overflow-auto">
-          <h2 className="text-3xl mt-10 gradient-text font-bold mb-8 text-center">Explainable AI</h2>
-          {report.analysisType === "DR" ? (
-            <div className="flex flex-col items-center text-center text-secondary">
-              <div className="text-xl px-5 font-bold bg-primary border border-[#5c60c6] rounded-3xl uppercase">
-                Smart Heatmap Left Eye
+        <div className="flex-1 bg-primary p-4 h-screen rounded shadow flex flex-col items-center overflow-auto">
+          <div className="mt-10 pt-5">
+          <RightPanelToggle activeTab={rightPanelTab} setActiveTab={setRightPanelTab} />
+          </div>
+          {rightPanelTab === "Clahe Images" ? (
+            <div className="mt-6 w-full">
+              <h3 className="text-xl font-semibold text-center gradient-text">CLAHE Images</h3>
+              <div className="grid grid-cols-1 gap-4 mt-4">
+                {report.leftEyeClahe && (
+                  <div className="flex flex-col items-center">
+                    <img src={report.leftEyeClahe} alt="Left Eye Clahe" className="w-[50%] object-contain" />
+                    <span className="text-secondary mt-1 text-lg font-semibold">Left Eye Clahe</span>
+                  </div>
+                )}
+                {report.rightEyeClahe && (
+                  <div className="flex flex-col items-center">
+                    <img src={report.rightEyeClahe} alt="Right Eye Clahe" className="w-[50%] object-contain" />
+                    <span className="text-secondary mt-1 text-lg font-semibold">Right Eye Clahe</span>
+                  </div>
+                )}
               </div>
-              <img className="mt-5" src={report.explainableAiLeftFundusImage} alt="Left Fundus" />
-              <div className="text-xl font-bold bg-primary border-2 border-[#5c60c6] rounded-3xl uppercase mt-10">
-                Smart Heatmap Right Eye
-              </div>
-              <img className="mt-5" src={report.explainableAiRightFundusImage} alt="Right Fundus" />
-            </div>
-          ) : report.analysisType === "Glaucoma" ? (
-            <div className="flex flex-col items-center text-center text-secondary">
-              <div className="text-xl px-5 font-bold bg-primary border-2 border-[#5c60c6] rounded-3xl uppercase">
-                Left Eye Glaucoma Contour
-              </div>
-              <img className="mt-5 mx-auto" src={report.contorLeftFundusImage} alt="Left Fundus" />
-              <div className="text-xl px-5 font-bold bg-primary border-2 border-[#5c60c6] rounded-3xl uppercase mt-10">
-                Right Eye Glaucoma Contour
-              </div>
-              <img className="mt-5 mx-auto" src={report.contorRightFundusImage} alt="Right Fundus" />
-            </div>
-          ) : report.analysisType === "Armd" ? (
-            <div className="flex flex-col items-center text-center text-secondary">
-              <div className="text-3xl font-bold bg-primary border-2 border-[#5c60c6] rounded-3xl uppercase">
-                Left Fundus ARMD
-              </div>
-              <h1 className="text-2xl gradient-text font-semibold mt-5">
-                Explainable AI Not available
-              </h1>
-              <div className="text-3xl font-bold bg-primary border-2 border-[#5c60c6] rounded-3xl uppercase mt-10">
-                Right Fundus ARMD
-              </div>
-              <h1 className="text-2xl gradient-text font-semibold mt-5">
-                Explainable AI Not available
-              </h1>
             </div>
           ) : (
-            <p className="text-secondary">Analysis type unknown.</p>
+            <div className="mt-6 w-full">
+              <h2 className="text-3xl gradient-text font-bold mb-8 text-center">Explainable AI</h2>
+              {report.analysisType === "DR" ? (
+                <div className="flex flex-col items-center text-center text-secondary">
+                  <div className="text-xl font-bold bg-primary  rounded-3xl uppercase px-3 py-1">
+                    Smart Heatmap Left Eye
+                  </div>
+                  <img className="mt-5  object-contain" src={report.explainableAiLeftFundusImage} alt="Left Heatmap" />
+                  <div className="text-xl font-bold bg-primary rounded-3xl uppercase mt-10 px-3 py-1">
+                    Smart Heatmap Right Eye
+                  </div>
+                  <img className="mt-5  object-contain" src={report.explainableAiRightFundusImage} alt="Right Heatmap" />
+                </div>
+              ) : report.analysisType === "Glaucoma" ? (
+                <div className="flex flex-col items-center text-center text-secondary">
+                
+                  <img className="  object-contain w-50"  src={report.contorLeftFundusImage} alt="Left Contour" />
+                  <div className="text-xl font-bold mt-2 px-3 py-1">
+                    Left Eye Heatmap
+                  </div>
+               
+                  <img className="mt-2  object-contain w-50" src={report.contorRightFundusImage} alt="Right Contour" />
+                  <div className="text-xl font-bold bg-primary mt-3 px-3 py-1">
+                    Right Eye Heatmap
+                  </div>
+                </div>
+              ) : report.analysisType === "Armd" ? (
+                <div className="flex flex-col items-center text-center text-secondary">
+                  <div className="text-3xl font-bold bg-primary border-2 border-[#5c60c6] rounded-3xl uppercase">
+                    Left Fundus ARMD
+                  </div>
+                  <h1 className="text-4xl gradient-text font-semibold mt-5">
+                    {report.leftFundusArmdPrediction || "N/A"}
+                  </h1>
+                  <div className="text-3xl font-bold bg-primary border-2 border-[#5c60c6] rounded-3xl uppercase mt-10">
+                    Right Fundus ARMD
+                  </div>
+                  <h1 className="text-4xl gradient-text font-semibold mt-5">
+                    {report.rightFundusArmdPrediction || "N/A"}
+                  </h1>
+                </div>
+              ) : (
+                <p className="text-secondary text-center">Analysis type unknown.</p>
+              )}
+            </div>
           )}
         </div>
       </div>
