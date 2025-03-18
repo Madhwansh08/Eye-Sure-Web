@@ -260,9 +260,9 @@ const Forgot = () => {
           {/* Step Progress Bar */}
           <div className="w-3/5 py-8 px-16 relative">
             {/* Render Heading and Text */}
-            <div>
+            <button onClick={() => navigate('/')} className="hover:cursor-pointer">
               <img alt="Your Company" src={logoimg} className="h-14 w-auto" />
-            </div>
+            </button>
             <div className="my-12">{renderHeadingAndText()}</div>
 
             {/* Render Form */}

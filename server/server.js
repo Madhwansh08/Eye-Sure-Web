@@ -60,6 +60,9 @@ app.use('/api/patient', patientRoutes);
 const reportRoutes=require('./routes/reportRoutes')
 app.use('/api/report', reportRoutes); 
 
+const contactRoutes = require('./routes/contactRoutes')
+app.use('/api/contact', contactRoutes);
+
 // Start the server
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef, useCallback } from "react";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import { useInView } from "react-intersection-observer";
@@ -15,6 +15,9 @@ import { useSelector } from "react-redux";
 import Footer from "../components/common/Footer";
 
 const Home = () => {
+  const featuresRef = useRef(null);
+  const demoRef = useRef(null);
+
   // Initialize AOS for animations
   useEffect(() => {
     AOS.init({ duration: 600, easing: "ease-in-out", once: true });
@@ -50,39 +53,55 @@ const Home = () => {
     };
   }, []);
 
+  // Throttled scroll handlers
+  const scrollToFeatures = useCallback(
+    throttle(() => {
+      featuresRef.current?.scrollIntoView({ behavior: "smooth" });
+    }, 1000),
+    []
+  );
 
-  const auth=useSelector((state)=>state.auth);
+  const scrollToDemo = useCallback(
+    throttle(() => {
+      demoRef.current?.scrollIntoView({ behavior: "smooth" });
+    }, 1000),
+    []
+  );
+
+  const auth = useSelector((state) => state.auth);
   console.log(auth);
 
   return (
     <div className="bg-primary flex flex-col min-h-screen">
       <Header />
-      <Hero />
+      <Hero scrollToFeatures={scrollToFeatures} scrollToDemo={scrollToDemo} />
       <section
         ref={ref}
         className="py-5 mt-5 bg-primary sm:py-16 lg:py-24"
         data-aos="fade-up"
       >
-       <div className="max-w-5xl px-4 mx-auto sm:px-6 lg:px-8">
-  <div className="max-w-2xl mx-auto text-center">
-    <h2 className="text-3xl uppercase font-bold whitespace-nowrap leading-tight text-secondary sm:text-4xl lg:text-6xl">
-      Our results in numbers
-    </h2>
-  </div>
+        <div className="max-w-5xl px-4 mx-auto sm:px-6 lg:px-8">
+          <div className="max-w-2xl mx-auto text-center">
+            <h2 className="text-3xl uppercase font-bold whitespace-nowrap leading-tight text-secondary sm:text-4xl lg:text-6xl">
+              Our results in numbers
+            </h2>
+          </div>
 
-  <div className="grid grid-cols-1 gap-8 mt-10 text-center  lg:mt-24 sm:gap-x-8 md:grid-cols-2">
-    {/* Accuracy */}
-    <div>
-      <h3 className="font-bold text-7xl gradient-text">
-        {inView && <CountUp start={0} end={94} duration={2.5} suffix="%" />}
-      </h3>
-      <p className="mt-4 text-3xl font-medium dark:text-[#030811] text-[#fdfdfd]">
-        Accuracy
-      </p>
-    </div>
+          <div className="grid grid-cols-1 gap-8 mt-10 text-center  lg:mt-24 sm:gap-x-8 md:grid-cols-2">
+            {/* Accuracy */}
+            <div>
+              <h3 className="font-bold text-7xl gradient-text">
+                {inView && (
+                  <CountUp start={0} end={94} duration={2.5} suffix="%" />
+                )}
+              </h3>
+              <p className="mt-4 text-3xl font-medium dark:text-[#030811] text-[#fdfdfd]">
+                Accuracy
+              </p>
+            </div>
 
-    {/* Doctors */}
-    {/* <div>
+            {/* Doctors */}
+            {/* <div>
       <h3 className="font-bold text-7xl gradient-text">
         {inView && <CountUp start={0} end={4821} duration={3} />}
       </h3>
@@ -91,31 +110,30 @@ const Home = () => {
       </p>
     </div> */}
 
-    {/* Data Set */}
-    <div>
-      <h3 className="font-bold text-7xl gradient-text">
-        {inView && (
-          <CountUp
-            start={0}
-            end={75}
-            duration={1.5}
-            separator=","
-            suffix="k"
-          />
-        )}
-      </h3>
-      <p className="mt-4 text-3xl font-medium darktext-[#030811] text-[#fdfdfd]">
-        No. Of Images
-      </p>
-    </div>
-  </div>
-</div>
-
+            {/* Data Set */}
+            <div>
+              <h3 className="font-bold text-7xl gradient-text">
+                {inView && (
+                  <CountUp
+                    start={0}
+                    end={75}
+                    duration={1.5}
+                    separator=","
+                    suffix="k"
+                  />
+                )}
+              </h3>
+              <p className="mt-4 text-3xl font-medium darktext-[#030811] text-[#fdfdfd]">
+                No. Of Images
+              </p>
+            </div>
+          </div>
+        </div>
       </section>
       {/* <section>
         <Content />
       </section> */}
-      <section>
+      <section ref={featuresRef}>
         <div className="flex flex-col items-center justify-center py-5 mt-5 bg-primary sm:py-16 lg:py-24">
           <h2 className="text-3xl uppercase font-bold text-center text-secondary sm:text-4xl lg:text-6xl">
             Our Features
@@ -129,7 +147,7 @@ const Home = () => {
       <section>
         <Testimonial />
       </section>
-      <section>
+      <section ref={demoRef}>
         <Demo />
       </section>
       <section>

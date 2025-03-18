@@ -38,7 +38,7 @@ const Register = () => {
       <div className="flex w-3/5 bg-primary flex-col justify-center px-6 py-12 lg:px-20 xl:px-24">
         <div className="mx-auto w-full max-w-md">
           <div>
-            <img alt="Your Company" src={logoimg} className="h-14 w-auto" />
+            <button onClick={() => navigate('/')} className="hover:cursor-pointer"><img alt="Your Company" src={logoimg} className="h-14 w-auto" /></button>
             <h2 className="mt-8 text-3xl font-bold tracking-tight text-secondary">
               Create your account
             </h2>
@@ -46,7 +46,7 @@ const Register = () => {
               Already have an account?{" "}
               <button
                 onClick={() => navigate("/login")}
-                className="font-semibold text-lg text-secondary hover:text-primary"
+                className="font-semibold text-lg text-secondary hover:text-primary hover:cursor-pointer"
               >
                 Sign In
               </button>
