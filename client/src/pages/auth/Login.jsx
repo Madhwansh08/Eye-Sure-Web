@@ -23,6 +23,7 @@ const Login = () => {
       navigate('/');
     } else {
       console.error('Login failed:', resultAction.payload);
+      toast.error(resultAction.payload);
     }
   };
 

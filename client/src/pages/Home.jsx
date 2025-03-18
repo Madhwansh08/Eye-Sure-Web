@@ -70,26 +70,26 @@ const Home = () => {
     </h2>
   </div>
 
-  <div className="grid grid-cols-1 gap-8 mt-10 text-center lg:mt-24 sm:gap-x-8 md:grid-cols-3">
+  <div className="grid grid-cols-1 gap-8 mt-10 text-center  lg:mt-24 sm:gap-x-8 md:grid-cols-2">
     {/* Accuracy */}
     <div>
       <h3 className="font-bold text-7xl gradient-text">
-        {inView && <CountUp start={0} end={97} duration={2.5} suffix="%" />}
+        {inView && <CountUp start={0} end={94} duration={2.5} suffix="%" />}
       </h3>
-      <p className="mt-4 text-xl font-medium text-[#030811] dark:text-[#fdfdfd]">
+      <p className="mt-4 text-3xl font-medium dark:text-[#030811] text-[#fdfdfd]">
         Accuracy
       </p>
     </div>
 
     {/* Doctors */}
-    <div>
+    {/* <div>
       <h3 className="font-bold text-7xl gradient-text">
         {inView && <CountUp start={0} end={4821} duration={3} />}
       </h3>
-      <p className="mt-4 text-xl font-medium text-[#030811] dark:text-[#fdfdfd]">
+      <p className="mt-4 text-3xl font-medium dark:text-[#030811] text-[#fdfdfd]">
         Doctors
       </p>
-    </div>
+    </div> */}
 
     {/* Data Set */}
     <div>
@@ -97,15 +97,15 @@ const Home = () => {
         {inView && (
           <CountUp
             start={0}
-            end={37000}
+            end={75000}
             duration={1.5}
             separator=","
             suffix="+"
           />
         )}
       </h3>
-      <p className="mt-4 text-xl font-medium text-[#030811] dark:text-[#fdfdfd]">
-        Data Set
+      <p className="mt-4 text-3xl font-medium darktext-[#030811] text-[#fdfdfd]">
+        No. Of Images
       </p>
     </div>
   </div>

@@ -23,6 +23,7 @@ const Register = () => {
       navigate('/login');
     } else {
       console.error('Registration failed:', resultAction.payload);
+      toast.error(resultAction.payload)
     }
   };
 

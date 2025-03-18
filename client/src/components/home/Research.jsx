@@ -52,8 +52,8 @@ const Card = ({ card }) => {
       {/* Descriptive text section */}
       <div className="relative h-1/4 w-full bg-primary p-4">
         <h3 className="text-4xl font-bold text-secondary">{card.title}</h3>
-        <p className="mt-2 text-xl text-secondary">
-          Detailed descriptive text for {card.title}. You can add more information here to explain the content further.
+        <p className="mt-8 text-xl text-secondary">
+          {card.description}
         </p>
       </div>
     </div>
@@ -65,27 +65,20 @@ export default Research;
 const cards = [
   {
     url: "/imgs/abstract/1.jpg",
-    title: "Title 1",
+    title: "Cardiovascular Diseases",
+    description:"AI-powered detection of atherosclerosis, hypertension, and other heart-related conditions to prevent complications early.",
     id: 1,
   },
   {
     url: "/imgs/abstract/2.jpg",
-    title: "Title 2",
+    title: "Nephrology (kidney diseases)",
+    description:"Identifying acute kidney disease (AKD), chronic kidney disease (CKD), and kidney failure at an early stage to enhance treatment strategies.",
     id: 2,
   },
   {
     url: "/imgs/abstract/3.jpg",
-    title: "Title 3",
+    title: "Hepatic (Liver Diseases)",
+    description:"Assisting in the early detection of non-alcoholic fatty liver disease (NAFLD) and alcoholic liver disease, crucial for timely management and care.",
     id: 3,
-  },
-  {
-    url: "/imgs/abstract/4.jpg",
-    title: "Title 4",
-    id: 4,
-  },
-  {
-    url: "/imgs/abstract/4.jpg",
-    title: "Title 5",
-    id: 5,
   },
 ];

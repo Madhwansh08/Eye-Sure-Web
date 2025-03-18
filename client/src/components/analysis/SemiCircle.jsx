@@ -1,66 +1,70 @@
 import React from "react";
 
-// Utility to classify percentage -> label + color
-function getCriticalityLevel(pct) {
-  if (pct <= 30) return { label: "Low", color: "#10b981" };     // Green
-  if (pct <= 70) return { label: "Medium", color: "#facc15" };  // Yellow
-  if (pct <= 90) return { label: "High", color: "#f59e0b" };    // Orange
-  return { label: "Critical", color: "#ef4444" };               // Red
+// Function to determine label & color based on percentage or DR classification
+function getCriticalityLevel({ percentage, className }) {
+  if (!isNaN(percentage)) {
+    // Case 1: Glaucoma (use percentage)
+    if (percentage <= 25) return { label: "Low", color: "#22c55e" }; // Green
+    if (percentage <= 60) return { label: "Moderate", color: "#facc15" }; // Yellow
+    return { label: "High", color: "#ef4444" }; // Red
+  } else if (className) {
+    // Case 2: DR Analysis (use class_name)
+
+    if (className.includes("NO DR")) return { label: "No DR", color: "#6b7280" }; // Grey (NO-DR)
+    if (className.includes("MILD DR")) return { label: "Low", color: "#22c55e" }; // Green (0-25)
+    if (className.includes("MODERATE DR")) return { label: "Moderate", color: "#facc15" }; // Yellow (25-60)
+    if (className.includes("severe") || className.includes("proliferate"))
+      return { label: "High", color: "#ef4444" }; // Red (60-100)
+  }
+
+  return { label: "Low", color: "#22c55e" }; // Default: Low (Green)
 }
 
 /**
- * SemiCircle
- * Displays an animated half-circle arc from left to right, with text in the center.
- *
- * @param {number} percentage - e.g. 75 means 75% fill
+ * SemiCircle Component
+ * Handles both Glaucoma (percentage-based) and DR Analysis (classification-based).
  */
-const SemiCircle = ({ percentage = 0 }) => {
-  const finalPct = Math.max(0, Math.min(100, percentage)); // clamp [0..100]
-  const { label, color } = getCriticalityLevel(finalPct);
+const SemiCircle = ({ percentage, className }) => {
+  // Determine classification level based on percentage or DR classification
+  const { label, color } = getCriticalityLevel({ percentage, className });
 
-  // Define geometry for a half-circle with radius 100
+  // SVG Geometry
   const radius = 100;
   const diameter = radius * 2;
-  // The length of the half-circle arc is π * R
-  const arcLength = Math.PI * radius;
+  const arcLength = Math.PI * radius; // Length of the half-circle
 
-  // For the stroke animation, we use dasharray = arcLength
-  // and dashoffset from arcLength (empty) to arcLength*(1 - finalScale) (full).
-  const finalScale = finalPct / 100; // 0..1
-
-  // We'll store the arc path from (0, radius) to (diameter, radius)
-  // This draws a half-circle above the line from left to right.
+  // Path for the semicircle
   const arcPath = `M 0,${radius} A ${radius},${radius} 0 0 1 ${diameter},${radius}`;
 
   return (
     <div className="flex items-center justify-center w-[150px] h-[120px]">
       <svg
         width={diameter}
-        height={radius + 20} // a bit of extra vertical space
+        height={radius + 20} // Extra vertical space
         viewBox={`0 0 ${diameter} ${radius + 20}`}
         xmlns="http://www.w3.org/2000/svg"
       >
         <defs>
-          {/* Glow effect matching the criticality color */}
+          {/* Glow effect for the stroke */}
           <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
-            <feDropShadow dx="0" dy="0" stdDeviation="4" floodColor={color} floodOpacity="0.5" />
+            <feDropShadow dx="0" dy="0" stdDeviation="4" floodColor={color} floodOpacity="0.6" />
           </filter>
         </defs>
 
-        {/* Background arc: same path, but a light color or dark grey */}
+        {/* Background Arc (Grey) */}
         <path
           d={arcPath}
           fill="none"
-          stroke="#2d2d2d"
+          stroke="#374151" // Tailwind Gray-700
           strokeWidth="15"
           strokeLinecap="round"
         />
 
-        {/* Foreground arc: color-coded, animated via strokeDashoffset */}
+        {/* Foreground Arc (Animated Stroke) */}
         <path
           d={arcPath}
           fill="none"
-          stroke={color}
+          stroke={color} // Dynamic color
           strokeWidth="15"
           strokeLinecap="round"
           strokeDasharray={arcLength}
@@ -71,19 +75,19 @@ const SemiCircle = ({ percentage = 0 }) => {
           }}
         />
 
-        {/* The text label in the center; place it near the bottom of the arc */}
+        {/* Center Label */}
         <text
           x={radius}
-          y={radius * 0.7}  // about 70% down the radius
+          y={radius * 0.7} // Positioning inside the arc
           textAnchor="middle"
           fill="white"
-          fontSize="25"
+          fontSize="22"
           fontWeight="bold"
         >
           {label}
         </text>
 
-        {/* Keyframes to animate the strokeDashoffset */}
+        {/* Animation Keyframes */}
         <style>
           {`
             @keyframes semiCircleGrow {
@@ -91,7 +95,7 @@ const SemiCircle = ({ percentage = 0 }) => {
                 stroke-dashoffset: ${arcLength};
               }
               100% {
-                stroke-dashoffset: ${arcLength - arcLength * finalScale};
+                stroke-dashoffset: 0;
               }
             }
           `}

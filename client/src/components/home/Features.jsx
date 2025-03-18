@@ -12,25 +12,25 @@ const FeatureData = [
     id: 1,
     imgUrl: featimg,
     subheading: "Abnormality Detection",
-    heading: "Seamless Abnormality Detection",
+    heading: "Seamless Image Acquisition",
     description:
-      "AI-driven abnormalities detection in medical imaging represents a significant advancement in diagnostic accuracy and efficiency. This feature utilizes advanced algorithms and machine learning models to identify irregularities in medical images such as X-rays, MRIs, and CT scans.",
+      "Capture high-resolution retinal images using a handheld fundus camera for on-the-go diagnostics.",
   },
   {
     id: 2,
     imgUrl: dashimg,
     subheading: "Editing Interface",
-    heading: "Intuitive Editing Interface",
+    heading: "AI-Powered Multi-Disease Detection",
     description:
-      "The intuitive editing interface allows users to easily manipulate and modify medical images. This feature provides a user-friendly platform for healthcare professionals to annotate, highlight, and adjust images to enhance diagnostic capabilities and improve patient care.",
+      "Detect diabetic retinopathy, glaucoma, and AMD with advanced AI analysis for early and accurate diagnosis.",
   },
   {
     id: 3,
     imgUrl: dashimg,
     subheading: "Modern Dashboard",
-    heading: "Modern UI Dashboard",
+    heading: "Interactive Image Analysis & Reports Generation",
     description:
-      "The modern UI dashboard offers a comprehensive overview of patient data, medical images, and diagnostic reports. This feature provides healthcare professionals with a centralized platform to access and manage patient information, streamline workflows, and improve collaboration among medical teams.",
+      "Doctors can visualize, add annotations, report generation and refine AI-generated insights for enhanced accuracy.",
   },
 ];
 
