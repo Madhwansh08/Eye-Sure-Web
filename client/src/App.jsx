@@ -9,6 +9,8 @@ import Profile from "./components/dashboard/Profile";
 import Dashboard from "./pages/Dashboard";
 import Login from "./pages/auth/Login";
 import Register from "./pages/auth/Register";
+import Forgot from "./pages/auth/Forgot";
+import Report from "./components/analysis/Report";
 import PrivateRoute from "./routes/Private";
 import PublicRoute from "./routes/Public";
 import AppInitializer from "./hooks/AppInitializer";
@@ -36,24 +38,24 @@ function App() {
           />
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route 
-              path="/upload" 
+            <Route path="/report" element={<Report/>} />
+            <Route
+              path="/upload"
               element={
                 <PrivateRoute>
                   <Upload />
                 </PrivateRoute>
-              } 
+              }
             />
             {/* Dynamic analysis route with reportId */}
-            <Route 
-              path="/analysis/:reportId" 
+            <Route
+              path="/analysis/:reportId"
               element={
                 <PrivateRoute>
                   <Analysis />
                 </PrivateRoute>
-              } 
+              }
             />
-
 
             <Route
               path="/explainable/:reportId"
@@ -69,26 +71,31 @@ function App() {
           <Route path="profile" element={<Profile />} />
         </Route>
             
-            
 
 
-
-
-            <Route 
-              path="/login" 
+            <Route
+              path="/login"
               element={
                 <PublicRoute>
                   <Login />
                 </PublicRoute>
-              } 
+              }
             />
-            <Route 
-              path="/register" 
+            <Route
+              path="/register"
               element={
                 <PublicRoute>
                   <Register />
                 </PublicRoute>
-              } 
+              }
+            />
+            <Route
+              path="/forgot"
+              element={
+                <PublicRoute>
+                  <Forgot />
+                </PublicRoute>
+              }
             />
           </Routes>
         </AppInitializer>

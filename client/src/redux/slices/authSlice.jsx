@@ -39,6 +39,66 @@ export const loginUser = createAsyncThunk(
   }
 );
 
+// Async thunk to get OTP
+export const handleGetOtp = createAsyncThunk(
+  'auth/sendOTP',
+  async({email}, { rejectWithValue }) => {
+    try {
+      const response = await axios.post(
+        `${API_URL}/api/auth/send-otp`,
+        {email},
+        { withCredentials: true}
+      );
+      return {user: response.data.otp}
+    } catch (error) {
+      console.error('Login error:', error);
+      return rejectWithValue(error.response?.data?.message || error.message);
+    }
+  }
+)
+
+// Async thunk to verify-OTP
+export const handleVerifyOtp = createAsyncThunk(
+  "auth/verifyOTP",
+  async ({ email, otp }, { rejectWithValue }) => {
+    try {
+      const response = await axios.post(
+        `${API_URL}/api/auth/verify-otp`,
+        { email, otp },
+        { withCredentials: true }
+      );
+
+      return {
+        tempToken: response.data.tempToken,
+        message: response.data.message,
+      };
+    } catch (error) {
+      console.error("OTP verification error:", error);
+      return rejectWithValue(error.response?.data?.message || "Failed to verify OTP.");
+    }
+  }
+);
+
+
+// Async thunk to reset password
+export const handleResetPassword = createAsyncThunk(
+  "auth/resetPassword",
+  async ({ tempToken, newPassword }, { rejectWithValue }) => {
+    try {
+      const response = await axios.post(
+        `${API_URL}/api/auth/reset-password`,
+        { tempToken, newPassword },
+        { withCredentials: true }
+      );
+
+      return { message: response.data.message };
+    } catch (error) {
+      console.error("Password reset error:", error);
+      return rejectWithValue(error.response?.data?.message || "Failed to reset password.");
+    }
+  }
+);
+
 // Async thunk for logout
 export const logoutUser = createAsyncThunk(
   'auth/logoutUser',
@@ -142,6 +202,49 @@ const authSlice = createSlice({
         state.loading = false;
         state.error = action.payload;
       });
+
+
+      // Send OTP
+    builder.addCase(handleGetOtp.pending, (state) => {
+      state.loading = true;
+      state.error = null;
+    });
+    builder.addCase(handleGetOtp.fulfilled, (state, action) => {
+      state.loading = false;
+      state.otpSent = action.payload.otpSent;
+    });
+    builder.addCase(handleGetOtp.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    });
+
+    // Verify OTP
+    builder.addCase(handleVerifyOtp.pending, (state) => {
+      state.loading = true;
+      state.error = null;
+    });
+    builder.addCase(handleVerifyOtp.fulfilled, (state, action) => {
+      state.loading = false;
+      state.tempToken = action.payload.tempToken;
+    });
+    builder.addCase(handleVerifyOtp.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    });
+
+    // Reset Password
+    builder.addCase(handleResetPassword.pending, (state) => {
+      state.loading = true;
+      state.error = null;
+    });
+    builder.addCase(handleResetPassword.fulfilled, (state) => {
+      state.loading = false;
+      state.tempToken = null; // Clear tempToken after reset
+    });
+    builder.addCase(handleResetPassword.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    });
       
   },
 });

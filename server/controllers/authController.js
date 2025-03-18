@@ -1,5 +1,7 @@
 const Doctor=require('../models/doctor');
 const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
+const nodemailer = require("nodemailer");
 const { hashPassword, comparePassword } = require('../helpers/authHelper');
 
 // Register API
@@ -89,6 +91,110 @@ exports.logoutDoctor = async (req, res) => {
   }
 };
 
+// Generate a 6-digit OTP
+const generateOTP = () => {
+  return Math.floor(100000 + Math.random() * 900000).toString();
+};
+
+// Configure nodemailer transporter
+const transporter = nodemailer.createTransport({
+  host: process.env.EMAIL_HOST,
+  port: parseInt(process.env.EMAIL_PORT, 10), 
+  secure: process.env.EMAIL_PORT === "465", 
+  auth: {
+    user: process.env.EMAIL_USER, 
+    pass: process.env.APP_PASS || "", 
+  },
+  tls: {
+    rejectUnauthorized: false, 
+  },
+});
+
+// Request OTP for password reset
+exports.requestPasswordReset = async (req, res) => {
+  try {
+    const { email } = req.body;
+    const doctor = await Doctor.findOne({ email });
+
+    if (!doctor) {
+      return res.status(404).send({ message: "Doctor not found" });
+    }
+
+    const otp = generateOTP();
+    doctor.resetPasswordOTP = otp;
+    await doctor.save();
+
+    // Send OTP via email using nodemailer
+    const mailOptions = {
+      from: process.env.EMAIL_USER,
+      to: email,
+      subject: "Your OTP for Resetting Password",
+      text: `Hello,\n\nYour OTP for Password reset is: ${otp}.\nIt will expire in 10 minutes.\n\nBest,\nYour Team`,
+    };
+
+    await transporter.sendMail(mailOptions);
+
+    res.status(200).send({ message: "OTP sent to email" });
+  } catch (error) {
+    console.error("Error requesting password reset:", error);
+    res.status(500).send({ message: "Internal server error" });
+  }
+};
+
+// Verify OTP
+exports.verifyOTP = async (req, res) => {
+  try {
+    const { email, otp } = req.body;
+    const doctor = await Doctor.findOne({ email });
+
+    if (!doctor) {
+      return res.status(404).send({ message: "Doctor not found" });
+    }
+    console.log(doctor.resetPasswordExpires);
+    if (
+      doctor.resetPasswordOTP !== otp ||
+      doctor.resetPasswordExpires < Date.now()
+    ) {
+      return res.status(400).send({ message: "Invalid or expired OTP" });
+    }
+
+    // Generate a temporary token for password reset
+    const tempToken = jwt.sign({ id: doctor._id }, process.env.JWT_SECRET, {
+      expiresIn: "15m",
+    });
+
+    res.status(200).send({ message: "OTP verified successfully", tempToken });
+  } catch (error) {
+    console.error("Error verifying OTP:", error);
+    res.status(500).send({ message: "Internal server error" });
+  }
+};
+
+// Reset password
+exports.resetPassword = async (req, res) => {
+  try {
+    const { tempToken, newPassword } = req.body;
+
+    // Verify the temporary token
+    const decoded = jwt.verify(tempToken, process.env.JWT_SECRET);
+    const doctor = await Doctor.findById(decoded.id);
+
+    if (!doctor) {
+      return res.status(404).send({ message: "Doctor not found" });
+    }
+
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    doctor.password = hashedPassword;
+    doctor.resetPasswordOTP = undefined;
+    doctor.resetPasswordExpires = undefined;
+    await doctor.save();
+
+    res.status(200).send({ message: "Password reset successfully" });
+  } catch (error) {
+    console.error("Error resetting password:", error);
+    res.status(500).send({ message: "Internal server error" });
+  }
+};
 
 //Hydrating the user
 exports.getProfile = async (req, res) => {
