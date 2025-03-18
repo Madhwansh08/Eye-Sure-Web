@@ -98,8 +98,8 @@ exports.getPatientHistory = async (req, res) => {
       const analysisType = report.analysisType;
 
       if (analysisType === "DR") {
-        leftResult = report.leftFundusPrediction?.predictions?.primary_classification?.class_name || "N/A";
-        rightResult = report.rightFundusPrediction?.predictions?.primary_classification?.class_name || "N/A";
+        leftResult = report.leftFundusPrediction?.primary_classification?.class_name || "N/A";
+        rightResult = report.rightFundusPrediction?.primary_classification?.class_name || "N/A";
       } else if (analysisType === "Glaucoma") {
         leftResult = report.contorLeftGlaucomaStatus || "N/A";
         rightResult = report.contorRightGlaucomaStatus || "N/A";

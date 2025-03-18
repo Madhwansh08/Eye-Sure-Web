@@ -35,29 +35,67 @@ const uploadBase64ImageToS3 = async (patientId, side, base64Image) => {
   ).then(result => result.Location);
 };
 
-// Parallel processing functions
-const processHeatMapModel = async (patientId, leftFile, rightFile) => {
-  const formData = new FormData();
-  formData.append('files', leftFile.buffer, leftFile.originalname);
-  formData.append('files', rightFile.buffer, rightFile.originalname);
 
+const processDR = async (patientId, leftFile, rightFile) => {
+  const formData = new FormData();
+  formData.append('left_eye', leftFile.buffer, leftFile.originalname);
+  formData.append('right_eye', rightFile.buffer, rightFile.originalname);
+
+  // Call your AI endpoint
   const { data } = await axiosInstance.post(
-    `${process.env.AI_DR_EXPLAIN_URL}/predict/`,
+    'http://10.10.110.24:8317/predict/',
     formData,
     { headers: formData.getHeaders() }
   );
 
-  const [leftGradcamURL, rightGradcamURL] = await Promise.all([
-    data?.predicted_images?.left_eye?.gradcam_image 
-      ? uploadBase64ImageToS3(patientId, 'left_gradcam', data.predicted_images.left_eye.gradcam_image)
-      : Promise.resolve(''),
-    data?.predicted_images?.right_eye?.gradcam_image 
-      ? uploadBase64ImageToS3(patientId, 'right_gradcam', data.predicted_images.right_eye.gradcam_image)
-      : Promise.resolve('')
-  ]);
+  let leftXAIURL = "";
+  let rightXAIURL = "";
 
-  return { leftGradcamURL, rightGradcamURL };
+  // ---------- LEFT EYE ----------
+  // Check if we have data.left_eye.xai_results.image
+  if (data?.left_eye?.xai_results?.image) {
+    // "image" is the base64 string
+    const leftBuffer = Buffer.from(data.left_eye.xai_results.image, 'base64');
+    const leftKey = `reports/${patientId}/left_gradcam-${Date.now()}.png`;
+
+    const leftUpload = await uploadFile(
+      process.env.S3_BUCKET_NAME,
+      leftKey,
+      leftBuffer,
+      'image/png'
+    );
+    leftXAIURL = leftUpload.Location;
+  }
+
+  // ---------- RIGHT EYE ----------
+  // Check if we have data.right_eye.xai_results.image
+  if (data?.right_eye?.xai_results?.image) {
+    const rightBuffer = Buffer.from(data.right_eye.xai_results.image, 'base64');
+    const rightKey = `reports/${patientId}/right_gradcam-${Date.now()}.png`;
+
+    const rightUpload = await uploadFile(
+      process.env.S3_BUCKET_NAME,
+      rightKey,
+      rightBuffer,
+      'image/png'
+    );
+    rightXAIURL = rightUpload.Location;
+  }
+
+  return {
+    left: {
+      primary_classification: data.left_eye.primary_classification,
+      sub_classes: data.left_eye.sub_classes,
+      xai_url: leftXAIURL
+    },
+    right: {
+      primary_classification: data.right_eye.primary_classification,
+      sub_classes: data.right_eye.sub_classes,
+      xai_url: rightXAIURL
+    }
+  };
 };
+
 
 const processContorModel = async (patientId, leftFile, rightFile) => {
   const formData = new FormData();
@@ -104,7 +142,6 @@ const processClaheModel = async (patientId, file) => {
     : '';
 };
 
-
 const processArmdModel = async (patientId, leftFile, rightFile) => {
   const formData = new FormData();
   formData.append('left_eye', leftFile.buffer, leftFile.originalname);
@@ -123,24 +160,15 @@ const processArmdModel = async (patientId, leftFile, rightFile) => {
   };
 };
 
-const processPredictionModel = async (file) => {
-  const formData = new FormData();
-  formData.append('file', file.buffer, file.originalname);
-  
-  const { data } = await axiosInstance.post(
-    `${process.env.AI_DR_URL}/predict/`,
-    formData,
-    { headers: formData.getHeaders() }
-  );
-  
-  return data;
-};
+
 
 
 exports.uploadDRReport = async (req, res) => {
   try {
     const { patientId, analysisType } = req.body;
-    if (!patientId) return res.status(400).json({ message: "Missing patientId" });
+    if (!patientId) {
+      return res.status(400).json({ message: "Missing patientId" });
+    }
     if (!analysisType || analysisType !== "DR") {
       return res.status(400).json({ message: "Invalid analysisType for DR report" });
     }
@@ -153,43 +181,55 @@ exports.uploadDRReport = async (req, res) => {
     ) {
       return res.status(400).json({ message: "Please upload both left and right images" });
     }
+
     const leftFile = req.files.leftImage[0];
     const rightFile = req.files.rightImage[0];
 
     // Verify patient existence.
     const patientExists = await Patient.exists({ _id: patientId });
-    if (!patientExists) return res.status(404).json({ message: "Patient not found" });
+    if (!patientExists) {
+      return res.status(404).json({ message: "Patient not found" });
+    }
 
-    // Parallel processing for DR analysis.
-    const [originalUrls, heatMapData, claheUrls, predictions] = await Promise.all([
+    // 1) Upload original images to S3
+    // 2) Run optional CLAHE
+    // 3) Run the new DR process (processDR)
+    const [originalUrls, claheUrls, drResults] = await Promise.all([
       Promise.all([
         uploadImageToS3(patientId, 'left', leftFile),
         uploadImageToS3(patientId, 'right', rightFile)
       ]),
-      processHeatMapModel(patientId, leftFile, rightFile),
       Promise.all([
         processClaheModel(patientId, leftFile),
         processClaheModel(patientId, rightFile)
       ]),
-      Promise.all([
-        processPredictionModel(leftFile),
-        processPredictionModel(rightFile)
-      ])
+      processDR(patientId, leftFile, rightFile)
     ]);
 
+    // Create a new report document
     const newReport = await Report.create({
       leftFundusImage: originalUrls[0],
       rightFundusImage: originalUrls[1],
       analysisType: "DR",
-      explainableAiLeftFundusImage: heatMapData.leftGradcamURL,
-      explainableAiRightFundusImage: heatMapData.rightGradcamURL,
+      explainableAiLeftFundusImage: drResults.left.xai_url,
+      explainableAiRightFundusImage: drResults.right.xai_url,
       leftEyeClahe: claheUrls[0],
       rightEyeClahe: claheUrls[1],
-      leftFundusPrediction: predictions[0],
-      rightFundusPrediction: predictions[1],
+
+      // Store the classification & sub-classes under leftFundusPrediction, rightFundusPrediction
+      leftFundusPrediction: {
+        primary_classification: drResults.left.primary_classification,
+        sub_classes: drResults.left.sub_classes
+      },
+      rightFundusPrediction: {
+        primary_classification: drResults.right.primary_classification,
+        sub_classes: drResults.right.sub_classes
+      },
+
       patientId
     });
 
+    // Update patient with the newly created report
     await Patient.findByIdAndUpdate(
       patientId,
       { $push: { reports: newReport._id } },

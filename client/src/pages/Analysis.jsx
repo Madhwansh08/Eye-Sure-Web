@@ -227,19 +227,21 @@ const Analysis = () => {
             <PatientHistoryTable patientHistory={patientHistory}/>
           </div>
 
+
         
-          <div className="mt-6 relative">
+          <div className="mt-5 bottom-20">
+            {/* <h2 className="text-3xl gradient-text font-semibold mb-2">Note</h2> */}
             <textarea
               id="note"
               className="w-full border-2 border-[#387AA4] text-secondary rounded-lg px-4 pt-6 pr-16 focus:outline-none bg-transparent"
               value={note}
-              placeholder="Add Report Note"
+              placeholder="Add Note"
               onChange={(e) => setNote(e.target.value)}
               rows={4}
             />
             <button
               onClick={handleSubmitNote}
-              className="absolute right-2 bottom-2 mb-1 bg-[#387AA4] text-white px-4 py-1 rounded-full hover:bg-[#4a4f9c] transition"
+              className=" mt-2 bg-[#387AA4] text-white px-4 py-1 rounded-full hover:bg-[#4a4f9c] transition"
             >
               Submit
             </button>
@@ -289,52 +291,56 @@ const Analysis = () => {
           <h2 className="text-3xl mt-10 gradient-text font-bold mb-8">Analysis Results</h2>
           {report.analysisType === "DR" ? (
             <div className="text-secondary text-center">
-              <div className="text-3xl font-bold bg-primary border-2 border-[#387AA4] rounded-3xl uppercase">
+              <div className="text-3xl font-bold bg-primary rounded-3xl uppercase">
                 Left Fundus
               </div>
-              <h1 className="text-4xl gradient-text font-semibold mt-5">
-                {report.leftFundusPrediction?.predictions?.primary_classification?.class_name || "N/A"}
+              <h1 className="text-4xl mt-5 text-secondary">
+                Primary Classification
               </h1>
-              <div className="flex justify-center mt-2 ">
+
+              <h1 className="text-4xl gradient-text font-semibold mt-5">
+                {report.leftFundusPrediction?.primary_classification?.class_name || "N/A"}
+              </h1>
+              {/* <div className="flex justify-center mt-2 ">
                 <SemiCircle
                   percentage={
                     (report.leftFundusPrediction?.predictions?.primary_classification?.accuracy * 100).toFixed(2) || "0"
                   }
                 />
-              </div>
+              </div> */}
               <h1 className="text-2xl font-semibold text-secondary mt-2">
-                {report.leftFundusPrediction?.predictions?.sub_classes?.class_name || "N/A"}
+                {report.leftFundusPrediction?.sub_classes?.class_name || "N/A"}
               </h1>
-              <div className="flex justify-center mt-2">
+              {/* <div className="flex justify-center mt-2">
                 <SemiCircle
                   percentage={
                     (report.leftFundusPrediction?.predictions?.sub_classes?.accuracy * 100).toFixed(2) || "0"
                   }
                 />
-              </div>
-              <div className="text-3xl font-bold bg-primary border-2 border-[#387AA4] rounded-3xl uppercase mt-10">
+              </div> */}
+              <div className="text-3xl font-bold bg-primary  rounded-3xl uppercase mt-10">
                 Right Fundus
               </div>
               <h1 className="text-4xl gradient-text font-semibold mt-5">
-                {report.rightFundusPrediction?.predictions?.primary_classification?.class_name || "N/A"}
+                {report.rightFundusPrediction?.primary_classification?.class_name || "N/A"}
               </h1>
-              <div className="flex justify-center mt-2">
+              {/* <div className="flex justify-center mt-2">
                 <SemiCircle
                   percentage={
                     (report.rightFundusPrediction?.predictions?.primary_classification?.accuracy * 100).toFixed(2) || "0"
                   }
                 />
-              </div>
+              </div> */}
               <h1 className="text-2xl font-semibold text-secondary mt-2">
-                {report.rightFundusPrediction?.predictions?.sub_classes?.class_name || "N/A"}
+                {report.rightFundusPrediction?.sub_classes?.class_name || "N/A"}
               </h1>
-              <div className="flex justify-center mt-2">
+              {/* <div className="flex justify-center mt-2">
                 <SemiCircle
                   percentage={
                     (report.rightFundusPrediction?.predictions?.sub_classes?.accuracy * 100).toFixed(2) || "0"
                   }
                 />
-              </div>
+              </div> */}
             </div>
           ) : report.analysisType === "Glaucoma" ? (
             <div className="text-secondary text-center">
@@ -386,6 +392,7 @@ const Analysis = () => {
           <FiArrowLeft size={24} />
         </button>
       </Draggable>
+      
     </div>
   );
 };

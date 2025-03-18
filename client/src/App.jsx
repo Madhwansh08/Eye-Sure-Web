@@ -5,6 +5,8 @@ import Home from "./pages/Home";
 import Upload from "./pages/Upload";
 import Analysis from "./pages/Analysis";
 import Explainable from "./pages/Explainable";
+import Profile from "./components/dashboard/Profile";
+import Dashboard from "./pages/Dashboard";
 import Login from "./pages/auth/Login";
 import Register from "./pages/auth/Register";
 import Forgot from "./pages/auth/Forgot";
@@ -12,6 +14,7 @@ import Report from "./components/analysis/Report";
 import PrivateRoute from "./routes/Private";
 import PublicRoute from "./routes/Public";
 import AppInitializer from "./hooks/AppInitializer";
+import Metrics from "./components/dashboard/Metrics";
 import { Provider } from "react-redux";
 import store from "./redux/store";
 import { ToastContainer } from "react-toastify";
@@ -62,6 +65,13 @@ function App() {
                 </PrivateRoute>
               }
             />
+
+<Route path="/dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>}>
+          <Route index element={<Metrics />} />
+          <Route path="profile" element={<Profile />} />
+        </Route>
+            
+
 
             <Route
               path="/login"
