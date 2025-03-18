@@ -177,8 +177,9 @@ const Explainable = () => {
         {/* Left Column: Patient Demographics & History */}
         <div className="flex-1 bg-primary p-4 rounded-b-xl rounded-t-xl shadow overflow-auto">
          <RgbToggles adjustments={adjustments} handleRGBChange={handleRGBChange}/>
-
         </div>
+
+
 
         {/* Middle Column: Image Canvas */}
         <div className="flex-1 bg-primary p-4 rounded shadow flex flex-col items-center justify-center">
