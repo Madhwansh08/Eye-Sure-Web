@@ -188,8 +188,6 @@ const Analysis = () => {
   // Determine the label to show above the canvas based on current image side.
   const currentSideLabel =
     imagesData[carouselIndex]?.side === "left" ? "Left Eye" : "Right Eye";
-
-  console.log("Report", report);
   return (
     <div className="flex flex-col bg-primary h-screen overflow-hidden relative">
       <Header />
@@ -300,8 +298,8 @@ const Analysis = () => {
           )}
         </div>
         {/* Right Column: Analysis Details */}
-        <div className="flex-1 bg-primary p-4 h-screen rounded shadow flex flex-col items-center overflow-auto">
-          <h2 className="text-4xl mt-10 gradient-text font-bold mb-8">
+        <div className="flex-1 bg-primary p-4 h-screen  rounded shadow flex flex-col items-center overflow-auto">
+          <h2 className="text-4xl mt-10 gradient-text font-bold mb-20 text-center">
             Analysis Results
           </h2>
           {report.analysisType === "DR" ? (
@@ -309,16 +307,9 @@ const Analysis = () => {
               <div className="text-3xl font-bold bg-primary rounded-3xl uppercase">
                 Left Fundus
               </div>
-              <h1 className="text-4xl mt-5 text-secondary">
-                Primary Classification
-              </h1>
-
-              <h1 className="text-4xl gradient-text font-semibold mt-5">
+              <h1 className="text-2xl gradient-text border border-[#5c60c6] rounded-xl px-3 py-1 font-semibold mt-5">
                 {report.leftFundusPrediction?.primary_classification
                   ?.class_name || "N/A"}
-              </h1>
-              <h1 className="text-2xl font-semibold text-secondary mt-2">
-                {report.leftFundusPrediction?.sub_classes?.class_name || "N/A"}
               </h1>
               <div className="flex justify-center mt-2">
                 <SemiCircle
@@ -327,15 +318,12 @@ const Analysis = () => {
                   }
                 />
               </div>
-              <div className="text-3xl font-bold bg-primary  rounded-3xl uppercase mt-10">
+              <div className="text-3xl font-bold bg-primary  rounded-3xl uppercase mt-16">
                 Right Fundus
               </div>
-              <h1 className="text-4xl gradient-text font-semibold mt-5">
+              <h1 className="text-2xl gradient-text border border-[#5c60c6] rounded-xl px-3 py-1 font-semibold mt-5">
                 {report.rightFundusPrediction?.primary_classification
                   ?.class_name || "N/A"}
-              </h1>
-              <h1 className="text-2xl font-semibold text-secondary mt-2">
-                {report.rightFundusPrediction?.sub_classes?.class_name || "N/A"}
               </h1>
               <div className="flex justify-center mt-2">
                 <SemiCircle
@@ -347,28 +335,29 @@ const Analysis = () => {
             </div>
           ) : report.analysisType === "Glaucoma" ? (
             <div className="text-secondary text-center">
-              <div className="text-3xl font-bold bg-primary border-2 border-[#5c60c6] rounded-3xl uppercase">
+              <div className="text-3xl font-bold bg-primary uppercase">
                 Left Fundus
               </div>
-              <h1 className="text-2xl gradient-text uppercase font-semibold mt-5">
-                {report.contorLeftGlaucomaStatus || "N/A"}
-              </h1>
               <div className="flex justify-center mt-2 ">
                 <SemiCircle
                   percentage={(report.contorLeftVCDR * 100).toFixed(2) || "0"}
                 />
               </div>
-              <div className="text-3xl font-bold bg-primary border-2 border-[#5c60c6] rounded-3xl uppercase mt-10">
+              <h1 className="text-xl gradient-text uppercase border border-[#5c60c6] px-3 py-1 rounded-xl font-semibold mt-5">
+                {report.contorLeftGlaucomaStatus || "N/A"}
+              </h1>
+
+              <div className="text-3xl font-bold bg-primary uppercase mt-16">
                 Right Fundus
               </div>
-              <h1 className="text-2xl gradient-text uppercase font-semibold mt-5">
-                {report.contorRightGlaucomaStatus || "N/A"}
-              </h1>
               <div className="flex justify-center mt-2">
                 <SemiCircle
                   percentage={(report.contorRightVCDR * 100).toFixed(2) || "0"}
                 />
               </div>
+              <h1 className="text-xl gradient-text uppercase border-1 border-[#5c60c6] rounded-xl px-3 py-1 font-semibold mt-5">
+                {report.contorRightGlaucomaStatus || "N/A"}
+              </h1>
             </div>
           ) : report.analysisType === "Armd" ? (
             <div className="text-secondary text-center">
@@ -376,7 +365,7 @@ const Analysis = () => {
               <div className="text-3xl font-bold bg-primary uppercase">
                 Left Fundus ARMD
               </div>
-              <h1 className="text-2xl gradient-text font-semibold mt-5">
+              <h1 className="text-2xl gradient-text border border-[#5c60c6] rounded-xl px-3 py-1  font-semibold mt-5">
                 {typeof report.leftFundusArmdPrediction === "string"
                   ? report.leftFundusArmdPrediction === "1"
                     ? "ARMD Detected"
@@ -385,10 +374,10 @@ const Analysis = () => {
               </h1>
 
               {/* Right Fundus ARMD */}
-              <div className="text-3xl font-bold bg-primary uppercase mt-10">
+              <div className="text-3xl font-bold bg-primary uppercase mt-16">
                 Right Fundus ARMD
               </div>
-              <h1 className="text-2xl gradient-text font-semibold mt-5">
+              <h1 className="text-2xl gradient-text border border-[#5c60c6] rounded-xl px-3 py-1  font-semibold mt-5">
                 {typeof report.rightFundusArmdPrediction === "string"
                   ? report.rightFundusArmdPrediction === "1"
                     ? "ARMD Detected"

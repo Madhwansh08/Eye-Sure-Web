@@ -3,21 +3,20 @@ import React from "react";
 // Function to determine label & color based on percentage or DR classification
 function getCriticalityLevel({ percentage, className }) {
   if (!isNaN(percentage)) {
-    // Case 1: Glaucoma (use percentage)
+    // Case 1: Glaucoma (percentage-based)
     if (percentage <= 25) return { label: "Low", color: "#22c55e" }; // Green
     if (percentage <= 60) return { label: "Moderate", color: "#facc15" }; // Yellow
     return { label: "High", color: "#ef4444" }; // Red
   } else if (className) {
-    // Case 2: DR Analysis (use class_name)
-
+    // Case 2: DR Analysis (classification-based)
     if (className.includes("NO DR")) return { label: "No DR", color: "#6b7280" }; // Grey (NO-DR)
-    if (className.includes("MILD DR")) return { label: "Low", color: "#22c55e" }; // Green (0-25)
-    if (className.includes("MODERATE DR")) return { label: "Moderate", color: "#facc15" }; // Yellow (25-60)
-    if (className.includes("severe") || className.includes("proliferate"))
-      return { label: "High", color: "#ef4444" }; // Red (60-100)
+    if (className.includes("MILD DR")) return { label: "Low", color: "#22c55e" }; // Green
+    if (className.includes("MODERATE DR")) return { label: "Moderate", color: "#facc15" }; // Yellow
+    if (className.includes("SEVERE") || className.includes("PROLIFERATE"))
+      return { label: "High", color: "#ef4444" }; // Red
   }
 
-  return { label: "Low", color: "#22c55e" }; // Default: Low (Green)
+  return { label: "Low", color: "#22c55e" }; // Default
 }
 
 /**
@@ -25,47 +24,52 @@ function getCriticalityLevel({ percentage, className }) {
  * Handles both Glaucoma (percentage-based) and DR Analysis (classification-based).
  */
 const SemiCircle = ({ percentage, className }) => {
-  // Determine classification level based on percentage or DR classification
   const { label, color } = getCriticalityLevel({ percentage, className });
 
-  // SVG Geometry
+  // SVG Configuration
   const radius = 100;
+  const strokeWidth = 15;
   const diameter = radius * 2;
+  const centerX = radius + strokeWidth;
+  const centerY = radius + strokeWidth;
   const arcLength = Math.PI * radius; // Length of the half-circle
 
-  // Path for the semicircle
-  const arcPath = `M 0,${radius} A ${radius},${radius} 0 0 1 ${diameter},${radius}`;
+  // Arc Path (Semi-circle from left to right)
+  const arcPath = `
+    M ${strokeWidth},${centerY}
+    A ${radius},${radius} 0 0 1 ${diameter + strokeWidth},${centerY}
+  `;
 
   return (
-    <div className="flex items-center justify-center w-[150px] h-[120px]">
+    <div className="flex items-center justify-center w-[200px] h-[120px]">
       <svg
-        width={diameter}
-        height={radius + 20} // Extra vertical space
-        viewBox={`0 0 ${diameter} ${radius + 20}`}
+        width={diameter + strokeWidth * 2}
+        height={radius + strokeWidth * 2}
+        viewBox={`0 0 ${diameter + strokeWidth * 2} ${radius + strokeWidth * 2}`}
         xmlns="http://www.w3.org/2000/svg"
       >
         <defs>
-          {/* Glow effect for the stroke */}
+          {/* Glow effect */}
           <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
-            <feDropShadow dx="0" dy="0" stdDeviation="4" floodColor={color} floodOpacity="0.6" />
+            <feDropShadow dx="0" dy="0" stdDeviation="3" floodColor={color} floodOpacity="0.6" />
           </filter>
         </defs>
 
-        {/* Background Arc (Grey) */}
+        {/* Background Arc (Static Grey) */}
         <path
           d={arcPath}
           fill="none"
-          stroke="#374151" // Tailwind Gray-700
-          strokeWidth="15"
+          stroke="#374151"
+          strokeWidth={strokeWidth}
           strokeLinecap="round"
         />
 
-        {/* Foreground Arc (Animated Stroke) */}
+        {/* Foreground Arc (Animated Fill) */}
         <path
           d={arcPath}
           fill="none"
-          stroke={color} // Dynamic color
-          strokeWidth="15"
+          stroke={color}
+          strokeWidth={strokeWidth}
           strokeLinecap="round"
           strokeDasharray={arcLength}
           strokeDashoffset={arcLength}
@@ -77,8 +81,8 @@ const SemiCircle = ({ percentage, className }) => {
 
         {/* Center Label */}
         <text
-          x={radius}
-          y={radius * 0.7} // Positioning inside the arc
+          x={centerX}
+          y={centerY - radius * 0.3}
           textAnchor="middle"
           fill="white"
           fontSize="22"
@@ -91,12 +95,8 @@ const SemiCircle = ({ percentage, className }) => {
         <style>
           {`
             @keyframes semiCircleGrow {
-              0% {
-                stroke-dashoffset: ${arcLength};
-              }
-              100% {
-                stroke-dashoffset: 0;
-              }
+              0% { stroke-dashoffset: ${arcLength}; }
+              100% { stroke-dashoffset: 0; }
             }
           `}
         </style>

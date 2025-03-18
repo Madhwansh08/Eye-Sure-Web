@@ -72,7 +72,7 @@ const Register = () => {
                     required
                     value={formData.name}
                     onChange={handleChange}
-                    className="block w-full rounded-md bg-primary px-4 py-2 text-lg text-secondary outline  outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:outline-indigo-600"
+                    className="block w-full rounded-md bg-white px-4 py-2 text-lg text-black outline  outline-gray-300 placeholder:text-gray-400  focus:outline-2 focus:outline-indigo-600"
                   />
                 </div>
               </div>
@@ -94,7 +94,7 @@ const Register = () => {
                     required
                     value={formData.email}
                     onChange={handleChange}
-                    className="block w-full rounded-md bg-primary px-4 py-2 text-lg text-secondary outline outline-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:outline-indigo-600"
+                    className="block w-full rounded-md bg-white px-4 py-2 text-lg text-black outline  outline-gray-300 placeholder:text-gray-400  focus:outline-2 focus:outline-indigo-600"
                   />
                 </div>
               </div>
@@ -116,7 +116,7 @@ const Register = () => {
                     required
                     value={formData.password}
                     onChange={handleChange}
-                    className="block w-full rounded-md bg-primary px-4 py-2 text-lg text-secondary outline outline-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:outline-indigo-600"
+                    className="block w-full rounded-md bg-white text-black px-4 py-2 text-lg outline outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:outline-indigo-600"
                   />
                 </div>
               </div>
@@ -126,7 +126,7 @@ const Register = () => {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="flex w-full justify-center rounded-md bg-secondary px-4 py-2 text-lg font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                  className="flex w-full justify-center rounded-md bg-secondary px-4 py-2 text-lg font-semibold text-white shadow-sm hover:bg-indigo-500  focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                 >
                   {loading ? "Registering..." : "Register"}
                 </button>

@@ -140,7 +140,7 @@ const Forgot = () => {
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="block w-full rounded-md bg-secondary px-4 py-2 text-lg text-secondary outline outline-bg-black placeholder:text-gray-400 focus:outline-2 focus:outline-indigo-600"
+                  className="block w-full rounded-md bg-white text-black px-4 py-2 text-lg outline outline-bg-black placeholder:text-gray-400 focus:outline-2 focus:outline-indigo-600"
                 />
               </div>
             </div>
@@ -234,7 +234,7 @@ const Forgot = () => {
                   required
                   value={newPassword}
                   onChange={(e) => setNewPassword(e.target.value)}
-                  className="block w-full rounded-md bg-secondary px-4 py-2 text-lg text-secondary outline outline-bg-black placeholder:text-gray-400 focus:outline-2 focus:outline-indigo-600"
+                  className="block w-full rounded-md bg-white text-black px-4 py-2 text-lg outline outline-bg-black placeholder:text-gray-400 focus:outline-2 focus:outline-indigo-600"
                 />
               </div>
             </div>

@@ -11,6 +11,7 @@ import Login from "./pages/auth/Login";
 import Register from "./pages/auth/Register";
 import Forgot from "./pages/auth/Forgot";
 import ErrorPage from "./pages/Error";
+import About from "./pages/About";
 import PrivateRoute from "./routes/Private";
 import PublicRoute from "./routes/Public";
 import AppInitializer from "./hooks/AppInitializer";
@@ -39,6 +40,7 @@ function App() {
           <Routes>
             <Route path="*" element={<ErrorPage />}/>
             <Route path="/" element={<Home />} />
+            <Route path="/about" element={<About />}/>
             <Route
               path="/upload"
               element={

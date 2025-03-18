@@ -13,6 +13,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { initReportState, setTool } from "../redux/slices/annotationSlice";
 import store from "../redux/store";
 import RgbToggles from "../components/explainable/RgbToggles";
+import FeedbackForm from "../components/explainable/Feedback";
 import RightPanelToggle from "../components/explainable/RightPanelToggle";
 
 const Explainable = () => {
@@ -177,6 +178,7 @@ const Explainable = () => {
         {/* Left Column: Patient Demographics & History */}
         <div className="flex-1 bg-primary p-4 rounded-b-xl rounded-t-xl shadow overflow-auto">
          <RgbToggles adjustments={adjustments} handleRGBChange={handleRGBChange}/>
+         <FeedbackForm type={report?.analysisType} />
         </div>
 
 
