@@ -1,7 +1,7 @@
 // routes/reportRoutes.js
 const express = require("express");
 const router = express.Router();
-const { uploadReport, getReportById , getRecentReports, uploadDRReport, uploadGlaucomaReport, uploadArmdReport, updateReportById } = require("../controllers/reportController");
+const { uploadReport, getReportById , getRecentReports, uploadDRReport, uploadGlaucomaReport, uploadArmdReport, updateReportById, updateReportNote } = require("../controllers/reportController");
 const authMiddleware = require("../middleware/authMiddleware");
 const upload = require("../config/multer");
 
@@ -57,6 +57,12 @@ router.patch(
 )
 
 
+router.patch(
+  '/:reportId/note'
+  ,
+  authMiddleware,
+  updateReportNote
+)
 
 
 

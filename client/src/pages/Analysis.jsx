@@ -15,6 +15,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { initReportState, setTool } from "../redux/slices/annotationSlice";
 import store from "../redux/store";
 import { toast } from "react-toastify";
+import PatientHistoryTable from "../components/analysis/PatientHistoryTable";
 
 const Analysis = () => {
   const { reportId } = useParams();
@@ -45,6 +46,8 @@ const Analysis = () => {
   const toggleButtonRef = useRef(null);
   const backButtonRef = useRef(null);
 
+  const [patientHistory , setPatientHistory]=useState([])
+
   useEffect(() => {
     const fetchReport = async () => {
       try {
@@ -73,6 +76,26 @@ const Analysis = () => {
       setLoading(false);
     }
   }, [reportId, dispatch]);
+
+
+  useEffect(() => {
+    const fetchHistory = async () => {
+      try {
+    
+  
+        const response = await axios.get(`${API_URL}/api/patient/${report.patientId}/history`, {
+          withCredentials: true,
+        });
+        setPatientHistory(response.data.history);
+      } catch (error) {
+        console.error("Error fetching patient history:", error);
+      }
+    };
+    if (patient) {
+      fetchHistory();
+    }
+  }, [patient]);
+ 
 
   if (loading) {
     return (
@@ -138,8 +161,29 @@ const Analysis = () => {
     navigate(`/explainable/${reportId}`);
   };
 
+
+  const handleSubmitNote = async () => {
+    try {
+      const payload = { note };
+      const response = await axios.patch(
+        `${API_URL}/api/report/${reportId}/note`,
+        payload,
+        { withCredentials: true }
+      );
+      toast.success("Note updated successfully!");
+      // Optionally update the report state if needed:
+      setReport(response.data.report);
+      setNote(""); // Clear the note after successful update
+    } catch (error) {
+      console.error("Error updating note:", error);
+      toast.error("Failed to update note");
+    }
+  };
+
   // Determine the label to show above the canvas based on current image side.
   const currentSideLabel = imagesData[carouselIndex]?.side === "left" ? "Left Eye" : "Right Eye";
+
+
 
   return (
     <div className="flex flex-col bg-primary h-screen overflow-hidden relative">
@@ -172,44 +216,29 @@ const Analysis = () => {
           <p className="mt-2 text-lg text-secondary">Name: {patient.name}</p>
           <p className="mt-2 text-lg text-secondary">Age: {patient.age}</p>
           <p className="mt-2 text-lg text-secondary">Gender: {patient.gender}</p>
-          <p className="mt-2 text-lg text-secondary">City: {patient.city}</p>
+          <p className="mt-2 text-lg text-secondary">
+  Location: {patient.location || "Not Available"}
+</p>
+
+        
+
           <div className="mt-10">
-            <h3 className="text-3xl mt-5 font-semibold gradient-text">Patient History</h3>
-            <table className="w-full mt-4 text-secondary border-collapse border border-gray-500">
-              <thead>
-                <tr className="bg-primary text-secondary">
-                  <th className="p-2 border border-gray-500">Date</th>
-                  <th className="p-2 border border-gray-500">Diagnosis</th>
-                  <th className="p-2 border border-gray-500">Treatment</th>
-                  <th className="p-2 border border-gray-500">Doctor</th>
-                </tr>
-              </thead>
-              <tbody>
-                {Array.from({ length: 8 }).map((_, index) => (
-                  <tr key={index} className="bg-primary text-secondary">
-                    <td className="p-2 border border-gray-500">2023-12-0{index + 1}</td>
-                    <td className="p-2 border border-gray-500">Condition {index + 1}</td>
-                    <td className="p-2 border border-gray-500">Medication {index + 1}</td>
-                    <td className="p-2 border border-gray-500">Dr. Smith</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+           
+            <PatientHistoryTable patientHistory={patientHistory}/>
           </div>
+
+        
           <div className="mt-6 relative">
             <textarea
               id="note"
               className="w-full border-2 border-[#387AA4] text-secondary rounded-lg px-4 pt-6 pr-16 focus:outline-none bg-transparent"
               value={note}
-              placeholder="Enter Note here"
+              placeholder="Add Report Note"
               onChange={(e) => setNote(e.target.value)}
               rows={4}
             />
             <button
-              onClick={() => {
-                console.log("Note Submitted:", note);
-                setNote("");
-              }}
+              onClick={handleSubmitNote}
               className="absolute right-2 bottom-2 mb-1 bg-[#387AA4] text-white px-4 py-1 rounded-full hover:bg-[#4a4f9c] transition"
             >
               Submit
@@ -219,7 +248,7 @@ const Analysis = () => {
         {/* Middle Column: Konva Canvas + Carousel */}
         <div className="flex-1 bg-primary p-4 rounded shadow flex flex-col items-center justify-center">
           {/* Label above the canvas */}
-          <h3 className="text-white font-semibold uppercase text-xl ">{currentSideLabel}</h3>
+          <h3 className="text-secondary font-semibold uppercase text-xl ">{currentSideLabel}</h3>
           {imagesData.length > 0 ? (
             <div className="relative" style={{ width: "800px", height: "800px" }}>
               <KonvaCanvas
@@ -260,13 +289,13 @@ const Analysis = () => {
           <h2 className="text-3xl mt-10 gradient-text font-bold mb-8">Analysis Results</h2>
           {report.analysisType === "DR" ? (
             <div className="text-secondary text-center">
-              <div className="text-3xl font-bold bg-primary border-2 border-[#5c60c6] rounded-3xl uppercase">
+              <div className="text-3xl font-bold bg-primary border-2 border-[#387AA4] rounded-3xl uppercase">
                 Left Fundus
               </div>
               <h1 className="text-4xl gradient-text font-semibold mt-5">
                 {report.leftFundusPrediction?.predictions?.primary_classification?.class_name || "N/A"}
               </h1>
-              <div className="flex justify-center mt-2">
+              <div className="flex justify-center mt-2 ">
                 <SemiCircle
                   percentage={
                     (report.leftFundusPrediction?.predictions?.primary_classification?.accuracy * 100).toFixed(2) || "0"
@@ -283,7 +312,7 @@ const Analysis = () => {
                   }
                 />
               </div>
-              <div className="text-3xl font-bold bg-primary border-2 border-[#5c60c6] rounded-3xl uppercase mt-10">
+              <div className="text-3xl font-bold bg-primary border-2 border-[#387AA4] rounded-3xl uppercase mt-10">
                 Right Fundus
               </div>
               <h1 className="text-4xl gradient-text font-semibold mt-5">
@@ -315,7 +344,7 @@ const Analysis = () => {
               <h1 className="text-2xl gradient-text uppercase font-semibold mt-5">
                 {report.contorLeftGlaucomaStatus || "N/A"}
               </h1>
-              <div className="flex justify-center mt-2">
+              <div className="flex justify-center mt-2 ">
                 <SemiCircle percentage={(report.contorLeftVCDR * 100).toFixed(2) || "0"} />
               </div>
               <div className="text-3xl font-bold bg-primary border-2 border-[#5c60c6] rounded-3xl uppercase mt-10">

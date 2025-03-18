@@ -1,6 +1,7 @@
 // controllers/patientController.js
 const Patient = require("../models/patient");
 const Doctor = require("../models/doctor");
+const Report=require('../models/report')
 
 exports.createPatient = async (req, res) => {
   try {
@@ -16,7 +17,7 @@ exports.createPatient = async (req, res) => {
       name: "", 
       age: 0,
       gender: "",
-      city: "",
+      location: "",
       contactNo: "",
       doctor: doctor._id,
       reports: []
@@ -81,21 +82,64 @@ exports.getPatientsByDoctor = async (req, res) => {
   };
 
 
+
+// controllers/reportController.js
+exports.getPatientHistory = async (req, res) => {
+  try {
+    const { patientId } = req.params;
+    if (!patientId) {
+      return res.status(400).json({ message: "Patient ID is required." });
+    }
+    
+    const reports = await Report.find({ patientId }).sort({ createdAt: -1 });
+    const history = reports.map((report) => {
+      let leftResult = "N/A";
+      let rightResult = "N/A";
+      const analysisType = report.analysisType;
+
+      if (analysisType === "DR") {
+        leftResult = report.leftFundusPrediction?.predictions?.primary_classification?.class_name || "N/A";
+        rightResult = report.rightFundusPrediction?.predictions?.primary_classification?.class_name || "N/A";
+      } else if (analysisType === "Glaucoma") {
+        leftResult = report.contorLeftGlaucomaStatus || "N/A";
+        rightResult = report.contorRightGlaucomaStatus || "N/A";
+      } else if (analysisType === "Armd") {
+        leftResult = report.leftFundusArmdPrediction === "1" ? "ARMD Detected" : "No ARMD";
+        rightResult = report.rightFundusArmdPrediction === "1" ? "ARMD Detected" : "No ARMD";
+      }
+
+      return {
+        date: report.createdAt,
+        analysisType,
+        leftResult,
+        rightResult,
+      };
+    });
+
+    return res.status(200).json({ history });
+  } catch (error) {
+    console.error("Error in patient history", error);
+    return res.status(500).json({ message: "Server error" });
+  }
+};
+
+
+
   
 exports.updatePatientById = async (req, res) => {
     try {
       const { patientId } = req.params;
-      const { age, patientName, gender } = req.body;
+      const { age, patientName, gender , location } = req.body;
   
       // Validate required fields
-      if (!patientId || !age || !patientName || !gender) {
+      if (!patientId || !age || !patientName || !gender || !location) {
         return res.status(400).json({ message: "Missing required fields" });
       }
   
       // Update the patient: we update the 'name', 'age', and 'gender' fields.
       const updatedPatient = await Patient.findByIdAndUpdate(
         patientId,
-        { name: patientName, age, gender },
+        { name: patientName, age, gender  , location},
         { new: true } // Return the updated document.
       );
   

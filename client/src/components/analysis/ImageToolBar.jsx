@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { motion } from "framer-motion";
 import { FiSun, FiSliders, FiMoon, FiZoomIn, FiToggleLeft, FiRefreshCw } from "react-icons/fi";
 import { RiPaletteFill } from "react-icons/ri";
+import CustomTooltip from "./CustomToolTip";
 
 const ImageToolBar = ({ onToggle, onAdjust, onResetPan }) => {
   // Local state for image adjustments.
@@ -108,56 +109,73 @@ const ImageToolBar = ({ onToggle, onAdjust, onResetPan }) => {
         ref={toolbarRef}
         className="fixed bottom-10 left-1/2 transform -translate-x-1/2 z-50 flex items-end space-x-4 px-6 py-3 bg-[#030811]/80 rounded-full shadow-lg"
       >
-        <motion.button
-          onClick={() => toggleFilter("brightness")}
-          whileHover={{ scale: 1.1 }}
-          className="p-2 rounded-full bg-gray-200 hover:bg-blue-500 hover:text-white transition"
-        >
-          <FiSun size={20} />
-        </motion.button>
-        <motion.button
-          onClick={() => toggleFilter("contrast")}
-          whileHover={{ scale: 1.1 }}
-          className="p-2 rounded-full bg-gray-200 hover:bg-blue-500 hover:text-white transition"
-        >
-          <FiSliders size={20} />
-        </motion.button>
-        <motion.button
-          onClick={() => updateAdjustments({ negative: !negative })}
-          whileHover={{ scale: 1.1 }}
-          className={`p-2 rounded-full transition ${negative ? "bg-blue-500 text-white" : "bg-gray-200"}`}
-        >
-          <FiMoon size={20} />
-        </motion.button>
-        <motion.button
-          onClick={() => toggleFilter("zoom")}
-          whileHover={{ scale: 1.1 }}
-          className="p-2 rounded-full bg-gray-200 hover:bg-blue-500 hover:text-white transition"
-        >
-          <FiZoomIn size={20} />
-        </motion.button>
-        <motion.button
-          onClick={() => setRgbEnabled((prev) => !prev)}
-          whileHover={{ scale: 1.1 }}
-          className={`p-2 rounded-full transition ${rgbEnabled ? "bg-blue-500 text-white" : "bg-gray-200"}`}
-        >
-          <RiPaletteFill size={20} />
-        </motion.button>
-        {/* Reset button */}
-        <motion.button
-          onClick={resetAdjustments}
-          whileHover={{ scale: 1.1 }}
-          className="p-2 rounded-full bg-gray-200 hover:bg-blue-500 hover:text-white transition"
-        >
-          <FiRefreshCw size={20} />
-        </motion.button>
-        <motion.button
-          onClick={handleToggle}
-          whileHover={{ scale: 1.1 }}
-          className="p-2 rounded-full bg-gray-200 hover:bg-blue-500 hover:text-white transition"
-        >
-          <FiToggleLeft size={20} />
-        </motion.button>
+        <CustomTooltip title="Brightness">
+          <motion.button
+            onClick={() => toggleFilter("brightness")}
+            whileHover={{ scale: 1.1 }}
+            className="p-2 rounded-full bg-gray-200 hover:bg-blue-500 hover:text-white transition"
+          >
+            <FiSun size={20} />
+          </motion.button>
+        </CustomTooltip>
+        <CustomTooltip title="Contrast">
+          <motion.button
+            onClick={() => toggleFilter("contrast")}
+            whileHover={{ scale: 1.1 }}
+            className="p-2 rounded-full bg-gray-200 hover:bg-blue-500 hover:text-white transition"
+          >
+            <FiSliders size={20} />
+          </motion.button>
+        </CustomTooltip>
+        <CustomTooltip title="Toggle Negative">
+          <motion.button
+            onClick={() => updateAdjustments({ negative: !negative })}
+            whileHover={{ scale: 1.1 }}
+            className={`p-2 rounded-full transition ${
+              negative ? "bg-blue-500 text-white" : "bg-gray-200"
+            }`}
+          >
+            <FiMoon size={20} />
+          </motion.button>
+        </CustomTooltip>
+        <CustomTooltip title="Zoom">
+          <motion.button
+            onClick={() => toggleFilter("zoom")}
+            whileHover={{ scale: 1.1 }}
+            className="p-2 rounded-full bg-gray-200 hover:bg-blue-500 hover:text-white transition"
+          >
+            <FiZoomIn size={20} />
+          </motion.button>
+        </CustomTooltip>
+        <CustomTooltip title="Toggle RGB">
+          <motion.button
+            onClick={() => setRgbEnabled((prev) => !prev)}
+            whileHover={{ scale: 1.1 }}
+            className={`p-2 rounded-full transition ${
+              rgbEnabled ? "bg-blue-500 text-white" : "bg-gray-200"
+            }`}
+          >
+            <RiPaletteFill size={20} />
+          </motion.button>
+        </CustomTooltip>
+        <CustomTooltip title="Reset Adjustments">
+          <motion.button
+            onClick={resetAdjustments}
+            whileHover={{ scale: 1.1 }}
+            className="p-2 rounded-full bg-gray-200 hover:bg-blue-500 hover:text-white transition"
+          >
+            <FiRefreshCw size={20} />
+          </motion.button>
+        </CustomTooltip>
+        <CustomTooltip title="Toggle Toolbar">
+          <motion.button
+            onClick={handleToggle}
+            whileHover={{ scale: 1.1 }}
+            className="p-2 rounded-full bg-gray-200 hover:bg-blue-500 hover:text-white transition"
+          >
+            <FiToggleLeft size={20} />
+          </motion.button>
+        </CustomTooltip>
       </div>
       {/* Slider container rendered separately for brightness, contrast, and zoom */}
       {activeFilter && (

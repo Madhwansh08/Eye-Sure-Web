@@ -11,6 +11,7 @@ const ExistingPatientModal = ({ onClose }) => {
   const [selectedPatientId, setSelectedPatientId] = useState("");
   const [age, setAge] = useState("");
   const [patientName, setPatientName] = useState("");
+  const [location , setLocation]=useState("")
   const [gender, setGender] = useState("");
   const [showConfirmModal, setShowConfirmModal] = useState(false);
 
@@ -24,6 +25,7 @@ const ExistingPatientModal = ({ onClose }) => {
         setAge(patient.age);
         setPatientName(patient.name);
         setGender(patient.gender);
+        setLocation(patient.location)
       } catch (error) {
         console.error("Error fetching patient details:", error);
         toast.error("Failed to fetch patient details");
@@ -35,7 +37,7 @@ const ExistingPatientModal = ({ onClose }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const formData = { age, patientName, gender };
+      const formData = { age, patientName, gender  , location};
       const response = await axios.put(`${API_URL}/api/patient/${selectedPatientId}`, formData, { withCredentials: true });
       console.log("Updated patient:", response.data);
       toast.success("Patient updated successfully!");
@@ -138,6 +140,16 @@ const ExistingPatientModal = ({ onClose }) => {
                     <option value="female">Female</option>
                     <option value="other">Other</option>
                   </select>
+                </div>
+                <div>
+                <label className="block text-sm text-secondary font-medium">Location</label>
+                  <input
+                    type="text"
+                    value={location}
+                    onChange={(e) => setLocation(e.target.value)}
+                    className="mt-1 w-full border rounded text-secondary px-3 py-2"
+                    required
+                  />
                 </div>
               </>
             )}

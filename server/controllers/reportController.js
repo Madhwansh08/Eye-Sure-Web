@@ -377,6 +377,36 @@ exports.updateReportById = async (req, res) => {
   }
 };
 
+// In your controller file (e.g., reportController.js)
+exports.updateReportNote = async (req, res) => {
+  try {
+    const { reportId } = req.params;
+    const { note } = req.body;
+
+    if (!reportId) {
+      return res.status(400).json({ message: "Report ID is required." });
+    }
+
+    // Update only the note field
+    const updatedReport = await Report.findByIdAndUpdate(
+      reportId,
+      { note: note || "" },
+      { new: true }
+    );
+
+    if (!updatedReport) {
+      return res.status(404).json({ message: "Report not found." });
+    }
+
+    return res.status(200).json({
+      report: updatedReport,
+      message: "Note updated successfully."
+    });
+  } catch (error) {
+    console.error("Error updating report note:", error);
+    return res.status(500).json({ message: "Internal server error." });
+  }
+};
 
 
 
@@ -395,7 +425,7 @@ exports.getReportById = async (req, res) => {
     }
 
     // Find the patient linked to this report
-    const patient = await Patient.findOne({ reports: reportId }).select("name age gender city contactNo");
+    const patient = await Patient.findOne({ reports: reportId }).select("name age gender city contactNo location");
 
     if (!patient) {
       return res.status(404).json({ message: "Patient not found" });
