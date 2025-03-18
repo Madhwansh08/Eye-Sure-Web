@@ -8,6 +8,7 @@ import {
 } from "../../redux/slices/authSlice";
 import { toast } from "react-toastify";
 import logoimg from "../../assets/logo.png";
+import forgot from "../../assets/forgot.mp4";
 
 const Forgot = () => {
   const [step, setStep] = useState(1);
@@ -270,11 +271,15 @@ const Forgot = () => {
         </div>
 
         {/* Background Image section */}
-        <div className="w-2/5">
-          <img
-            src="https://images.unsplash.com/photo-1496917756835-20cb06e75b4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1908&q=80"
-            alt="BackgroundImage"
-            className="w-[100%] h-full object-cover"
+        <div className="w-2/5 flex justify-center items-center bg-white">
+          <video
+            src={forgot}
+            alt="forgot"
+            className="object-cover transition-transform duration-300 group-hover:scale-110 pl-8"
+            autoPlay
+            loop
+            muted
+            playsInline
           />
         </div>
       </section>

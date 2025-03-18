@@ -97,10 +97,10 @@ const Home = () => {
         {inView && (
           <CountUp
             start={0}
-            end={75000}
+            end={75}
             duration={1.5}
             separator=","
-            suffix="+"
+            suffix="k"
           />
         )}
       </h3>

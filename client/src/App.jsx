@@ -10,7 +10,7 @@ import Dashboard from "./pages/Dashboard";
 import Login from "./pages/auth/Login";
 import Register from "./pages/auth/Register";
 import Forgot from "./pages/auth/Forgot";
-import Report from "./components/analysis/Report";
+import ErrorPage from "./pages/Error";
 import PrivateRoute from "./routes/Private";
 import PublicRoute from "./routes/Public";
 import AppInitializer from "./hooks/AppInitializer";
@@ -37,8 +37,8 @@ function App() {
             pauseOnHover
           />
           <Routes>
+            <Route path="*" element={<ErrorPage />}/>
             <Route path="/" element={<Home />} />
-            <Route path="/report" element={<Report/>} />
             <Route
               path="/upload"
               element={

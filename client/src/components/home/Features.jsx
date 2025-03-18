@@ -3,6 +3,8 @@ import { motion, useScroll, useTransform } from "framer-motion";
 
 import featimg from "../../assets/featureimg.jpg";
 import dashimg from "../../assets/dashboard.jpg";
+import feature1 from "../../assets/feature2.png";
+import feature3 from "../../assets/feature3.png";
 
 const IMG_PADDING = 20;
 const IMG_HEIGHT = "50vh"; // Smaller image height
@@ -10,7 +12,7 @@ const IMG_HEIGHT = "50vh"; // Smaller image height
 const FeatureData = [
   {
     id: 1,
-    imgUrl: featimg,
+    imgUrl: feature1,
     subheading: "Abnormality Detection",
     heading: "Seamless Image Acquisition",
     description:
@@ -18,7 +20,7 @@ const FeatureData = [
   },
   {
     id: 2,
-    imgUrl: dashimg,
+    imgUrl: featimg,
     subheading: "Editing Interface",
     heading: "AI-Powered Multi-Disease Detection",
     description:
@@ -26,7 +28,7 @@ const FeatureData = [
   },
   {
     id: 3,
-    imgUrl: dashimg,
+    imgUrl: feature3,
     subheading: "Modern Dashboard",
     heading: "Interactive Image Analysis & Reports Generation",
     description:

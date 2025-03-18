@@ -2,6 +2,7 @@
 
 import { ChevronRightIcon } from "@heroicons/react/20/solid";
 import AtomScene from "./AbstractEye";
+import herogif from "../../assets/herogif.gif"
 
 export default function Hero() {
   return (
@@ -12,6 +13,10 @@ export default function Hero() {
           <div className="mt-16 sm:mt-24 lg:mt-0 lg:shrink-0 lg:grow h-[600px]">
             {/* The Canvas is transparent, so the gradient behind it will show */}
             <AtomScene />
+          </div>
+          {/* Left column with gif */}
+          <div className=" z-50 pr-24">
+            <img src={herogif} alt="Hero" className="w-[30rem] h-[30rem]"/>
           </div>
 
           {/* Right column with text */}
