@@ -273,17 +273,25 @@ const Explainable = () => {
                 </div>
               ) : report.analysisType === "Armd" ? (
                 <div className="flex flex-col items-center text-center text-secondary">
-                  <div className="text-3xl font-bold bg-primary border-2 border-[#5c60c6] rounded-3xl uppercase">
+                  <div className="text-2xl font-bold bg-primary uppercase">
                     Left Fundus ARMD
                   </div>
-                  <h1 className="text-4xl gradient-text font-semibold mt-5">
-                    {report.leftFundusArmdPrediction || "N/A"}
+                  <h1 className="text-2xl gradient-text border-1 border-[#5c60c6] rounded-xl px-3 py-1  font-semibold mt-5">
+                  {typeof report.leftFundusArmdPrediction === "string"
+                  ? report.leftFundusArmdPrediction === "1"
+                    ? "ARMD Detected"
+                    : "No ARMD Detected"
+                  : "N/A"}
                   </h1>
-                  <div className="text-3xl font-bold bg-primary border-2 border-[#5c60c6] rounded-3xl uppercase mt-10">
+                  <div className="text-2xl font-bold bg-primary uppercase mt-10">
                     Right Fundus ARMD
                   </div>
-                  <h1 className="text-4xl gradient-text font-semibold mt-5">
-                    {report.rightFundusArmdPrediction || "N/A"}
+                  <h1 className="text-2xl gradient-text border border-[#5c60c6] rounded-xl px-3 py-1 font-semibold mt-5">
+                  {typeof report.rightFundusArmdPrediction === "string"
+                  ? report.rightFundusArmdPrediction === "1"
+                    ? "ARMD Detected"
+                    : "No ARMD Detected"
+                  : "N/A"}
                   </h1>
                 </div>
               ) : (
