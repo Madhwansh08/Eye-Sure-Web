@@ -2,8 +2,6 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 export default function Demo() {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
   return (
     <div className="bg-primary ">
       <div className="flex flex-col border-b border-gray-200 lg:border-0">
@@ -25,12 +23,11 @@ export default function Demo() {
                     demo to see the future of diagnostics in action.
                   </p>
                   <div className="mt-8">
-                    <button
-                      onClick={() => setIsModalOpen(true)}
-                      className="inline-block rounded-md border border-transparent bg-secondary px-8 py-3 font-medium text-secondary hover:bg-[#030811] hover:text-[#fdfdfd]"
-                    >
-                      Watch Full Demo
-                    </button>
+                    <a href="https://www.youtube.com/watch?v=ZPgSqAt3PY8" target="_blank" rel="noopener noreferrer">
+                      <button className="inline-block rounded-md border border-transparent bg-secondary px-8 py-3 font-medium text-secondary hover:bg-[#030811] hover:text-[#fdfdfd]">
+                        Watch Full Demo
+                      </button>
+                    </a>
                   </div>
                 </div>
               </div>
@@ -59,45 +56,6 @@ export default function Demo() {
           </div>
         </div>
       </div>
-
-      {/* Modal */}
-      {/* Modal */}
-      <AnimatePresence>
-        {isModalOpen && (
-          <motion.div
-            className="fixed inset-0 z-50 flex items-center justify-center bg-primary bg-opacity-50"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-          >
-            <motion.div
-              className="relative bg-white rounded-lg shadow-lg w-full max-w-6xl"
-              initial={{ scale: 0.8, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.8, opacity: 0 }}
-              transition={{ duration: 0.3 }}
-            >
-              {/* Close Button */}
-              <button
-                className="absolute top-4 right-4 bg-[#030811] hover:bg-[#5c60c6] text-[#f2ebe3] font-bold rounded-lg p-2 shadow-lg z-50"
-                onClick={() => setIsModalOpen(false)}
-                aria-label="Close"
-              >
-                ✖
-              </button>
-              <div className="aspect-w-16 aspect-h-9 relative">
-                <iframe
-                  className="w-full h-full rounded-b-lg"
-                  src="https://www.youtube.com/embed/ZPgSqAt3PY8"
-                  title="YouTube video player"          
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                ></iframe>
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
     </div>
   );
 }

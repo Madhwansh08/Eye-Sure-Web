@@ -48,13 +48,14 @@ const FeedbackForm = ({ type }) => {
                   </option>
                 ))
               : type === "Glaucoma"
-              ? ["Suspect glaucoma", "Normal glaucoma", "Glaucoma"].map((option) => (
-                  <option key={option} value={option}>
-                    {option}
-                  </option>
-                ))
-              : 
-              ["ARMD Detected", "No ARMD Detected"].map((option) => (
+              ? ["Suspect glaucoma", "Non glaucoma", "Glaucoma"].map(
+                  (option) => (
+                    <option key={option} value={option}>
+                      {option}
+                    </option>
+                  )
+                )
+              : ["ARMD Detected", "No ARMD Detected"].map((option) => (
                   <option key={option} value={option}>
                     {option}
                   </option>
@@ -63,34 +64,25 @@ const FeedbackForm = ({ type }) => {
         </div>
 
         {/* LEFT SEVERITY (Only for DR & Glaucoma) */}
-        {(type === "DR" || type === "Glaucoma") && (
+        {type === "DR" && (
           <div className="ml-4">
             <label className="text-md font-medium text-secondary flex">
               ► Severity:
             </label>
             <select
               name="rightSeverity"
-              value={formData.rightSeverity}
+              value={formData.leftSeverity}
               onChange={handleChange}
               className="w-full p-2 mt-2 border rounded-md bg-secondary"
             >
               <option value="">Select</option>
-              {type === "DR"
-                ? [
-                    "No DR",
-                    "Mild DR",
-                    "Moderate DR",
-                    "Severe/Proliferate DR",
-                  ].map((option) => (
-                    <option key={option} value={option}>
-                      {option}
-                    </option>
-                  ))
-                : ["Low", "Medium", "High"].map((option) => (
-                    <option key={option} value={option}>
-                      {option}
-                    </option>
-                  ))}
+              {["No DR", "Mild DR", "Moderate DR", "Severe/Proliferate DR"].map(
+                (option) => (
+                  <option key={option} value={option}>
+                    {option}
+                  </option>
+                )
+              )}
             </select>
           </div>
         )}
@@ -114,7 +106,7 @@ const FeedbackForm = ({ type }) => {
                   </option>
                 ))
               : type === "Glaucoma"
-              ? ["Suspect glaucoma", "Non-suspect glaucoma", "Glaucoma"].map(
+              ? ["Suspect glaucoma", "Non glaucoma", "Glaucoma"].map(
                   (option) => (
                     <option key={option} value={option}>
                       {option}
@@ -130,7 +122,7 @@ const FeedbackForm = ({ type }) => {
         </div>
 
         {/* RIGHT SEVERITY (Only for DR & Glaucoma) */}
-        {(type === "DR" || type === "Glaucoma") && (
+        {type === "DR" && (
           <div className="ml-4">
             <label className="text-md font-medium text-secondary flex">
               ► Severity:
@@ -142,22 +134,13 @@ const FeedbackForm = ({ type }) => {
               className="w-full p-2 mt-2 border rounded-md bg-secondary"
             >
               <option value="">Select</option>
-              {type === "DR"
-                ? [
-                    "No DR",
-                    "Mild DR",
-                    "Moderate DR",
-                    "Severe/Proliferate DR",
-                  ].map((option) => (
-                    <option key={option} value={option}>
-                      {option}
-                    </option>
-                  ))
-                : ["Low", "Medium", "High"].map((option) => (
-                    <option key={option} value={option}>
-                      {option}
-                    </option>
-                  ))}
+              {["No DR", "Mild DR", "Moderate DR", "Severe/Proliferate DR"].map(
+                (option) => (
+                  <option key={option} value={option}>
+                    {option}
+                  </option>
+                )
+              )}
             </select>
           </div>
         )}
