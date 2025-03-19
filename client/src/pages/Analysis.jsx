@@ -3,7 +3,7 @@ import Header from "../components/common/Header";
 import AnnotationToolBar from "../components/analysis/AnnotationToolBar";
 import ImageToolBar from "../components/analysis/ImageToolBar";
 import KonvaCanvas from "../components/analysis/KonvaCanvas";
-import { FiArrowLeft, FiArrowRight } from "react-icons/fi";
+import { FiArrowLeft, FiArrowRight, FiDownload } from "react-icons/fi";
 import Draggable from "react-draggable";
 import axios from "axios";
 import icon from "../assets/aiicon.gif";
@@ -16,6 +16,7 @@ import { initReportState, setTool } from "../redux/slices/annotationSlice";
 import store from "../redux/store";
 import { toast } from "react-toastify";
 import PatientHistoryTable from "../components/analysis/PatientHistoryTable";
+import { handleDownloadPDF } from "../components/analysis/Report"; // Import the handleDownloadPDF function
 
 const Analysis = () => {
   const { reportId } = useParams();
@@ -45,6 +46,7 @@ const Analysis = () => {
 
   const toggleButtonRef = useRef(null);
   const backButtonRef = useRef(null);
+  const downloadReportRef = useRef(null); // Add reference for download report button
 
   const [patientHistory, setPatientHistory] = useState([]);
 
@@ -185,9 +187,15 @@ const Analysis = () => {
     }
   };
 
+  const handleDownloadReport = () => {
+    handleDownloadPDF(patient, report);
+    console.log("patient", patient);
+  };
+
   // Determine the label to show above the canvas based on current image side.
   const currentSideLabel =
     imagesData[carouselIndex]?.side === "left" ? "Left Eye" : "Right Eye";
+
   return (
     <div className="flex flex-col bg-primary h-screen overflow-hidden relative">
       <Header />
@@ -390,6 +398,15 @@ const Analysis = () => {
           )}
         </div>
       </div>
+      <Draggable nodeRef={downloadReportRef}>
+        <button
+          ref={downloadReportRef}
+          onClick={handleDownloadReport} 
+          className="fixed bottom-4 right-30 z-50 p-3 bg-primary rounded-full shadow-lg text-primary border border-[#387AA4] hover:bg-gray-200 transition flex items-center hover:cursor-pointer"
+        >
+          <FiDownload size={24} />
+        </button>
+      </Draggable>
       <Draggable nodeRef={backButtonRef}>
         <button
           ref={backButtonRef}
