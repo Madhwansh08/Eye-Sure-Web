@@ -3,9 +3,9 @@ import jsPDF from "jspdf";
 import "jspdf-autotable";
 import logo from "../../assets/logo.png";
 
-export const handleDownloadPDF = (patient, report) => {
-  console.log("Patient1: ", patient);
-  console.log("Report1: ", report);
+export const handleDownloadPDF = (patient, report, user) => {
+  // console.log("Patient1: ", patient);
+  // console.log("Report1: ", report);
   const doc = new jsPDF({
     orientation: "portrait",
     unit: "mm",
@@ -38,7 +38,7 @@ export const handleDownloadPDF = (patient, report) => {
       x = 10; // reset x position if needed
     }
   };
-
+  y -= 5;
   // ----------------- Report Title -----------------
   doc.text("Fundus Medical Report", 105, y, { align: "center" });
   y += 4;
@@ -123,7 +123,7 @@ export const handleDownloadPDF = (patient, report) => {
   doc.setFont("helvetica", "bold");
   doc.text("OPHTHALMOLOGIST:", rightX, yRight);
   doc.setFont("helvetica", "normal");
-  doc.text("Chintan Patel" || "N/A", rightX + 45, yRight);
+  doc.text(user || "N/A", rightX + 45, yRight);
 
   yRight += 6;
 
@@ -140,7 +140,7 @@ export const handleDownloadPDF = (patient, report) => {
   doc.text("Eyes", rightX + 45, yRight);
   yRight += 6;
 
-  y = Math.max(y, yRight) + 8;
+  y = Math.max(y, yRight) + 10;
   // ----------------- Transformed Image Section -----------------
   // checkYPosition(200);
   doc.setDrawColor(0, 0, 128);
@@ -150,7 +150,7 @@ export const handleDownloadPDF = (patient, report) => {
   doc.text("AI-Screening Summary", x, y);
   doc.setLineWidth(0.025); // Thin line
   doc.line(x, y + 1, x + 47, y + 1);
-  y += 10;
+  y += 14;
 
 
   y += 36;
@@ -158,18 +158,30 @@ export const handleDownloadPDF = (patient, report) => {
   doc.setFont("helvetica", "bold");
   doc.setTextColor(0, 0, 0);
   doc.setFontSize(12);
-  doc.text("Left Eye:", x, y);
+  doc.text("Left Eye:", 10, y);
   doc.setFontSize(10);
   y += 7;
   let leftName = report?.analysisType === "DR" ? (report?.leftFundusPrediction?.primary_classification?.class_name) : (report?.analysisType === "Glaucoma") ? report?.contorLeftGlaucomaStatus
-    : report?.leftFundusArmdPrediction;
-  const maxWidth = 20; // Adjust this width if needed
-  const leftNameLines = doc.splitTextToSize(
-    leftName || "N/A",
-    maxWidth
-  );
-  // doc.text(locationLines, 40, y);
-  doc.text("Result: " + leftNameLines || "N/A", 10, y);
+    : (report?.leftFundusArmdPrediction == 1 ? "ARMD detected" : "ARMD not detected");
+
+  // Define the maximum width for the text
+  const maxWidth = 40; // Adjust this value based on your page width
+  let ynew=y;
+  // Split the text if it is too long
+  if (doc.getTextWidth("Result: " + leftName) > maxWidth) {
+    // Split the text into multiple lines
+    const leftNameLines = doc.splitTextToSize("Result: " + leftName, maxWidth);
+
+    // Print each line
+    leftNameLines.forEach(line => {
+      doc.text(line || "N/A", 10, ynew);
+      ynew += 7;
+    });
+  } else {
+    doc.text("Result: " + leftName || "N/A", 10, ynew);
+    ynew += 7;
+  }
+
   y += 60;
   checkYPosition(10);
 
@@ -178,12 +190,27 @@ export const handleDownloadPDF = (patient, report) => {
   doc.setFont("helvetica", "bold");
   doc.setTextColor(0, 0, 0);
   doc.setFontSize(12);
-  doc.text("Right Eye :", x, y);
+  doc.text("Right Eye :", 10, y);
   y += 7;
   doc.setFontSize(10);
   let rightName = report?.analysisType === "DR" ? (report?.rightFundusPrediction?.primary_classification?.class_name) : (report?.analysisType === "Glaucoma") ? report?.contorRightGlaucomaStatus
-    : report?.rightFundusArmdPrediction;
-  doc.text("Result: " + rightName || "N/A", 10, y);
+    : (report?.rightFundusArmdPrediction == 1 ? "ARMD detected" : "ARMD not detected");
+  
+  ynew = y;  
+  // Split the text if it is too long
+  if (doc.getTextWidth("Result: " + rightName) > maxWidth) {
+    // Split the text into multiple lines
+    const rightNameLines = doc.splitTextToSize("Result: " + rightName, maxWidth);
+
+    // Print each line
+    rightNameLines.forEach(line => {
+      doc.text(line || "N/A", 10, ynew);
+      ynew += 7;
+    });
+  } else {
+    doc.text("Result: " + rightName || "N/A", 10, ynew);
+    ynew += 7;
+  }
   y -= 15;
   y -= 110;
   x += 43;
@@ -263,16 +290,16 @@ export const handleDownloadPDF = (patient, report) => {
           doc.setFont("helvetica", "bold");
           doc.setFontSize(12);
           doc.setTextColor(0, 0, 128);
-          doc.text("Recommendation :", x, y);
+          doc.text("Recommendation", x, y);
           doc.setDrawColor(0, 0, 128);
           doc.setLineWidth(0.025); // Thin line
-          doc.line(x, y + 1, x + 38, y + 1);
+          doc.line(x, y + 1, x + 36, y + 1);
           doc.setFont("helvetica", "bold");
           doc.setFontSize(10);
           doc.setTextColor(0, 0, 0);
           y += 7;
           doc.setFontSize(10);
-          doc.text("Doctor's Note: " + report.note || "N/A", 30, y);
+          doc.text(report?.note || "N/A", 30, y);
           doc.setFont("helvetica", "normal");
           y += 15;
           checkYPosition(15);
@@ -296,6 +323,8 @@ export const handleDownloadPDF = (patient, report) => {
           // Doctor's name and designation
           doc.setFont("helvetica", "bold");
           doc.setFontSize(12);
+          doc.text(user , x, y);
+          y += 7;
           doc.setFontSize(10);
           doc.setFont("helvetica", "normal");
           doc.text("(MD,Opthalmologist)", x, y);
@@ -335,7 +364,7 @@ const DownloadReport = ({ patient, report }) => {
   return (
     <div>
       <button
-        onClick={() => handleDownloadPDF(patient, report)}
+        onClick={() => handleDownloadPDF(patient, report, user)}
         className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
       >
         Download Report

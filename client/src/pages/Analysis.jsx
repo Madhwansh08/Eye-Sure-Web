@@ -22,6 +22,7 @@ const Analysis = () => {
   const { reportId } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const doctor = useSelector((state) => state.auth.user);
 
   const [report, setReport] = useState(null);
   const [patient, setPatient] = useState(null);
@@ -188,8 +189,7 @@ const Analysis = () => {
   };
 
   const handleDownloadReport = () => {
-    handleDownloadPDF(patient, report);
-    console.log("patient", patient);
+    handleDownloadPDF(patient, report, doctor.name);
   };
 
   // Determine the label to show above the canvas based on current image side.
