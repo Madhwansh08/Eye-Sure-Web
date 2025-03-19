@@ -11,20 +11,22 @@ const FeedbackForm = ({ type }) => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    console.log(name,value);
+    console.log(name, value);
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    toast.success("Feedback submitted successfully")
+    toast.success("Feedback submitted successfully");
     console.log(formData);
-  }
+  };
 
   return (
     <div className="max-w-xl mx-auto bg-primary p-6 rounded-lg border border-white px-6 py-3 mt-24">
       <h2 className="text-2xl font-semibold text-center text-secondary mb-6">
-        {type} Feedback Form
+        <h2 className="text-2xl font-semibold text-center text-secondary mb-6">
+          {type === "Armd" ? "ARMD" : type} Feedback Form
+        </h2>
       </h2>
       <form className="space-y-4">
         {/* LEFT FUNDUS */}
@@ -40,17 +42,19 @@ const FeedbackForm = ({ type }) => {
           >
             <option value="">Select</option>
             {type === "DR"
-              ? ["REF DR", "NON-REF DR", "NO DR"].map((option) => (
+              ? ["REF DR", "NON-REF DR"].map((option) => (
                   <option key={option} value={option}>
                     {option}
                   </option>
                 ))
               : type === "Glaucoma"
-              ? ["Suspect glaucoma", "Normal glaucoma", "Glaucoma"].map((option) => (
-                  <option key={option} value={option}>
-                    {option}
-                  </option>
-                ))
+              ? ["Suspect glaucoma", "Non-suspect glaucoma", "Glaucoma"].map(
+                  (option) => (
+                    <option key={option} value={option}>
+                      {option}
+                    </option>
+                  )
+                )
               : ["ARMD Detected", "No ARMD Detected"].map((option) => (
                   <option key={option} value={option}>
                     {option}
@@ -62,21 +66,32 @@ const FeedbackForm = ({ type }) => {
         {/* LEFT SEVERITY (Only for DR & Glaucoma) */}
         {(type === "DR" || type === "Glaucoma") && (
           <div className="ml-4">
-            <label className="block text-md font-medium text-secondary">
+            <label className="text-md font-medium text-secondary flex">
               ► Severity:
             </label>
             <select
-              name="leftSeverity"
-              value={formData.leftSeverity}
+              name="rightSeverity"
+              value={formData.rightSeverity}
               onChange={handleChange}
               className="w-full p-2 mt-2 border rounded-md bg-gray-100 dark:bg-gray-700"
             >
               <option value="">Select</option>
-              {["Low", "Medium", "High"].map((option) => (
-                <option key={option} value={option}>
-                  {option}
-                </option>
-              ))}
+              {type === "DR"
+                ? [
+                    "No DR",
+                    "Mild DR",
+                    "Moderate DR",
+                    "Severe/Proliferate DR",
+                  ].map((option) => (
+                    <option key={option} value={option}>
+                      {option}
+                    </option>
+                  ))
+                : ["Low", "Medium", "High"].map((option) => (
+                    <option key={option} value={option}>
+                      {option}
+                    </option>
+                  ))}
             </select>
           </div>
         )}
@@ -90,17 +105,17 @@ const FeedbackForm = ({ type }) => {
             name="rightFundus"
             value={formData.rightFundus}
             onChange={handleChange}
-            className="w-full p-2 mt-2 border rounded-md bg-gray-100 dark:bg-gray-700"
+            className="w-full p-2 mt-2 border rounded-md bg-gray-100"
           >
             <option value="">Select</option>
             {type === "DR"
-              ? ["REF DR", "NON-REF DR", "NO DR"].map((option) => (
+              ? ["REF DR", "NON-REF DR"].map((option) => (
                   <option key={option} value={option}>
                     {option}
                   </option>
                 ))
               : type === "Glaucoma"
-              ? ["Suspect glaucoma", "Normal glaucoma", "Glaucoma"].map(
+              ? ["Suspect glaucoma", "Non-suspect glaucoma", "Glaucoma"].map(
                   (option) => (
                     <option key={option} value={option}>
                       {option}
@@ -128,11 +143,22 @@ const FeedbackForm = ({ type }) => {
               className="w-full p-2 mt-2 border rounded-md bg-gray-100 dark:bg-gray-700"
             >
               <option value="">Select</option>
-              {["Low", "Medium", "High"].map((option) => (
-                <option key={option} value={option}>
-                  {option}
-                </option>
-              ))}
+              {type === "DR"
+                ? [
+                    "No DR",
+                    "Mild DR",
+                    "Moderate DR",
+                    "Severe/Proliferate DR",
+                  ].map((option) => (
+                    <option key={option} value={option}>
+                      {option}
+                    </option>
+                  ))
+                : ["Low", "Medium", "High"].map((option) => (
+                    <option key={option} value={option}>
+                      {option}
+                    </option>
+                  ))}
             </select>
           </div>
         )}
