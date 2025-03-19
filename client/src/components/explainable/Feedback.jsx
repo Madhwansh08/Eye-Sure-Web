@@ -38,7 +38,7 @@ const FeedbackForm = ({ type }) => {
             name="leftFundus"
             value={formData.leftFundus}
             onChange={handleChange}
-            className="w-full p-2 mt-2 border rounded-md bg-gray-100 dark:bg-gray-700"
+            className="w-full p-2 mt-2 border rounded-md bg-secondary"
           >
             <option value="">Select</option>
             {type === "DR"
@@ -72,7 +72,7 @@ const FeedbackForm = ({ type }) => {
               name="rightSeverity"
               value={formData.rightSeverity}
               onChange={handleChange}
-              className="w-full p-2 mt-2 border rounded-md bg-gray-100 dark:bg-gray-700"
+              className="w-full p-2 mt-2 border rounded-md bg-secondary"
             >
               <option value="">Select</option>
               {type === "DR"
@@ -104,7 +104,7 @@ const FeedbackForm = ({ type }) => {
             name="rightFundus"
             value={formData.rightFundus}
             onChange={handleChange}
-            className="w-full p-2 mt-2 border rounded-md bg-gray-100"
+            className="w-full p-2 mt-2 border rounded-md bg-secondary"
           >
             <option value="">Select</option>
             {type === "DR"
@@ -139,7 +139,7 @@ const FeedbackForm = ({ type }) => {
               name="rightSeverity"
               value={formData.rightSeverity}
               onChange={handleChange}
-              className="w-full p-2 mt-2 border rounded-md bg-gray-100 dark:bg-gray-700"
+              className="w-full p-2 mt-2 border rounded-md bg-secondary"
             >
               <option value="">Select</option>
               {type === "DR"

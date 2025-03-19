@@ -167,7 +167,7 @@ const ImageToolBar = ({ onToggle, onAdjust, onResetPan }) => {
             <FiRefreshCw size={20} />
           </motion.button>
         </CustomTooltip>
-        {/* <CustomTooltip title="Toggle Toolbar">
+        <CustomTooltip title="Toggle Toolbar">
           <motion.button
             onClick={handleToggle}
             whileHover={{ scale: 1.1 }}
@@ -175,7 +175,7 @@ const ImageToolBar = ({ onToggle, onAdjust, onResetPan }) => {
           >
             <FiToggleLeft size={20} />
           </motion.button>
-        </CustomTooltip> */}
+        </CustomTooltip>
       </div>
       {/* Slider container rendered separately for brightness, contrast, and zoom */}
       {activeFilter && (
