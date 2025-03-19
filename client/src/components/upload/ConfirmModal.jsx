@@ -19,7 +19,7 @@ const ConfirmModal = ({ onCancel, patientId }) => {
     switch (activeTab) {
       case "Glaucoma Analysis":
         return "Glaucoma";
-      case "Armd Analysis":
+      case "ARMD Analysis":
         return "Armd";
       case "DR Analysis":
       default:

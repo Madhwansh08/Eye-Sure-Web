@@ -10,19 +10,22 @@ const PatientModal = ({ onClose, patientId }) => {
   const [age, setAge] = useState("");
   const [patientName, setPatientName] = useState("");
   const [gender, setGender] = useState("");
-  const [location , setLocation]=useState("");
+  const [location, setLocation] = useState("");
   const [showConfirmModal, setShowConfirmModal] = useState(false);
 
+  // Handle form submission to update patient details
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const formData = { age, patientName, gender , location };
+    const formData = { age, patientName, gender, location };
     try {
-      const response = await axios.put(`${API_URL}/api/patient/${patientId}`, formData, {
-        withCredentials: true,
-      });
+      const response = await axios.put(
+        `${API_URL}/api/patient/${patientId}`,
+        formData,
+        { withCredentials: true }
+      );
       console.log("Updated patient:", response.data);
       toast.success("Patient updated successfully!");
-      // Open the confirmation modal
+      // Open the confirmation modal if update succeeds
       setShowConfirmModal(true);
     } catch (error) {
       console.error("Error updating patient:", error);
@@ -30,6 +33,24 @@ const PatientModal = ({ onClose, patientId }) => {
     }
   };
 
+  // Handle cancel button click
+  // If no details are filled, delete the patient record
+  const handleCancel = async () => {
+    if (!age && !patientName && !gender && !location) {
+      try {
+        await axios.delete(`${API_URL}/api/patient/${patientId}`, {
+          withCredentials: true,
+        });
+        toast.success("Empty patient record deleted successfully");
+      } catch (error) {
+        toast.error("Failed to delete patient");
+        console.error("Error deleting patient:", error);
+      }
+    }
+    onClose();
+  };
+
+  // Close the confirmation modal and then the PatientModal
   const handleConfirmClose = () => {
     setShowConfirmModal(false);
     onClose();
@@ -47,10 +68,14 @@ const PatientModal = ({ onClose, patientId }) => {
           animate={{ scale: 1 }}
           className="bg-primary p-10 rounded-lg shadow-lg w-full border-2 border-[#387aa4] max-w-2xl"
         >
-          <h2 className="text-2xl font-bold mb-6 text-secondary">New Patient Details</h2>
+          <h2 className="text-2xl font-bold mb-6 text-secondary">
+            New Patient Details
+          </h2>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-secondary">Patient ID</label>
+              <label className="block text-sm font-medium text-secondary">
+                Patient ID
+              </label>
               <input
                 type="text"
                 value={patientId}
@@ -60,7 +85,9 @@ const PatientModal = ({ onClose, patientId }) => {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-secondary">Age</label>
+              <label className="block text-sm font-medium text-secondary">
+                Age
+              </label>
               <input
                 type="number"
                 value={age}
@@ -70,7 +97,9 @@ const PatientModal = ({ onClose, patientId }) => {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-secondary">Patient Name</label>
+              <label className="block text-sm font-medium text-secondary">
+                Patient Name
+              </label>
               <input
                 type="text"
                 value={patientName}
@@ -80,7 +109,9 @@ const PatientModal = ({ onClose, patientId }) => {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-secondary">Gender</label>
+              <label className="block text-sm font-medium text-secondary">
+                Gender
+              </label>
               <select
                 value={gender}
                 onChange={(e) => setGender(e.target.value)}
@@ -94,7 +125,9 @@ const PatientModal = ({ onClose, patientId }) => {
               </select>
             </div>
             <div>
-            <label className="block text-sm font-medium text-secondary">Location</label>
+              <label className="block text-sm font-medium text-secondary">
+                Location
+              </label>
               <input
                 type="text"
                 value={location}
@@ -106,7 +139,7 @@ const PatientModal = ({ onClose, patientId }) => {
             <div className="flex justify-end space-x-4 mt-6">
               <button
                 type="button"
-                onClick={onClose}
+                onClick={handleCancel}
                 className="px-4 py-2 rounded bg-gray-300 text-gray-800 hover:bg-gray-400 transition"
               >
                 Cancel

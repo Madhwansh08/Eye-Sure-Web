@@ -30,7 +30,7 @@ export default function Hero({ scrollToFeatures, scrollToDemo }) {
               {/* Call scrollToFeatures when clicked */}
               <button
                 onClick={scrollToFeatures}
-                className="rounded-md px-3.5 z-50 py-2.5 text-sm font-semibold bg-secondary text-secondary hover:bg-primary hover:cursor-pointer"
+                className="rounded-md px-3.5 z-50 py-2.5 text-sm font-semibold bg-secondary text-secondary shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 hover:cursor-pointer"
               >
                 Explore
               </button>

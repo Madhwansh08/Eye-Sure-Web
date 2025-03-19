@@ -14,12 +14,14 @@ import { initReportState, setTool } from "../redux/slices/annotationSlice";
 import store from "../redux/store";
 import RgbToggles from "../components/explainable/RgbToggles";
 import FeedbackForm from "../components/explainable/Feedback";
+import { handleDownloadPDF } from "../components/analysis/Report";
 import RightPanelToggle from "../components/explainable/RightPanelToggle";
 
 const Explainable = () => {
   const { reportId } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const doctor = useSelector((state) => state.auth.user);
 
   const [report, setReport] = useState(null);
   const [patient, setPatient] = useState(null);
@@ -47,6 +49,7 @@ const Explainable = () => {
 
   const toggleButtonRef = useRef(null);
   const backButtonRef = useRef(null);
+  const downloadReportRef = useRef(null); // Add reference for download report button
 
   useEffect(() => {
     const fetchReport = async () => {
@@ -145,6 +148,11 @@ const Explainable = () => {
     }
   };
 
+    const handleDownloadReport = () => {
+      handleDownloadPDF(patient, report, doctor.name);
+      console.log("patient", patient);
+    };
+
   const handleExplainableAI = () => {
     navigate(`/explainable/${reportId}`);
   };
@@ -165,10 +173,10 @@ const Explainable = () => {
       ) : (
         <ImageToolBar onToggle={toggleToolbar} onAdjust={setAdjustments} onResetPan={handleResetPan} />
       )}
-      <Draggable nodeRef={toggleButtonRef}>
+      <Draggable nodeRef={downloadReportRef}>
         <button
-          ref={toggleButtonRef}
-          onClick={handleExplainableAI}
+          ref={downloadReportRef}
+          onClick={handleDownloadReport}
           className="fixed bottom-4 right-4 z-50 p-3 rounded-full shadow-lg text-primary border border-[#5c60c6] hover:bg-hover-ai transition flex items-center bg-animated-ai"
         >
           <FiDownload size={28} className="text-white" />
