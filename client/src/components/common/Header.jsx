@@ -172,7 +172,7 @@ const Header = () => {
               <button
                 aria-label="Logout"
                 onClick={handleLogout}
-                className="flex items-center space-x-2 px-4 py-2 w-full text-sm text-secondary hover:bg-[#5c60c6]"
+                className="flex items-center space-x-2 px-4 py-2 w-full text-sm text-secondary hover:bg-[#317d8a]"
               >
                 <ArrowRightStartOnRectangleIcon className="h-5 w-5" />
                 <span>Logout</span>
