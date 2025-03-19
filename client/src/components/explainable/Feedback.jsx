@@ -15,10 +15,11 @@ const FeedbackForm = ({ type }) => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-//   const handleSubmit = () => {
-//     toast.success("Feedback submitted successfully")
-//     console.log(formData);
-//   }
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    toast.success("Feedback submitted successfully")
+    console.log(formData);
+  }
 
   return (
     <div className="max-w-xl mx-auto bg-primary p-6 rounded-lg border border-white px-6 py-3 mt-24">
@@ -139,7 +140,7 @@ const FeedbackForm = ({ type }) => {
         {/* SUBMIT BUTTON */}
         <div className="flex justify-center items-center mt-8 mb-4">
           <button
-            // onClick={handleSubmit}
+            onClick={handleSubmit}
             className="flex justify-center rounded-md bg-secondary px-4 py-2 text-lg font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
           >
             Submit

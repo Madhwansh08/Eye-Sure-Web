@@ -210,7 +210,7 @@ const Analysis = () => {
       <button
         ref={toggleButtonRef}
         onClick={handleExplainableAI}
-        className="fixed bottom-4 right-4 z-50 p-3 rounded-full shadow-lg text-primary border border-[#5c60c6] hover:bg-hover-ai transition flex items-center bg-animated-ai"
+        className="fixed bottom-4 right-4 z-50 p-3 rounded-full shadow-lg text-primary border border-[#5c60c6] hover:bg-hover-ai transition flex items-center bg-animated-ai hover:cursor-pointer"
       >
         <img src={icon} alt="AI" className="w-10 h-10 grayscale-[100]" />
       </button>
@@ -394,7 +394,7 @@ const Analysis = () => {
         <button
           ref={backButtonRef}
           onClick={() => navigate(-1)}
-          className="fixed bottom-4 left-4 z-50 p-3 bg-primary rounded-full shadow-lg text-primary border border-[#387AA4] hover:bg-gray-200 transition flex items-center"
+          className="fixed bottom-4 left-4 z-50 p-3 bg-primary rounded-full shadow-lg text-primary border border-[#387AA4] hover:bg-gray-200 transition flex items-center hover:cursor-pointer"
         >
           <FiArrowLeft size={24} />
         </button>
