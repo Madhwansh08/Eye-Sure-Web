@@ -250,7 +250,7 @@ const BlockInTextCard = ({ tag, text, examples, onContactClick }) => {
   return (
     <div className="w-full max-w-xl space-y-6">
       <div>
-        <p className="mb-1.5 text-2xl font-bold uppercase">{tag}</p>
+        <p className="mb-1.5 text-4xl font-bold uppercase">{tag}</p>
         <hr className="dark:border-[#030811] border-[#fdfdfd]" />
       </div>
       <p className="max-w-lg text-xl leading-relaxed">{text}</p>
@@ -393,7 +393,7 @@ const DragCloseDrawer = ({ open, setOpen, children }) => {
                 className="h-2 w-16 cursor-grab touch-none rounded-full bg-[#f2ebe3] hover:bg-[#387AA4] active:cursor-grabbing"
               />
             </div>
-            <div className="relative z-0 h-full overflow-y-scroll p-4 pt-12">
+            <div className="relative z-0 h-full overflow-hidden p-4 pt-12">
               {children}
             </div>
           </motion.div>
