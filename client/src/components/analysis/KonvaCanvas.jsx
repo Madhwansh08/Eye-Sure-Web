@@ -229,6 +229,7 @@ const KonvaCanvas = ({
         <Layer>
           {backgroundImage && (
             <KonvaImage
+            
               ref={imageRef}
               image={backgroundImage}
               x={0}

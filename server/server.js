@@ -60,6 +60,10 @@ app.use('/api/patient', patientRoutes);
 const reportRoutes=require('./routes/reportRoutes')
 app.use('/api/report', reportRoutes); 
 
+
+const dashboardRoutes=require('./routes/dashboardRoutes')
+app.use('/api/dashboard' , dashboardRoutes)
+
 // Start the server
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);

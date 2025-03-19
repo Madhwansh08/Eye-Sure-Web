@@ -118,7 +118,7 @@ const ExistingPatientModal = ({ onClose }) => {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm text-secondary font-medium">Patient Name (Preferred Initials Only!)</label>
+                  <label className="block text-sm text-secondary font-medium">Patient Name</label>
                   <input
                     type="text"
                     value={patientName}
