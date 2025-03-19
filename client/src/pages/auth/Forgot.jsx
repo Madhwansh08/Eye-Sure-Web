@@ -254,7 +254,7 @@ const Forgot = () => {
 
   return (
     <div>
-      <section className="flex justify-center min-h-screen bg-[#030811] dark:bg-[#fdfdfd] relative overflow-x-hidden overflow-y-hidden">
+      <section className="flex justify-center min-h-screen bg-primary relative overflow-x-hidden overflow-y-hidden">
         {/* Content section */}
         <div className="w-3/5 flex flex-col gap-y-8 items-center justify-center">
           {/* Step Progress Bar */}

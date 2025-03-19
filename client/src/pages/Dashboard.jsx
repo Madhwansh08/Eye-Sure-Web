@@ -59,7 +59,7 @@ const Dashboard = () => {
                 className={() =>
                   classNames(
                     location.pathname === item.path
-                      ? "bg-[#5c60c6] text-[#f2ebe3]"
+                      ? "bg-[#387AA4] text-[#f2ebe3]"
                       : "text-gray-800 dark:text-gray-400 hover:bg-gray-500 dark:hover:bg-gray-600 hover:text-white",
                     "flex items-center gap-x-3 px-3 py-2 rounded-md"
                   )
@@ -88,8 +88,8 @@ const Dashboard = () => {
               className={() =>
                 classNames(
                   location.pathname === item.path
-                    ? "bg-[#5c60c6] text-[#f2ebe3]"
-                    : "text-black dark:text-[#f2ebe3] hover:bg-[#5c60c6] hover:text-white",
+                    ? "bg-[#387AA4] text-[#f2ebe3]"
+                    : "text-black dark:text-[#f2ebe3] hover:bg-[#387AA4] hover:text-white",
                   "flex items-center gap-x-3 px-3 py-2 rounded-md"
                 )
               }

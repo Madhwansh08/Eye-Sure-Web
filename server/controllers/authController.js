@@ -4,6 +4,9 @@ const bcrypt = require('bcrypt');
 const nodemailer = require("nodemailer");
 const { hashPassword, comparePassword } = require('../helpers/authHelper');
 
+
+
+
 // Register API
 exports.registerDoctor = async (req, res) => {
   try {
@@ -124,12 +127,59 @@ exports.requestPasswordReset = async (req, res) => {
     doctor.resetPasswordOTP = otp;
     await doctor.save();
 
-    // Send OTP via email using nodemailer
+    // Create a stylish HTML email template
+    const htmlContent = `
+      <html>
+      <body style="margin:0; padding:0; font-family: Arial, sans-serif; background-color: #f4f4f4;">
+        <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
+          <!-- Header -->
+          <tr>
+            <td style="background: #030811; padding: 20px; text-align: center; color: #ffffff; font-size: 24px;">
+              Nuvo Ai
+            </td>
+          </tr>
+          <!-- Main Content -->
+          <tr>
+            <td style="padding: 20px;">
+              <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width:600px; margin: auto; background: #ffffff; border: 1px solid #dddddd; border-radius: 8px; overflow: hidden;">
+                <!-- Banner Image -->
+                <tr>
+                  <td style="text-align: center;">
+                    <img src="https://res.cloudinary.com/dh0kdktqr/image/upload/v1742287641/email_x7yxk6.jpg" alt="Banner Image" style="width:100%; max-width:600px; display: block;">
+                  </td>
+                </tr>
+                <!-- Email Body -->
+                <tr>
+                  <td style="padding: 20px; color: #333333;">
+                    <h2 style="color: #030811;">Password Reset Request</h2>
+                    <p>Hello,</p>
+                    <p>Your OTP for password reset is: <strong style="color:#030811;">${otp}</strong></p>
+                    <p>This OTP will expire in 10 minutes. Please use it to reset your password.</p>
+                    <p>If you did not request a password reset, please ignore this email.</p>
+                    <p>Best regards,<br>Your Team</p>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          <!-- Footer -->
+          <tr>
+            <td style="background: #f0f0f0; padding: 10px; text-align: center; font-size: 12px; color: #888888;">
+              © 2025 Nuvo ai. All rights reserved.
+            </td>
+          </tr>
+        </table>
+      </body>
+      </html>
+    `;
+
+    // Mail options with both plain text and HTML content
     const mailOptions = {
       from: process.env.EMAIL_USER,
       to: email,
       subject: "Your OTP for Resetting Password",
-      text: `Hello,\n\nYour OTP for Password reset is: ${otp}.\nIt will expire in 10 minutes.\n\nBest,\nYour Team`,
+      text: `Hello,\n\nYour OTP for password reset is: ${otp}.\nIt will expire in 10 minutes.\n\nBest,\nYour Team`,
+      html: htmlContent,
     };
 
     await transporter.sendMail(mailOptions);
@@ -140,6 +190,8 @@ exports.requestPasswordReset = async (req, res) => {
     res.status(500).send({ message: "Internal server error" });
   }
 };
+
+
 
 // Verify OTP
 exports.verifyOTP = async (req, res) => {
