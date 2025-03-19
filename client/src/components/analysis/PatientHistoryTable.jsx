@@ -59,7 +59,7 @@ export default function PatientHistoryTable({ patientHistory }) {
             <thead>
               <tr className="bg-secondary text-secondary uppercase text-sm font-bold tracking-wider">
                 <th className="p-2 border border-gray-500 text-left">Date</th>
-                <th className="p-2 border border-gray-500 text-left">Analysis</th>
+                <th className="p-2 border border-gray-500 text-left">Diagnosis</th>
                 <th className="p-2 border border-gray-500 text-left">Left Result</th>
                 <th className="p-2 border border-gray-500 text-left">Right Result</th>
               </tr>

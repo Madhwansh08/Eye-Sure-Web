@@ -117,7 +117,7 @@ const AnnotationToolBar = ({ onToggle, currentTool, setCurrentTool, onSaveAnnota
           <FiSave size={20} />
         </motion.button>
       </CustomTooltip>
-      <CustomTooltip title="Toggle Toolbar">
+      {/* <CustomTooltip title="Toggle Toolbar">
         <motion.button
           onClick={onToggle}
           variants={buttonVariants}
@@ -127,7 +127,7 @@ const AnnotationToolBar = ({ onToggle, currentTool, setCurrentTool, onSaveAnnota
         >
           <FiToggleRight size={20} />
         </motion.button>
-      </CustomTooltip>
+      </CustomTooltip> */}
     </div>
   );
 };

@@ -48,14 +48,13 @@ const FeedbackForm = ({ type }) => {
                   </option>
                 ))
               : type === "Glaucoma"
-              ? ["Suspect glaucoma", "Non-suspect glaucoma", "Glaucoma"].map(
-                  (option) => (
-                    <option key={option} value={option}>
-                      {option}
-                    </option>
-                  )
-                )
-              : ["ARMD Detected", "No ARMD Detected"].map((option) => (
+              ? ["Suspect glaucoma", "Normal glaucoma", "Glaucoma"].map((option) => (
+                  <option key={option} value={option}>
+                    {option}
+                  </option>
+                ))
+              : 
+              ["ARMD Detected", "No ARMD Detected"].map((option) => (
                   <option key={option} value={option}>
                     {option}
                   </option>

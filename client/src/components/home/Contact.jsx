@@ -104,9 +104,7 @@ export const Contact = () => {
                 Get in touch
               </h2>
               <p className="mt-6 text-lg/8 text-secondary">
-                Proin volutpat consequat porttitor cras nullam gravida at. Orci
-                molestie a eu arcu. Sed ut tincidunt integer elementum id sem.
-                Arcu sed malesuada et magna.
+              Need assistance? Our support team is here to help. Reach out with any questions or concerns, and we'll get back to you promptly.
               </p>
               <dl className="mt-10 space-y-4 text-base/7 text-gray-600">
                 <div className="flex gap-x-4">
