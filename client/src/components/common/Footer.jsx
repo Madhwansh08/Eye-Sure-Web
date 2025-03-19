@@ -90,7 +90,7 @@ const Footer = () => {
                   className="text-base text-secondary transition-all duration-200 hover:text-opacity-80 focus:text-opacity-80"
                 >
                   {" "}
-                  Radiologists{" "}
+                  Ophthalmologist{" "}
                 </a>
               </li>
               <li>
@@ -173,7 +173,7 @@ const Footer = () => {
             </li>
           </ul>
           <p className="w-full mt-8 text-sm text-center text-secondary md:mt-0 md:w-auto md:order-2">
-            © Copyright 2025, All Rights Reserved by Merai
+            © Copyright 2025, All Rights Reserved by Nuvoai
           </p>
         </div>
       </div>

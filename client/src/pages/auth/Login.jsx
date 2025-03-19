@@ -1,15 +1,16 @@
-import React, { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { loginUser } from '../../redux/slices/authSlice';
-import { useNavigate, Link } from 'react-router-dom';
-import { toast } from 'react-toastify';
-import logoimg from '../../assets/logo.png'; 
+import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { loginUser } from "../../redux/slices/authSlice";
+import { useNavigate, Link } from "react-router-dom";
+import { toast } from "react-toastify";
+import logoimg from "../../assets/logo.png";
+import login from "../../assets/login.mp4";
 
 const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { loading, error } = useSelector((state) => state.auth);
-  const [formData, setFormData] = useState({ email: '', password: '' });
+  const [formData, setFormData] = useState({ email: "", password: "" });
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -19,10 +20,11 @@ const Login = () => {
     e.preventDefault();
     const resultAction = await dispatch(loginUser(formData));
     if (loginUser.fulfilled.match(resultAction)) {
-      toast.success('Login successful');
-      navigate('/');
+      toast.success("Login successful");
+      navigate("/");
     } else {
-      console.error('Login failed:', resultAction.payload);
+      console.error("Login failed:", resultAction.payload);
+      toast.error(resultAction.payload);
     }
   };
 
@@ -32,28 +34,34 @@ const Login = () => {
       <div className="flex w-3/5 bg-primary flex-col justify-center px-6 py-12 lg:px-20 xl:px-24">
         <div className="mx-auto w-full max-w-md">
           <div>
-            <img
-              alt="Your Company"
-              src={logoimg}
-              className="h-14 w-auto"
-            />
+            <button
+              onClick={() => navigate("/")}
+              className="hover:cursor-pointer"
+            >
+              <img alt="Your Company" src={logoimg} className="h-14 w-auto" />
+            </button>{" "}
             <h2 className="mt-8 text-3xl font-bold tracking-tight text-secondary">
               Sign in to your account
             </h2>
             <p className="mt-3 text-lg text-gray-500">
-              Do not have an account?{' '}
-              <button onClick={()=>navigate('/register')} className="font-semibold text-lg text-secondary hover:text-primary">
-               Sign Up
+              Do not have an account?{" "}
+              <button
+                onClick={() => navigate("/register")}
+                className="font-semibold text-lg text-secondary hover:text-primary hover:cursor-pointer"
+              >
+                Sign Up
               </button>
             </p>
-           
           </div>
 
           <div className="mt-12">
             <form onSubmit={handleSubmit} className="space-y-8">
               {/* Email */}
               <div>
-                <label htmlFor="email" className="block text-lg font-medium text-secondary">
+                <label
+                  htmlFor="email"
+                  className="block text-lg font-medium text-secondary"
+                >
                   Email address
                 </label>
                 <div className="mt-2">
@@ -65,14 +73,17 @@ const Login = () => {
                     required
                     value={formData.email}
                     onChange={handleChange}
-                    className="block w-full rounded-md bg-secondary px-4 py-2 text-lg text-secondary outline outline-1 outline-bg-black placeholder:text-gray-400 focus:outline focus:outline-2 focus:outline-indigo-600"
+                    className="block w-full rounded-md bg-white text-black px-4 py-2 text-lg outline outline-bg-black placeholder:text-gray-400 focus:outline-2 focus:outline-indigo-600"
                   />
                 </div>
               </div>
 
               {/* Password */}
               <div>
-                <label htmlFor="password" className="block text-lg font-medium text-secondary">
+                <label
+                  htmlFor="password"
+                  className="block text-lg font-medium text-secondary"
+                >
                   Password
                 </label>
                 <div className="mt-2">
@@ -84,7 +95,7 @@ const Login = () => {
                     required
                     value={formData.password}
                     onChange={handleChange}
-                    className="block w-full rounded-md bg-secondary  px-4 py-2 text-lg text-secondary outline outline-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:outline-indigo-600"
+                    className="block w-full rounded-md bg-white text-black px-4 py-2 text-lg outline outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:outline-indigo-600"
                   />
                 </div>
               </div>
@@ -122,13 +133,16 @@ const Login = () => {
                       </svg>
                     </div>
                   </div>
-                  <label htmlFor="remember-me" className="block text-lg text-secondary">
+                  <label
+                    htmlFor="remember-me"
+                    className="block text-lg text-secondary"
+                  >
                     Remember me
                   </label>
                 </div>
 
                 <div className="text-base">
-                  <Link to='/forgot' className="font-semibold text-primary">
+                  <Link to="/forgot" className="font-semibold text-primary">
                     Forgot password?
                   </Link>
                 </div>
@@ -141,7 +155,7 @@ const Login = () => {
                   disabled={loading}
                   className="flex w-full justify-center rounded-md bg-secondary px-4 py-2 text-lg font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                 >
-                  {loading ? 'Logging in...' : 'Sign in'}
+                  {loading ? "Logging in..." : "Sign in"}
                 </button>
               </div>
             </form>
@@ -151,10 +165,14 @@ const Login = () => {
 
       {/* Right side (image) - 40% */}
       <div className="relative hidden w-2/5 lg:block">
-        <img
-          alt=""
-          src="https://images.unsplash.com/photo-1496917756835-20cb06e75b4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1908&q=80"
-          className="absolute inset-0 h-full w-full object-cover"
+        <video
+          src={login}
+          alt="login"
+          className="object-cover h-full w-full transition-transform duration-300 group-hover:scale-110"
+          autoPlay
+          loop
+          muted
+          playsInline
         />
       </div>
     </div>

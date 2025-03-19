@@ -6,7 +6,7 @@ import KonvaCanvas from "../components/analysis/KonvaCanvas";
 import { FiArrowLeft, FiArrowRight } from "react-icons/fi";
 import Draggable from "react-draggable";
 import axios from "axios";
-import icon from '../assets/aiicon.gif'
+import icon from "../assets/aiicon.gif";
 import { AiFillOpenAI } from "react-icons/ai";
 import { useParams, useNavigate } from "react-router-dom";
 import API_URL from "../utils/config";
@@ -32,7 +32,7 @@ const Analysis = () => {
     contrast: 0,
     saturation: 0,
     negative: false,
-    zoom: 1
+    zoom: 1,
   });
   const [resetPanTrigger, setResetPanTrigger] = useState(0);
   const [note, setNote] = useState("");
@@ -46,21 +46,23 @@ const Analysis = () => {
   const toggleButtonRef = useRef(null);
   const backButtonRef = useRef(null);
 
-  const [patientHistory , setPatientHistory]=useState([])
+  const [patientHistory, setPatientHistory] = useState([]);
 
   useEffect(() => {
     const fetchReport = async () => {
       try {
         const response = await axios.get(`${API_URL}/api/report/${reportId}`, {
-          withCredentials: true
+          withCredentials: true,
         });
         setReport(response.data.report);
         setPatient(response.data.patient);
         dispatch(
           initReportState({
             reportId,
-            leftAnnotations: response.data.report.leftFundusAnnotationCoordinates || [],
-            rightAnnotations: response.data.report.rightFundusAnnotationCoordinates || []
+            leftAnnotations:
+              response.data.report.leftFundusAnnotationCoordinates || [],
+            rightAnnotations:
+              response.data.report.rightFundusAnnotationCoordinates || [],
           })
         );
       } catch (error) {
@@ -77,15 +79,15 @@ const Analysis = () => {
     }
   }, [reportId, dispatch]);
 
-
   useEffect(() => {
     const fetchHistory = async () => {
       try {
-    
-  
-        const response = await axios.get(`${API_URL}/api/patient/${report.patientId}/history`, {
-          withCredentials: true,
-        });
+        const response = await axios.get(
+          `${API_URL}/api/patient/${report.patientId}/history`,
+          {
+            withCredentials: true,
+          }
+        );
         setPatientHistory(response.data.history);
       } catch (error) {
         console.error("Error fetching patient history:", error);
@@ -95,7 +97,6 @@ const Analysis = () => {
       fetchHistory();
     }
   }, [patient]);
- 
 
   if (loading) {
     return (
@@ -108,7 +109,7 @@ const Analysis = () => {
 
   const imagesData = [
     { side: "left", src: report?.leftFundusImage },
-    { side: "right", src: report?.rightFundusImage }
+    { side: "right", src: report?.rightFundusImage },
   ].filter((item) => item.src);
 
   const toggleToolbar = () => {
@@ -127,7 +128,9 @@ const Analysis = () => {
   };
 
   const goPrev = () => {
-    setCarouselIndex((prev) => (prev - 1 + imagesData.length) % imagesData.length);
+    setCarouselIndex(
+      (prev) => (prev - 1 + imagesData.length) % imagesData.length
+    );
   };
 
   const goNext = () => {
@@ -144,13 +147,16 @@ const Analysis = () => {
       const data = state.byReportId[reportId];
       const payload = {
         leftFundusAnnotationCoordinates: data.leftImageAnnotations,
-        rightFundusAnnotationCoordinates: data.rightImageAnnotations
+        rightFundusAnnotationCoordinates: data.rightImageAnnotations,
       };
-      const response = await axios.patch(`${API_URL}/api/report/${reportId}/annotations`, payload, {
-        withCredentials: true
-      });
-     toast.success("Annotations saved successfully!");
-  
+      const response = await axios.patch(
+        `${API_URL}/api/report/${reportId}/annotations`,
+        payload,
+        {
+          withCredentials: true,
+        }
+      );
+      toast.success("Annotations saved successfully!");
     } catch (error) {
       toast.error("Failed to save annotations");
       alert("Failed to save annotations");
@@ -160,7 +166,6 @@ const Analysis = () => {
   const handleExplainableAI = () => {
     navigate(`/explainable/${reportId}`);
   };
-
 
   const handleSubmitNote = async () => {
     try {
@@ -181,10 +186,8 @@ const Analysis = () => {
   };
 
   // Determine the label to show above the canvas based on current image side.
-  const currentSideLabel = imagesData[carouselIndex]?.side === "left" ? "Left Eye" : "Right Eye";
-
-
-
+  const currentSideLabel =
+    imagesData[carouselIndex]?.side === "left" ? "Left Eye" : "Right Eye";
   return (
     <div className="flex flex-col bg-primary h-screen overflow-hidden relative">
       <Header />
@@ -197,38 +200,41 @@ const Analysis = () => {
           reportId={reportId}
         />
       ) : (
-        <ImageToolBar onToggle={toggleToolbar} onAdjust={setAdjustments} onResetPan={handleResetPan} />
+        <ImageToolBar
+          onToggle={toggleToolbar}
+          onAdjust={setAdjustments}
+          onResetPan={handleResetPan}
+        />
       )}
       {/* <Draggable nodeRef={toggleButtonRef}> */}
-        <button
-          ref={toggleButtonRef}
-          onClick={handleExplainableAI}
-          className="fixed bottom-4 right-4 z-50 p-3 rounded-full shadow-lg text-primary border border-[#5c60c6] hover:bg-hover-ai transition flex items-center bg-animated-ai"
-        >
-          <img src={icon}  alt="AI" className="w-10 h-10 grayscale-[100]" />
-        </button>
+      <button
+        ref={toggleButtonRef}
+        onClick={handleExplainableAI}
+        className="fixed bottom-4 right-4 z-50 p-3 rounded-full shadow-lg text-primary border border-[#5c60c6] hover:bg-hover-ai transition flex items-center bg-animated-ai hover:cursor-pointer"
+      >
+        <img src={icon} alt="AI" className="w-10 h-10 grayscale-[100]" />
+      </button>
       {/* </Draggable> */}
       <div className="flex flex-row flex-1 p-8 space-x-8">
         {/* Left Column: Patient Demographics & History */}
         <div className="flex-1 bg-primary p-4 rounded-b-xl rounded-t-xl shadow overflow-auto">
-          <h2 className="text-3xl gradient-text font-semibold mt-10">Patient Demographics</h2>
+          <h2 className="text-3xl gradient-text font-semibold mt-10">
+            Patient Demographics
+          </h2>
           <p className="mt-4 text-lg text-secondary">ID: {report.patientId}</p>
           <p className="mt-2 text-lg text-secondary">Name: {patient.name}</p>
           <p className="mt-2 text-lg text-secondary">Age: {patient.age}</p>
-          <p className="mt-2 text-lg text-secondary">Gender: {patient.gender}</p>
           <p className="mt-2 text-lg text-secondary">
-  Location: {patient.location || "Not Available"}
-</p>
-
-        
+            Gender: {patient.gender}
+          </p>
+          <p className="mt-2 text-lg text-secondary">
+            Location: {patient.location || "Not Available"}
+          </p>
 
           <div className="mt-10">
-           
-            <PatientHistoryTable patientHistory={patientHistory}/>
+            <PatientHistoryTable patientHistory={patientHistory} />
           </div>
 
-
-        
           <div className="mt-5 bottom-20">
             {/* <h2 className="text-3xl gradient-text font-semibold mb-2">Note</h2> */}
             <textarea
@@ -250,9 +256,14 @@ const Analysis = () => {
         {/* Middle Column: Konva Canvas + Carousel */}
         <div className="flex-1 bg-primary p-4 rounded shadow flex flex-col items-center justify-center">
           {/* Label above the canvas */}
-          <h3 className="text-secondary font-semibold uppercase text-xl ">{currentSideLabel}</h3>
+          <h3 className="text-secondary font-semibold uppercase text-xl ">
+            {currentSideLabel}
+          </h3>
           {imagesData.length > 0 ? (
-            <div className="relative" style={{ width: "800px", height: "800px" }}>
+            <div
+              className="relative"
+              style={{ width: "800px", height: "800px" }}
+            >
               <KonvaCanvas
                 reportId={reportId}
                 side={imagesData[carouselIndex].side}
@@ -287,95 +298,91 @@ const Analysis = () => {
           )}
         </div>
         {/* Right Column: Analysis Details */}
-        <div className="flex-1 bg-primary p-4 h-screen rounded shadow flex flex-col items-center overflow-auto">
-          <h2 className="text-3xl mt-10 gradient-text font-bold mb-8">Analysis Results</h2>
+        <div className="flex-1 bg-primary p-4 h-screen  rounded shadow flex flex-col items-center overflow-auto">
+          <h2 className="text-4xl mt-10 gradient-text font-bold mb-20 text-center">
+            Analysis Results
+          </h2>
           {report.analysisType === "DR" ? (
             <div className="text-secondary text-center">
               <div className="text-3xl font-bold bg-primary rounded-3xl uppercase">
                 Left Fundus
               </div>
-              <h1 className="text-4xl mt-5 text-secondary">
-                Primary Classification
+              <h1 className="text-2xl gradient-text border border-[#5c60c6] rounded-xl px-3 py-1 font-semibold mt-5">
+                {report.leftFundusPrediction?.primary_classification
+                  ?.class_name || "N/A"}
               </h1>
-
-              <h1 className="text-4xl gradient-text font-semibold mt-5">
-                {report.leftFundusPrediction?.primary_classification?.class_name || "N/A"}
-              </h1>
-              {/* <div className="flex justify-center mt-2 ">
+              <div className="flex justify-center mt-2">
                 <SemiCircle
-                  percentage={
-                    (report.leftFundusPrediction?.predictions?.primary_classification?.accuracy * 100).toFixed(2) || "0"
+                  className={
+                    report.leftFundusPrediction?.sub_classes?.class_name
                   }
                 />
-              </div> */}
-              <h1 className="text-2xl font-semibold text-secondary mt-2">
-                {report.leftFundusPrediction?.sub_classes?.class_name || "N/A"}
-              </h1>
-              {/* <div className="flex justify-center mt-2">
-                <SemiCircle
-                  percentage={
-                    (report.leftFundusPrediction?.predictions?.sub_classes?.accuracy * 100).toFixed(2) || "0"
-                  }
-                />
-              </div> */}
-              <div className="text-3xl font-bold bg-primary  rounded-3xl uppercase mt-10">
+              </div>
+              <div className="text-3xl font-bold bg-primary  rounded-3xl uppercase mt-16">
                 Right Fundus
               </div>
-              <h1 className="text-4xl gradient-text font-semibold mt-5">
-                {report.rightFundusPrediction?.primary_classification?.class_name || "N/A"}
+              <h1 className="text-2xl gradient-text border border-[#5c60c6] rounded-xl px-3 py-1 font-semibold mt-5">
+                {report.rightFundusPrediction?.primary_classification
+                  ?.class_name || "N/A"}
               </h1>
-              {/* <div className="flex justify-center mt-2">
+              <div className="flex justify-center mt-2">
                 <SemiCircle
-                  percentage={
-                    (report.rightFundusPrediction?.predictions?.primary_classification?.accuracy * 100).toFixed(2) || "0"
+                  className={
+                    report.rightFundusPrediction?.sub_classes?.class_name
                   }
                 />
-              </div> */}
-              <h1 className="text-2xl font-semibold text-secondary mt-2">
-                {report.rightFundusPrediction?.sub_classes?.class_name || "N/A"}
-              </h1>
-              {/* <div className="flex justify-center mt-2">
-                <SemiCircle
-                  percentage={
-                    (report.rightFundusPrediction?.predictions?.sub_classes?.accuracy * 100).toFixed(2) || "0"
-                  }
-                />
-              </div> */}
+              </div>
             </div>
           ) : report.analysisType === "Glaucoma" ? (
             <div className="text-secondary text-center">
-              <div className="text-3xl font-bold bg-primary border-2 border-[#5c60c6] rounded-3xl uppercase">
+              <div className="text-3xl font-bold bg-primary uppercase">
                 Left Fundus
               </div>
-              <h1 className="text-2xl gradient-text uppercase font-semibold mt-5">
+              <div className="flex justify-center mt-2 ">
+                <SemiCircle
+                  percentage={(report.contorLeftVCDR * 100).toFixed(2) || "0"}
+                />
+              </div>
+              <h1 className="text-xl gradient-text uppercase border border-[#5c60c6] px-3 py-1 rounded-xl font-semibold mt-5">
                 {report.contorLeftGlaucomaStatus || "N/A"}
               </h1>
-              <div className="flex justify-center mt-2 ">
-                <SemiCircle percentage={(report.contorLeftVCDR * 100).toFixed(2) || "0"} />
-              </div>
-              <div className="text-3xl font-bold bg-primary border-2 border-[#5c60c6] rounded-3xl uppercase mt-10">
+
+              <div className="text-3xl font-bold bg-primary uppercase mt-16">
                 Right Fundus
               </div>
-              <h1 className="text-2xl gradient-text uppercase font-semibold mt-5">
+              <div className="flex justify-center mt-2">
+                <SemiCircle
+                  percentage={(report.contorRightVCDR * 100).toFixed(2) || "0"}
+                />
+              </div>
+              <h1 className="text-xl gradient-text uppercase border-1 border-[#5c60c6] rounded-xl px-3 py-1 font-semibold mt-5">
                 {report.contorRightGlaucomaStatus || "N/A"}
               </h1>
-              <div className="flex justify-center mt-2">
-                <SemiCircle percentage={(report.contorRightVCDR * 100).toFixed(2) || "0"} />
-              </div>
             </div>
           ) : report.analysisType === "Armd" ? (
             <div className="text-secondary text-center">
-              <div className="text-3xl font-bold bg-primary border-2 border-[#5c60c6] rounded-3xl uppercase">
+              {/* Left Fundus ARMD */}
+              <div className="text-3xl font-bold bg-primary uppercase">
                 Left Fundus ARMD
               </div>
-              <h1 className="text-4xl gradient-text font-semibold mt-5">
-                {report.leftFundusArmdPrediction || "N/A"}
+              <h1 className="text-2xl gradient-text border border-[#5c60c6] rounded-xl px-3 py-1  font-semibold mt-5">
+                {typeof report.leftFundusArmdPrediction === "string"
+                  ? report.leftFundusArmdPrediction === "1"
+                    ? "ARMD Detected"
+                    : "No ARMD Detected"
+                  : "N/A"}
               </h1>
-              <div className="text-3xl font-bold bg-primary border-2 border-[#5c60c6] rounded-3xl uppercase mt-10">
+
+              {/* Right Fundus ARMD */}
+              <div className="text-3xl font-bold bg-primary uppercase mt-16">
                 Right Fundus ARMD
               </div>
-              <h1 className="text-4xl gradient-text font-semibold mt-5">
-                {report.rightFundusArmdPrediction || "N/A"}
+              <h1 className="text-2xl gradient-text border border-[#5c60c6] rounded-xl px-3 py-1  font-semibold mt-5">
+                {typeof report.rightFundusArmdPrediction === "string"
+                  ? report.rightFundusArmdPrediction === "1"
+                    ? "ARMD Detected"
+                    : "No ARMD Detected"
+                  : "N/A"}
               </h1>
             </div>
           ) : (
@@ -387,12 +394,11 @@ const Analysis = () => {
         <button
           ref={backButtonRef}
           onClick={() => navigate(-1)}
-          className="fixed bottom-4 left-4 z-50 p-3 bg-primary rounded-full shadow-lg text-primary border border-[#387AA4] hover:bg-gray-200 transition flex items-center"
+          className="fixed bottom-4 left-4 z-50 p-3 bg-primary rounded-full shadow-lg text-primary border border-[#387AA4] hover:bg-gray-200 transition flex items-center hover:cursor-pointer"
         >
           <FiArrowLeft size={24} />
         </button>
       </Draggable>
-      
     </div>
   );
 };

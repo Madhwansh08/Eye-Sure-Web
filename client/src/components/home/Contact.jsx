@@ -17,17 +17,20 @@ export const Contact = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
 
   const [formData, setFormData] = useState({
-    name: "",
+    firstName: "",
+    lastName: "",
     email: "",
-    comment: "",
+    phoneNumber:"",
+    message: "",
   });
 
   const navigate = useNavigate();
 
   const handleInputChange = (e) => {
-    const { id, value } = e.target;
-    setFormData((prev) => ({ ...prev, [id]: value }));
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
+  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -36,7 +39,7 @@ export const Contact = () => {
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
       // Form validation
-      if (!formData.name || !formData.email || !formData.comment) {
+      if (!formData.firstName || !formData.lastName || !formData.email || !formData.phoneNumber || !formData.message) {
         toast.error("All fields are required");
         return;
       }
@@ -46,7 +49,7 @@ export const Contact = () => {
       }
 
       const response = await axios.post(
-        `${config.API_URL}/api/contact/submit`,
+        'http://localhost:9000/api/contact/submit',
         formData,
         {
           headers: {
@@ -57,7 +60,7 @@ export const Contact = () => {
 
       if (response.status === 201) {
         toast.success("Feedback submitted successfully");
-        setFormData({ name: "", email: "", comment: "" }); // Reset form
+        setFormData({ firstName: "", lastName:"", email: "", phoneNumber:"", message: "" }); 
         setDrawerOpen(false); // Close drawer
         navigate("/");
       } else {
@@ -96,42 +99,6 @@ export const Contact = () => {
           <div className="relative px-6 pb-20 pt-24 sm:pt-32 lg:static lg:px-8 lg:py-48">
             <div className="mx-auto max-w-xl lg:mx-0 lg:max-w-lg">
               <div className="absolute inset-y-0 left-0 -z-10 w-full overflow-hidden bg-[#030811] ring-1 ring-gray-900/10 lg:w-1/2">
-                <svg
-                  aria-hidden="true"
-                  className="absolute inset-0 size-full stroke-[#5c60c6]/30"
-                >
-                  <defs>
-                    <pattern
-                      x="100%"
-                      y={-1}
-                      id="83fd4e5a-9d52-42fc-97b6-718e5d7ee527"
-                      width={100}
-                      height={200}
-                      patternUnits="userSpaceOnUse"
-                    >
-                      <path d="M130 200V.5M.5 .5H200" fill="none" />
-                    </pattern>
-                  </defs>
-                  <rect
-                    fill="#030811"
-                    width="100%"
-                    height="100%"
-                    strokeWidth={0}
-                  />
-                  <svg
-                    x="100%"
-                    y={-1}
-                    className="overflow-visible fill-[#c5865c]"
-                  >
-                    <path d="M-470.5 0h201v201h-201Z" strokeWidth={0} />
-                  </svg>
-                  <rect
-                    fill="url(#83fd4e5a-9d52-42fc-97b6-718e5d7ee527)"
-                    width="100%"
-                    height="100%"
-                    strokeWidth={0}
-                  />
-                </svg>
               </div>
               <h2 className="text-pretty text-4xl font-semibold tracking-tight text-secondary sm:text-5xl">
                 Get in touch
@@ -152,10 +119,10 @@ export const Contact = () => {
                   </dt>
                   <dd>
                     <a
-                      href="mailto:hello@example.com"
+                      href="mailto:merai.helpdesk@gmail.com"
                       className="hover:text-secondary"
                     >
-                      hello@example.com
+                      merai.helpdesk@gmail.com
                     </a>
                   </dd>
                 </div>
@@ -163,7 +130,7 @@ export const Contact = () => {
             </div>
           </div>
           <form
-            action="#"
+            onSubmit={handleSubmit}
             method="POST"
             className="px-6 pb-24 pt-20 sm:pb-32 lg:px-8 lg:py-48"
           >
@@ -179,10 +146,12 @@ export const Contact = () => {
                   <div className="mt-2.5">
                     <input
                       id="first-name"
-                      name="first-name"
+                      name="firstName"
                       type="text"
                       autoComplete="given-name"
-                      className="block w-full rounded-md bg-white px-3.5 py-2 text-base text-secondary outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600"
+                      value={formData.firstName}
+                      onChange={handleInputChange}
+                      className="block w-full rounded-md bg-white px-3.5 py-2 text-base text-black outline -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600"
                     />
                   </div>
                 </div>
@@ -196,10 +165,12 @@ export const Contact = () => {
                   <div className="mt-2.5">
                     <input
                       id="last-name"
-                      name="last-name"
+                      name="lastName"
                       type="text"
                       autoComplete="family-name"
-                      className="block w-full rounded-md bg-white px-3.5 py-2 text-base text-secondary outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600"
+                      value={formData.lastName}
+                      onChange={handleInputChange}
+                      className="block w-full rounded-md bg-white px-3.5 py-2 text-base text-black outline -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600"
                     />
                   </div>
                 </div>
@@ -216,7 +187,9 @@ export const Contact = () => {
                       name="email"
                       type="email"
                       autoComplete="email"
-                      className="block w-full rounded-md bg-white px-3.5 py-2 text-base text-secondary outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600"
+                      value={formData.email}
+                      onChange={handleInputChange}
+                      className="block w-full rounded-md bg-white px-3.5 py-2 text-base text-black outline -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600"
                     />
                   </div>
                 </div>
@@ -230,10 +203,12 @@ export const Contact = () => {
                   <div className="mt-2.5">
                     <input
                       id="phone-number"
-                      name="phone-number"
+                      name="phoneNumber"
                       type="tel"
                       autoComplete="tel"
-                      className="block w-full rounded-md bg-white px-3.5 py-2 text-base text-secondary outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600"
+                      value={formData.phoneNumber}
+                      onChange={handleInputChange}
+                      className="block w-full rounded-md bg-white px-3.5 py-2 text-base text-black outline -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600"
                     />
                   </div>
                 </div>
@@ -249,7 +224,9 @@ export const Contact = () => {
                       id="message"
                       name="message"
                       rows={4}
-                      className="block w-full rounded-md bg-white px-3.5 py-2 text-base text-secondary outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600"
+                      value={formData.message}
+                      onChange={handleInputChange}
+                      className="block w-full rounded-md bg-white px-3.5 py-2 text-base text-black outline -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600"
                       defaultValue={""}
                     />
                   </div>
@@ -258,7 +235,7 @@ export const Contact = () => {
               <div className="mt-8 flex justify-end">
                 <button
                   type="submit"
-                  className="rounded-md bg-secondary px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-[#030811] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                  className="rounded-md bg-secondary px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-[#030811] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                 >
                   Send message
                 </button>

@@ -1,5 +1,34 @@
 import { motion, useTransform, useScroll } from "framer-motion";
 import { useRef } from "react";
+import cardiovascular from "../../assets/cardiovascular.mp4";
+import kidney from "../../assets/kidney.mp4";
+import liver from "../../assets/liver.mp4";
+
+
+const cards = [
+  {
+    url: cardiovascular,  
+    title: "Cardiovascular Diseases",
+    description:
+      "AI-powered detection of atherosclerosis, hypertension, and other heart-related conditions to prevent complications early.",
+    id: 1,
+  },
+  {
+    url: kidney,  
+    title: "Nephrology (Kidney Diseases)",
+    description:
+      "Identifying acute kidney disease (AKD), chronic kidney disease (CKD), and kidney failure at an early stage to enhance treatment strategies.",
+    id: 2,
+  },
+  {
+    url: liver,  
+    title: "Hepatic (Liver Diseases)",
+    description:
+      "Assisting in the early detection of non-alcoholic fatty liver disease (NAFLD) and alcoholic liver disease, crucial for timely management and care.",
+    id: 3,
+  },
+];
+
 
 const Research = () => {
   return (
@@ -39,22 +68,25 @@ const Card = ({ card }) => {
   return (
     <div
       key={card.id}
-      className="group relative h-[800px] w-[700px] overflow-hidden bg-secondary flex flex-col rounded-lg "
+      className="group relative h-[800px] w-[700px] overflow-hidden flex flex-col rounded-lg "
     >
-      {/* Image section */}
+      {/* Video section */}
       <div className="relative h-3/4 w-full overflow-hidden">
-        <img
+        <video
           src={card.url}
           alt={card.title}
           className="object-cover h-full w-full transition-transform duration-300 group-hover:scale-110"
+          autoPlay
+          loop
+          muted
+          playsInline
         />
       </div>
+
       {/* Descriptive text section */}
       <div className="relative h-1/4 w-full bg-primary p-4">
         <h3 className="text-4xl font-bold text-secondary">{card.title}</h3>
-        <p className="mt-2 text-xl text-secondary">
-          Detailed descriptive text for {card.title}. You can add more information here to explain the content further.
-        </p>
+        <p className="mt-8 text-xl text-secondary">{card.description}</p>
       </div>
     </div>
   );
@@ -62,30 +94,4 @@ const Card = ({ card }) => {
 
 export default Research;
 
-const cards = [
-  {
-    url: "/imgs/abstract/1.jpg",
-    title: "Title 1",
-    id: 1,
-  },
-  {
-    url: "/imgs/abstract/2.jpg",
-    title: "Title 2",
-    id: 2,
-  },
-  {
-    url: "/imgs/abstract/3.jpg",
-    title: "Title 3",
-    id: 3,
-  },
-  {
-    url: "/imgs/abstract/4.jpg",
-    title: "Title 4",
-    id: 4,
-  },
-  {
-    url: "/imgs/abstract/4.jpg",
-    title: "Title 5",
-    id: 5,
-  },
-];
+

@@ -8,6 +8,7 @@ import {
 } from "../../redux/slices/authSlice";
 import { toast } from "react-toastify";
 import logoimg from "../../assets/logo.png";
+import forgot from "../../assets/forgot.mp4";
 
 const Forgot = () => {
   const [step, setStep] = useState(1);
@@ -139,7 +140,7 @@ const Forgot = () => {
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="block w-full rounded-md bg-secondary px-4 py-2 text-lg text-secondary outline outline-bg-black placeholder:text-gray-400 focus:outline-2 focus:outline-indigo-600"
+                  className="block w-full rounded-md bg-white text-black px-4 py-2 text-lg outline outline-bg-black placeholder:text-gray-400 focus:outline-2 focus:outline-indigo-600"
                 />
               </div>
             </div>
@@ -233,7 +234,7 @@ const Forgot = () => {
                   required
                   value={newPassword}
                   onChange={(e) => setNewPassword(e.target.value)}
-                  className="block w-full rounded-md bg-secondary px-4 py-2 text-lg text-secondary outline outline-bg-black placeholder:text-gray-400 focus:outline-2 focus:outline-indigo-600"
+                  className="block w-full rounded-md bg-white text-black px-4 py-2 text-lg outline outline-bg-black placeholder:text-gray-400 focus:outline-2 focus:outline-indigo-600"
                 />
               </div>
             </div>
@@ -259,9 +260,9 @@ const Forgot = () => {
           {/* Step Progress Bar */}
           <div className="w-3/5 py-8 px-16 relative">
             {/* Render Heading and Text */}
-            <div>
+            <button onClick={() => navigate('/')} className="hover:cursor-pointer">
               <img alt="Your Company" src={logoimg} className="h-14 w-auto" />
-            </div>
+            </button>
             <div className="my-12">{renderHeadingAndText()}</div>
 
             {/* Render Form */}
@@ -270,11 +271,15 @@ const Forgot = () => {
         </div>
 
         {/* Background Image section */}
-        <div className="w-2/5">
-          <img
-            src="https://images.unsplash.com/photo-1496917756835-20cb06e75b4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1908&q=80"
-            alt="BackgroundImage"
-            className="w-[100%] h-full object-cover"
+        <div className="w-2/5 flex justify-center items-center bg-white">
+          <video
+            src={forgot}
+            alt="forgot"
+            className="object-cover transition-transform duration-300 group-hover:scale-110 pl-8"
+            autoPlay
+            loop
+            muted
+            playsInline
           />
         </div>
       </section>

@@ -61,8 +61,13 @@ const reportRoutes=require('./routes/reportRoutes')
 app.use('/api/report', reportRoutes); 
 
 
+const contactRoutes = require('./routes/contactRoutes')
+app.use('/api/contact', contactRoutes);
+
+
 const dashboardRoutes=require('./routes/dashboardRoutes')
 app.use('/api/dashboard' , dashboardRoutes)
+
 
 // Start the server
 app.listen(port, () => {

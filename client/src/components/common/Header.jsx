@@ -195,7 +195,7 @@ const Header = () => {
     >
       <nav className="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8" aria-label="Global">
         <div className="flex flex-1">
-          <button onClick={() => navigate("/")} className="-m-1.5 p-1.5" aria-label="Navigate to home">
+          <button onClick={() => navigate("/")} className="-m-1.5 p-1.5 hover:cursor-pointer" aria-label="Navigate to home">
             <img className="h-10 w-auto hover:animate-pulse " src={LogoImage} alt="Logo" />
           </button>
         </div>
