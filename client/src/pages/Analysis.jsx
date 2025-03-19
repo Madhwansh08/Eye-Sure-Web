@@ -208,6 +208,9 @@ const Analysis = () => {
   const currentSideLabel =
     imagesData[carouselIndex]?.side === "left" ? "Left Eye" : "Right Eye";
 
+
+    console.log(report.rightFundusPrediction?.sub_classes?.class_name)
+
   return (
     <div className="flex flex-col bg-primary h-screen overflow-hidden relative">
       <Header />
@@ -329,7 +332,8 @@ const Analysis = () => {
               </h1>
               <div className="flex justify-center mt-2">
                 <SemiCircle
-                  className={
+                
+                  classNameDR={
                     report.leftFundusPrediction?.sub_classes?.class_name
                   }
                 />
@@ -343,7 +347,7 @@ const Analysis = () => {
               </h1>
               <div className="flex justify-center mt-2">
                 <SemiCircle
-                  className={
+                  classNameDR={
                     report.rightFundusPrediction?.sub_classes?.class_name
                   }
                 />
@@ -356,7 +360,7 @@ const Analysis = () => {
               </div>
               <div className="flex justify-center mt-2">
                 <SemiCircle
-                  percentage={(report.contorLeftVCDR * 100).toFixed(2) || "0"}
+                classNameGlaucoma={report.contorLeftGlaucomaStatus || 'NA'}
                 />
               </div>
               <h1 className="text-xl gradient-text uppercase border border-[#5c60c6] px-3 py-1 rounded-xl font-semibold mt-5">
@@ -367,7 +371,7 @@ const Analysis = () => {
               </div>
               <div className="flex justify-center mt-2">
                 <SemiCircle
-                  percentage={(report.contorRightVCDR * 100).toFixed(2) || "0"}
+                 classNameGlaucoma={report.contorRightGlaucomaStatus || 'NA'}
                 />
               </div>
               <h1 className="text-xl gradient-text uppercase border-1 border-[#5c60c6] rounded-xl px-3 py-1 font-semibold mt-5">
