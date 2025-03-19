@@ -7,7 +7,6 @@ import { FiArrowLeft, FiArrowRight, FiDownload } from "react-icons/fi";
 import Draggable from "react-draggable";
 import axios from "axios";
 import icon from "../assets/aiicon.gif";
-import { AiFillOpenAI } from "react-icons/ai";
 import { useParams, useNavigate } from "react-router-dom";
 import API_URL from "../utils/config";
 import SemiCircle from "../components/analysis/SemiCircle";
@@ -16,7 +15,8 @@ import { initReportState, setTool } from "../redux/slices/annotationSlice";
 import store from "../redux/store";
 import { toast } from "react-toastify";
 import PatientHistoryTable from "../components/analysis/PatientHistoryTable";
-import { handleDownloadPDF } from "../components/analysis/Report"; // Import the handleDownloadPDF function
+import { handleDownloadPDF } from "../components/analysis/Report";
+import DownloadConfirmationModal from "../components/analysis/DownloadConfirmationModal";
 
 const Analysis = () => {
   const { reportId } = useParams();
@@ -37,6 +37,7 @@ const Analysis = () => {
   });
   const [resetPanTrigger, setResetPanTrigger] = useState(0);
   const [note, setNote] = useState("");
+  const [showDownloadPopup, setShowDownloadPopup] = useState(false);
 
   // Read current tool from Redux (default is null)
   const currentTool = useSelector((state) => {
@@ -46,7 +47,7 @@ const Analysis = () => {
 
   const toggleButtonRef = useRef(null);
   const backButtonRef = useRef(null);
-  const downloadReportRef = useRef(null); // Add reference for download report button
+  const downloadReportRef = useRef(null);
 
   const [patientHistory, setPatientHistory] = useState([]);
 
@@ -116,7 +117,6 @@ const Analysis = () => {
 
   const toggleToolbar = () => {
     if (toolbarMode === "annotation") {
-      // When switching to image toolbar, clear the active tool.
       dispatch(setTool({ reportId, tool: null }));
       setToolbarMode("image");
     } else {
@@ -151,7 +151,7 @@ const Analysis = () => {
         leftFundusAnnotationCoordinates: data.leftImageAnnotations,
         rightFundusAnnotationCoordinates: data.rightImageAnnotations,
       };
-      const response = await axios.patch(
+      await axios.patch(
         `${API_URL}/api/report/${reportId}/annotations`,
         payload,
         {
@@ -178,21 +178,33 @@ const Analysis = () => {
         { withCredentials: true }
       );
       toast.success("Note updated successfully!");
-      // Optionally update the report state if needed:
       setReport(response.data.report);
-      setNote(""); // Clear the note after successful update
+      setNote("");
     } catch (error) {
       console.error("Error updating note:", error);
       toast.error("Failed to update note");
     }
   };
 
+  // Download function that triggers the PDF download
   const handleDownloadReport = () => {
     handleDownloadPDF(patient, report);
     console.log("patient", patient);
   };
 
-  // Determine the label to show above the canvas based on current image side.
+  // When the user clicks on the download button, show the modal.
+  // If "Yes" is clicked, route to the explainable page.
+  // If "No" is clicked (or auto-triggered), close the popup and download.
+  const onModalYes = () => {
+    setShowDownloadPopup(false);
+    navigate(`/explainable/${reportId}`);
+  };
+
+  const onModalNo = () => {
+    setShowDownloadPopup(false);
+    handleDownloadReport();
+  };
+
   const currentSideLabel =
     imagesData[carouselIndex]?.side === "left" ? "Left Eye" : "Right Eye";
 
@@ -214,7 +226,6 @@ const Analysis = () => {
           onResetPan={handleResetPan}
         />
       )}
-      {/* <Draggable nodeRef={toggleButtonRef}> */}
       <button
         ref={toggleButtonRef}
         onClick={handleExplainableAI}
@@ -222,7 +233,6 @@ const Analysis = () => {
       >
         <img src={icon} alt="AI" className="w-10 h-10 grayscale-[100]" />
       </button>
-      {/* </Draggable> */}
       <div className="flex flex-row flex-1 p-8 space-x-8">
         {/* Left Column: Patient Demographics & History */}
         <div className="flex-1 bg-primary p-4 rounded-b-xl rounded-t-xl shadow overflow-auto">
@@ -244,7 +254,6 @@ const Analysis = () => {
           </div>
 
           <div className="mt-5 bottom-20">
-            {/* <h2 className="text-3xl gradient-text font-semibold mb-2">Note</h2> */}
             <textarea
               id="note"
               className="w-full border-2 border-[#387AA4] text-secondary rounded-lg px-4 pt-6 pr-16 focus:outline-none bg-transparent"
@@ -255,7 +264,7 @@ const Analysis = () => {
             />
             <button
               onClick={handleSubmitNote}
-              className=" mt-2 bg-[#387AA4] text-white px-4 py-1 rounded-full hover:bg-[#4a4f9c] transition"
+              className="mt-2 bg-[#387AA4] text-white px-4 py-1 rounded-full hover:bg-[#4a4f9c] transition"
             >
               Submit
             </button>
@@ -263,7 +272,6 @@ const Analysis = () => {
         </div>
         {/* Middle Column: Konva Canvas + Carousel */}
         <div className="flex-1 bg-primary p-4 rounded shadow flex flex-col items-center justify-center">
-          {/* Label above the canvas */}
           <h3 className="text-secondary font-semibold uppercase text-xl ">
             {currentSideLabel}
           </h3>
@@ -306,7 +314,7 @@ const Analysis = () => {
           )}
         </div>
         {/* Right Column: Analysis Details */}
-        <div className="flex-1 bg-primary p-4 h-screen  rounded shadow flex flex-col items-center overflow-auto">
+        <div className="flex-1 bg-primary p-4 h-screen rounded shadow flex flex-col items-center overflow-auto">
           <h2 className="text-4xl mt-10 gradient-text font-bold mb-20 text-center">
             Analysis Results
           </h2>
@@ -326,7 +334,7 @@ const Analysis = () => {
                   }
                 />
               </div>
-              <div className="text-3xl font-bold bg-primary  rounded-3xl uppercase mt-16">
+              <div className="text-3xl font-bold bg-primary rounded-3xl uppercase mt-16">
                 Right Fundus
               </div>
               <h1 className="text-2xl gradient-text border border-[#5c60c6] rounded-xl px-3 py-1 font-semibold mt-5">
@@ -346,7 +354,7 @@ const Analysis = () => {
               <div className="text-3xl font-bold bg-primary uppercase">
                 Left Fundus
               </div>
-              <div className="flex justify-center mt-2 ">
+              <div className="flex justify-center mt-2">
                 <SemiCircle
                   percentage={(report.contorLeftVCDR * 100).toFixed(2) || "0"}
                 />
@@ -354,7 +362,6 @@ const Analysis = () => {
               <h1 className="text-xl gradient-text uppercase border border-[#5c60c6] px-3 py-1 rounded-xl font-semibold mt-5">
                 {report.contorLeftGlaucomaStatus || "N/A"}
               </h1>
-
               <div className="text-3xl font-bold bg-primary uppercase mt-16">
                 Right Fundus
               </div>
@@ -369,23 +376,20 @@ const Analysis = () => {
             </div>
           ) : report.analysisType === "Armd" ? (
             <div className="text-secondary text-center">
-              {/* Left Fundus ARMD */}
               <div className="text-3xl font-bold bg-primary uppercase">
                 Left Fundus ARMD
               </div>
-              <h1 className="text-2xl gradient-text border border-[#5c60c6] rounded-xl px-3 py-1  font-semibold mt-5">
+              <h1 className="text-2xl gradient-text border border-[#5c60c6] rounded-xl px-3 py-1 font-semibold mt-5">
                 {typeof report.leftFundusArmdPrediction === "string"
                   ? report.leftFundusArmdPrediction === "1"
                     ? "ARMD Detected"
                     : "No ARMD Detected"
                   : "N/A"}
               </h1>
-
-              {/* Right Fundus ARMD */}
               <div className="text-3xl font-bold bg-primary uppercase mt-16">
                 Right Fundus ARMD
               </div>
-              <h1 className="text-2xl gradient-text border border-[#5c60c6] rounded-xl px-3 py-1  font-semibold mt-5">
+              <h1 className="text-2xl gradient-text border border-[#5c60c6] rounded-xl px-3 py-1 font-semibold mt-5">
                 {typeof report.rightFundusArmdPrediction === "string"
                   ? report.rightFundusArmdPrediction === "1"
                     ? "ARMD Detected"
@@ -401,7 +405,7 @@ const Analysis = () => {
       <Draggable nodeRef={downloadReportRef}>
         <button
           ref={downloadReportRef}
-          onClick={handleDownloadReport} 
+          onClick={() => setShowDownloadPopup(true)}
           className="fixed bottom-4 right-30 z-50 p-3 bg-primary rounded-full shadow-lg text-primary border border-[#387AA4] hover:bg-gray-200 transition flex items-center hover:cursor-pointer"
         >
           <FiDownload size={24} />
@@ -416,6 +420,15 @@ const Analysis = () => {
           <FiArrowLeft size={24} />
         </button>
       </Draggable>
+      
+      {/* Render the confirmation modal if needed */}
+      {showDownloadPopup && (
+        <DownloadConfirmationModal
+          timeout={5000}
+          onYes={onModalYes}
+          onNo={onModalNo}
+        />
+      )}
     </div>
   );
 };

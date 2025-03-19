@@ -153,3 +153,56 @@ exports.updatePatientById = async (req, res) => {
       return res.status(500).json({ message: "Server error" });
     }
   };
+
+
+
+
+  exports.deletePatientById = async (req, res) => {
+    try {
+      // Ensure the doctor is authenticated
+      const doctor = req.doctor;
+      if (!doctor) {
+        return res.status(401).json({ message: "Unauthorized" });
+      }
+  
+      const { patientId } = req.params;
+      const patient = await Patient.findById(patientId);
+      if (!patient) {
+        return res.status(404).json({ message: "Patient not found" });
+      }
+  
+      // Verify the patient belongs to the authenticated doctor
+      if (patient.doctor.toString() !== doctor._id.toString()) {
+        return res
+          .status(403)
+          .json({ message: "You are not authorized to delete this patient" });
+      }
+  
+      // OPTIONAL: Check if the patient record is "empty"
+      // Here we assume an "empty" record has an empty name, gender, location,
+      // age equal to 0, and no contact number.
+      const isEmpty =
+        patient.name === "" &&
+        patient.age === 0 &&
+        patient.gender === "" &&
+        patient.location === "" &&
+        (!patient.contactNo || patient.contactNo === "");
+  
+      if (!isEmpty) {
+        return res.status(400).json({
+          message: "Patient record contains data and cannot be deleted",
+        });
+      }
+  
+      // Delete the patient record
+      await Patient.findByIdAndDelete(patientId);
+  
+      // Optionally update the doctor's record to remove the patient ID.
+      await Doctor.findByIdAndUpdate(doctor._id, { $pull: { patients: patientId } });
+  
+      return res.status(200).json({ message: "Patient deleted successfully" });
+    } catch (error) {
+      console.error("Error deleting patient:", error);
+      return res.status(500).json({ message: "Server error" });
+    }
+  };
