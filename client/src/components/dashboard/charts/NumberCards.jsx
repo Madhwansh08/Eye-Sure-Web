@@ -1,6 +1,8 @@
 import React from "react";
 import { FiUser } from "react-icons/fi";
-import { BsLungs } from "react-icons/bs";
+import {  BsEyeFill} from "react-icons/bs";
+import { IoEyeOutline } from "react-icons/io5";
+import { FaRegEye } from "react-icons/fa6";
 import { MdPriorityHigh, MdOutlineCheck } from "react-icons/md";
 
 const NumberCards = ({ patientCount, drCount, glaucomaCount, armdCount }) => {
@@ -18,19 +20,19 @@ const NumberCards = ({ patientCount, drCount, glaucomaCount, armdCount }) => {
           title="DR Reports"
           subtitle="Total DR Reports"
           number={drCount}
-          Icon={BsLungs}
+          Icon={BsEyeFill}
         />
         <Card
           title="Glaucoma Reports"
           subtitle="Total Glaucoma Reports"
           number={glaucomaCount}
-          Icon={MdPriorityHigh}
+          Icon={IoEyeOutline}
         />
         <Card
           title="ARMD Reports"
           subtitle="Total ARMD Reports"
           number={armdCount}
-          Icon={MdOutlineCheck}
+          Icon={FaRegEye}
         />
       </div>
     </div>

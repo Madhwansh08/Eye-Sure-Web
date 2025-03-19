@@ -12,12 +12,12 @@ const steps = [
   },
   {
     name: "Data Processing",
-    description: "Kindly wait while the system processes the fundus images and patient data.",
+    description: "Kindly wait while the system processes the fundus images.",
     status: "upcoming",
   },
   {
     name: "Review Analysis",
-    description: "Manually review and edit the Fundus images analysis for accuracy if needed.",
+    description: "Review and edit the Fundus images analysis for accuracy if needed.",
     status: "upcoming",
   },
   {

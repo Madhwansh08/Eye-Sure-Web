@@ -147,7 +147,7 @@ const ImageToolBar = ({ onToggle, onAdjust, onResetPan }) => {
             <FiZoomIn size={20} />
           </motion.button>
         </CustomTooltip>
-        <CustomTooltip title="Toggle RGB">
+        {/* <CustomTooltip title="Toggle RGB">
           <motion.button
             onClick={() => setRgbEnabled((prev) => !prev)}
             whileHover={{ scale: 1.1 }}
@@ -157,7 +157,7 @@ const ImageToolBar = ({ onToggle, onAdjust, onResetPan }) => {
           >
             <RiPaletteFill size={20} />
           </motion.button>
-        </CustomTooltip>
+        </CustomTooltip> */}
         <CustomTooltip title="Reset Adjustments">
           <motion.button
             onClick={resetAdjustments}

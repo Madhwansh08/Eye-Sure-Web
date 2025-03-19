@@ -95,7 +95,7 @@ const Home = () => {
                   <CountUp start={0} end={94} duration={2.5} suffix="%" />
                 )}
               </h3>
-              <p className="mt-4 text-3xl font-medium dark:text-[#030811] text-[#fdfdfd]">
+              <p className="mt-4 text-3xl font-medium text-secondary">
                 Accuracy
               </p>
             </div>

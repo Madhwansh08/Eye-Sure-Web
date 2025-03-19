@@ -480,16 +480,22 @@ exports.getReportById = async (req, res) => {
 };
 
 
-
 exports.getRecentReports = async (req, res) => {
-    try {
-      // Fetch the top 5 reports, sorted by creation date descending.
-      const reports = await Report.find({})
-        .sort({ createdAt: -1 })
-        .limit(5);
+  try {
+      // Get the logged-in doctor's ID from the request
+      const doctorId = req.doctor.id;
+
+      // Find patients assigned to this doctor
+      const patientIds = await Patient.find({ doctor: doctorId }).distinct('_id');
+
+      // Fetch the top 5 recent reports for those patients
+      const reports = await Report.find({ patientId: { $in: patientIds } })
+          .sort({ createdAt: -1 })
+          .limit(5);
+
       return res.status(200).json({ reports });
-    } catch (error) {
+  } catch (error) {
       console.error("Error fetching recent reports:", error);
       return res.status(500).json({ message: "Server error" });
-    }
+  }
 };
