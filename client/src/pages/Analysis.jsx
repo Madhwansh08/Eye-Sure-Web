@@ -22,6 +22,7 @@ const Analysis = () => {
   const { reportId } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const doctor = useSelector((state) => state.auth.user);
 
   const [report, setReport] = useState(null);
   const [patient, setPatient] = useState(null);
@@ -188,8 +189,7 @@ const Analysis = () => {
 
   // Download function that triggers the PDF download
   const handleDownloadReport = () => {
-    handleDownloadPDF(patient, report);
-    console.log("patient", patient);
+    handleDownloadPDF(patient, report, doctor.name);
   };
 
   // When the user clicks on the download button, show the modal.
@@ -234,7 +234,7 @@ const Analysis = () => {
         onClick={handleExplainableAI}
         className="fixed bottom-4 right-4 z-50 p-3 rounded-full shadow-lg text-primary border border-[#5c60c6] hover:bg-hover-ai transition flex items-center bg-animated-ai hover:cursor-pointer"
       >
-        <img src={icon} alt="AI" className="w-10 h-10 grayscale-[100]" />
+        <img src={icon} alt="AI" className="w-7.5 h-7.5 grayscale-[100]" />
       </button>
       <div className="flex flex-row flex-1 p-8 space-x-8">
         {/* Left Column: Patient Demographics & History */}
@@ -410,9 +410,9 @@ const Analysis = () => {
         <button
           ref={downloadReportRef}
           onClick={() => setShowDownloadPopup(true)}
-          className="fixed bottom-4 right-30 z-50 p-3 bg-primary rounded-full shadow-lg text-primary border border-[#387AA4] hover:bg-gray-200 transition flex items-center hover:cursor-pointer"
+          className="fixed bottom-4 right-24 z-50 p-3 rounded-full shadow-lg text-primary border border-[#5c60c6] hover:bg-hover-ai transition flex items-center bg-animated-ai"
         >
-          <FiDownload size={24} />
+          <FiDownload size={28} className="text-white"/>
         </button>
       </Draggable>
       <Draggable nodeRef={backButtonRef}>
@@ -421,7 +421,7 @@ const Analysis = () => {
           onClick={() => navigate(-1)}
           className="fixed bottom-4 left-4 z-50 p-3 bg-primary rounded-full shadow-lg text-primary border border-[#387AA4] hover:bg-gray-200 transition flex items-center hover:cursor-pointer"
         >
-          <FiArrowLeft size={24} />
+          <FiArrowLeft size={24}/>
         </button>
       </Draggable>
       

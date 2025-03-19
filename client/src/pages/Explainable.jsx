@@ -21,6 +21,7 @@ const Explainable = () => {
   const { reportId } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const doctor = useSelector((state) => state.auth.user);
 
   const [report, setReport] = useState(null);
   const [patient, setPatient] = useState(null);
@@ -148,7 +149,7 @@ const Explainable = () => {
   };
 
     const handleDownloadReport = () => {
-      handleDownloadPDF(patient, report);
+      handleDownloadPDF(patient, report, doctor.name);
       console.log("patient", patient);
     };
 

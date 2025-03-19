@@ -12,6 +12,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { logoutUser } from "../../redux/slices/authSlice";
 import ThemeToggle from "./ThemeToggle";
 import {toast} from 'react-toastify'
+import { FiUser } from "react-icons/fi";
 
 const Header = () => {
   const dispatch = useDispatch();
@@ -161,12 +162,12 @@ const Header = () => {
               <button
                 aria-label="Profile Settings"
                 onClick={() => {
-                  navigate("/dashboard");
+                  navigate("/dashboard/profile");
                   setIsDropdownOpen(false);
                 }}
                 className="flex items-center space-x-2 px-4 py-2 w-full text-sm text-secondary hover:bg-secondary"
               >
-                <Cog6ToothIcon className="w-5 h-5" />
+                <FiUser className="w-5 h-5" />
                 <span>Profile Settings</span>
               </button>
               <button
@@ -296,7 +297,7 @@ const Header = () => {
                     </button>
                     <button
                       onClick={() => {
-                        navigate("/dashboard");
+                        navigate("/dashboard/profile");
                         setIsMenuOpen(false);
                       }}
                       className="block w-full rounded-lg px-4 py-2 mb-2 text-base font-semibold text-white hover:bg-gray-700"

@@ -41,7 +41,7 @@ export default function InstructionSlider() {
   return (
     <div className="relative w-full max-w-md mx-auto">
       <div >
-        <h1 className="text-3xl font-semibold text-primary ">Instructions For the User:</h1>
+        <h1 className="text-3xl font-semibold gradient-text ">Instructions For the User:</h1>
       </div>
       <motion.nav
         aria-label="Progress"
