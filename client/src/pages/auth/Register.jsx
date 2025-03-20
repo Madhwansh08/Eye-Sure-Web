@@ -10,7 +10,7 @@ import pdf from "../../assets/T&C and PP - Eyesure.pdf"
 const Register = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { loading, error } = useSelector((state) => state.auth);
+  const { loading } = useSelector((state) => state.auth);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -129,7 +129,7 @@ const Register = () => {
                         id="remember-me"
                         name="remember-me"
                         type="checkbox"
-                        className="col-start-1 row-start-1 appearance-none rounded border border-gray-300 bg-white checked:border-indigo-600 checked:bg-indigo-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                        className="col-start-1 row-start-1 appearance-none rounded border border-gray-300 bg-white checked:border-indigo-600 checked:bg-indigo-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                       />
                       <svg
                         fill="none"
@@ -157,7 +157,7 @@ const Register = () => {
                     htmlFor="remember-me"
                     className="block text-lg text-secondary"
                   >
-                  I agree to the <a href={pdf} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">Terms & Conditions</a> and <a href="" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">Privacy Policy</a>
+                  I agree to the <a href={pdf} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">Terms & Conditions</a> and <a href={pdf} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">Privacy Policy</a>
                   </label>
                 </div>
 
