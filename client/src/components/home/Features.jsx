@@ -1,9 +1,9 @@
 import React, { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 
-import featimg from "../../assets/featureimg.jpg";
-import dashimg from "../../assets/dashboard.jpg";
-import feature1 from "../../assets/feature2.png";
+
+import feature1 from "../../assets/feature1.png";
+import feature2 from "../../assets/feature2.png";
 import feature3 from "../../assets/feature3.png";
 
 const IMG_PADDING = 20;
@@ -20,7 +20,7 @@ const FeatureData = [
   },
   {
     id: 2,
-    imgUrl: featimg,
+    imgUrl: feature2,
     subheading: "Editing Interface",
     heading: "AI-Powered Multi-Disease Detection",
     description:
