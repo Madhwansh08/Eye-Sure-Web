@@ -153,7 +153,7 @@ const Home = () => {
       <section>
         <Contact />
       </section>
-      <Footer />
+      <Footer scrollToFeatures={scrollToFeatures}/>
     </div>
   );
 };

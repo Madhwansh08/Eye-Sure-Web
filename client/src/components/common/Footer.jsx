@@ -3,13 +3,13 @@
 import React from "react";
 import LogoImage from "../../assets/logo.png";
 
-const Footer = () => {
+const Footer = ({scrollToFeatures}) => {
   return (
     <section className="py-10 bg-primary sm:pt-16 lg:pt-24">
       <div className="px-4 mx-auto sm:px-6 lg:px-8 max-w-7xl">
-        <div className="grid grid-cols-1 gap-x-5 gap-y-12 md:grid-cols-3 md:gap-x-12">
+        <div className="grid grid-cols-1 gap-x-5 gap-y-12 md:grid-cols-4 md:gap-x-12">
           <div>
-            <p className="text-base text-secondary">Company</p>
+            <p className="text-base text-secondary font-bold">Company</p>
             <ul className="mt-8 space-y-4">
               <li>
                 <a
@@ -22,14 +22,13 @@ const Footer = () => {
                 </a>
               </li>
               <li>
-                <a
-                  href="/features"
-                  title="Features"
-                  className="text-base text-secondary transition-all duration-200 hover:text-opacity-80 focus:text-opacity-80"
+                <button
+                  onClick={scrollToFeatures}
+                  className="text-base text-secondary transition-all duration-200 hover:text-opacity-80 focus:text-opacity-80 hover:cursor-pointer"
                 >
                   {" "}
                   Features{" "}
-                </a>
+                </button>
               </li>
 
               <li>
@@ -45,7 +44,7 @@ const Footer = () => {
             </ul>
           </div>
           <div>
-            <p className="text-base text-secondary">Help</p>
+            <p className="text-base text-secondary font-bold">Help</p>
             <ul className="mt-8 space-y-4">
               <li>
                 <a
@@ -81,7 +80,7 @@ const Footer = () => {
             </ul>
           </div>
           <div>
-            <p className="text-base text-secondary">Experts Involved</p>
+            <p className="text-base text-secondary font-bold">Experts Involved</p>
             <ul className="mt-8 space-y-4">
               <li>
                 <a
@@ -112,6 +111,42 @@ const Footer = () => {
                 >
                   {" "}
                   IIT Professors{" "}
+                </a>
+              </li>
+            </ul>
+          </div>
+          <div>
+            <p className="text-base text-secondary font-bold">Explore Other Products</p>
+            <ul className="mt-8 space-y-4">
+              <li>
+                <a
+                  href="/free-ebooks"
+                  title="Free eBooks"
+                  className="text-base text-secondary transition-all duration-200 hover:text-opacity-80 focus:text-opacity-80"
+                >
+                  {" "}
+                  RadioIQ{" "}
+                </a>
+              </li>
+              <li>
+                <a
+                  href="/demo-tutorial"
+                  title="Demo Tutorial"
+                  className="text-base text-secondary transition-all duration-200 hover:text-opacity-80 focus:text-opacity-80"
+                >
+                  {" "}
+                  TaviVision{" "}
+                </a>
+              </li>
+
+              <li>
+                <a
+                  href="/youtube-playlist"
+                  title="YouTube Playlist"
+                  className="text-base text-secondary transition-all duration-200 hover:text-opacity-80 focus:text-opacity-80"
+                >
+                  {" "}
+                  EyeSure{" "}
                 </a>
               </li>
             </ul>

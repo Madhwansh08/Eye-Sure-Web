@@ -19,7 +19,7 @@ const ConfirmModal = ({ onCancel, patientId }) => {
     switch (activeTab) {
       case "Glaucoma Analysis":
         return "Glaucoma";
-      case "ARMD Analysis":
+      case "Armd Analysis":
         return "Armd";
       case "DR Analysis":
       default:
@@ -134,7 +134,7 @@ const ConfirmModal = ({ onCancel, patientId }) => {
                 onClick={() => setActiveTab("Armd Analysis")}
                 aria-label="Armd Analysis"
               >
-                Armd Analysis
+                ARMD Analysis
               </button>
             </div>
           </div>

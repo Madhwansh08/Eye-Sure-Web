@@ -62,7 +62,7 @@ export default function Testimonial() {
 
 const TestimonialCard = ({ testimonial }) => {
   return (
-    <div className="flex justify-between gap-8 w-full bg-primary p-4 rounded-lg shadow-lg">
+    <div className="flex justify-between gap-8 w-full min-h-[220px] bg-primary p-4 rounded-lg shadow-lg border border-white">
       <div className="flex-1 pr-4">
         <figure className="mt-6 flex flex-col justify-between">
           <blockquote className="text-xl font-semibold text-pretty text-secondary">

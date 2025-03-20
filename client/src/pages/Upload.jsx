@@ -88,7 +88,7 @@ const Upload = () => {
 
   const handleAnalyze = async () => {
     if (!leftImage || !rightImage) {
-      alert("Please upload and crop both images before analyzing.");
+      toast.error("Please upload and crop both images before analyzing.");
       return;
     }
 
@@ -143,7 +143,7 @@ const Upload = () => {
       }
     } catch (error) {
       console.error("Error uploading images:", error);
-      alert("Error uploading images. Check console for details.");
+      toast.error("Error uploading images. Check console for details.");
     }
   };
 
