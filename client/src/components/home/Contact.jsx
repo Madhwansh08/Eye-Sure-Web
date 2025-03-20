@@ -15,6 +15,7 @@ import config from "../../utils/config";
 
 export const Contact = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const [formData, setFormData] = useState({
     firstName: "",
@@ -36,6 +37,7 @@ export const Contact = () => {
     e.preventDefault();
 
     try {
+      setLoading(true);
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
       // Form validation
@@ -74,6 +76,8 @@ export const Contact = () => {
       } else {
         toast.error("An unexpected error occurred. Please try again.");
       }
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -235,7 +239,7 @@ export const Contact = () => {
                   type="submit"
                   className="rounded-md bg-secondary px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-[#030811] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                 >
-                  Send message
+                  {loading ? "Sending..." : "Send message"}
                 </button>
               </div>
             </div>

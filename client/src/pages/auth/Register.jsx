@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import logoimg from "../../assets/logo.png";
 import login from "../../assets/login.mp4";
+import pdf from "../../assets/T&C and PP - Eyesure.pdf"
 
 const Register = () => {
   const dispatch = useDispatch();
@@ -46,7 +47,7 @@ const Register = () => {
               Already have an account?{" "}
               <button
                 onClick={() => navigate("/login")}
-                className="font-semibold text-lg text-secondary hover:text-primary hover:cursor-pointer"
+                className="font-semibold text-lg text-secondary hover:text-primary hover:cursor-pointer hover:underline"
               >
                 Sign In
               </button>
@@ -156,7 +157,7 @@ const Register = () => {
                     htmlFor="remember-me"
                     className="block text-lg text-secondary"
                   >
-                  I agree to the <span className="text-primary">Terms & Conditions</span>
+                  I agree to the <a href={pdf} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">Terms & Conditions</a>
                   </label>
                 </div>
 
