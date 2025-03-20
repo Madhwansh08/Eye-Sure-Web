@@ -157,7 +157,7 @@ const Register = () => {
                     htmlFor="remember-me"
                     className="block text-lg text-secondary"
                   >
-                  I agree to the <a href={pdf} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">Terms & Conditions</a>
+                  I agree to the <a href={pdf} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">Terms & Conditions</a> and <a href="" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">Privacy Policy</a>
                   </label>
                 </div>
 

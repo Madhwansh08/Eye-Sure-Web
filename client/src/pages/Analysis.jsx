@@ -162,7 +162,6 @@ const Analysis = () => {
       toast.success("Annotations saved successfully!");
     } catch (error) {
       toast.error("Failed to save annotations");
-      alert("Failed to save annotations");
     }
   };
 

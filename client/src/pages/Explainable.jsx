@@ -145,10 +145,10 @@ const Explainable = () => {
         withCredentials: true
       });
       console.log("Annotations saved:", response.data);
-      alert("Annotations saved successfully!");
+      toast.success("Annotations saved successfully!");
     } catch (error) {
       console.error("Error saving annotations:", error);
-      alert("Failed to save annotations");
+      toast.error("Failed to save annotations");
     }
   };
 

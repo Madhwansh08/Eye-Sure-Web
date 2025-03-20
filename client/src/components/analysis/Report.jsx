@@ -4,8 +4,7 @@ import "jspdf-autotable";
 import logo from "../../assets/logo.png";
 
 export const handleDownloadPDF = (patient, report, user) => {
-  // console.log("Patient1: ", patient);
-  // console.log("Report1: ", report);
+
   const doc = new jsPDF({
     orientation: "portrait",
     unit: "mm",
@@ -13,10 +12,24 @@ export const handleDownloadPDF = (patient, report, user) => {
   });
 
   const addLogo = () => {
-    doc.addImage(logo, "PNG", 12, 4, 59, 20);
+    doc.addImage(logo, "PNG", 8, 3, 59, 20);
   };
 
   addLogo();
+
+  doc.setFont("helvetica");
+  doc.setFontSize(10);
+  doc.setTextColor(0, 0, 120);
+  doc.text("Doctor Name : ", 130, 10);
+  doc.setFont("helvetica", "normal");
+  doc.text(user || "N/A", 155, 10);
+
+  doc.setFont("helvetica");
+  doc.setFontSize(10);
+  doc.setTextColor(0, 0, 120);
+  doc.text("Clinic Name : ", 130, 20);
+  doc.setFont("helvetica", "normal");
+  // doc.text(user?.clinic, 155, 10);
 
   // Set Font for Title
   doc.setFont("helvetica", "bold");
@@ -25,7 +38,7 @@ export const handleDownloadPDF = (patient, report, user) => {
 
   // Starting coordinates
   let x = 10;
-  let y = 36;
+  let y = 46;
   const pageHeight = doc.internal.pageSize.getHeight();
 
   // Function to add new page if content exceeds page size
@@ -40,7 +53,7 @@ export const handleDownloadPDF = (patient, report, user) => {
   };
   y -= 5;
   // ----------------- Report Title -----------------
-  doc.text("Fundus Medical Report", 105, y, { align: "center" });
+  doc.text("EyeSure Medical Report", 105, y, { align: "center" });
   y += 4;
 
   // Add Header Divider (Centered)
@@ -92,12 +105,6 @@ export const handleDownloadPDF = (patient, report, user) => {
 
   y += 6;
 
-  // Location
-  doc.setFont("helvetica", "bold");
-  doc.text("LOCATION:", 10, y);
-  doc.setFont("helvetica", "normal");
-  doc.text(patient.location || "N/A", 40, y);
-
   const rightX = 110;
   let yRight = y - 30;
   doc.setFontSize(10);
@@ -119,11 +126,11 @@ export const handleDownloadPDF = (patient, report, user) => {
 
   yRight += 6;
 
-  // OPHTHALMOLOGIST
+  // Location
   doc.setFont("helvetica", "bold");
-  doc.text("OPHTHALMOLOGIST:", rightX, yRight);
+  doc.text("LOCATION:", rightX, yRight);
   doc.setFont("helvetica", "normal");
-  doc.text(user || "N/A", rightX + 45, yRight);
+  doc.text(patient.location || "N/A", rightX + 45, yRight);
 
   yRight += 6;
 
@@ -227,7 +234,7 @@ export const handleDownloadPDF = (patient, report, user) => {
   transformedImg1.onload = () => {
     doc.addImage(transformedImg1, "PNG", x, y, 75, 75);
     doc.setFontSize(12);
-    doc.text("Left Eye", x, y - 2);
+    doc.text("Fundus", x, y - 2);
 
     // Draw border for transformed image
     doc.setDrawColor(0, 0, 0);
@@ -260,7 +267,7 @@ export const handleDownloadPDF = (patient, report, user) => {
       transformedImg3.onload = () => {
         doc.addImage(transformedImg3, "PNG", x, y, 75, 75);
         doc.setFontSize(12);
-        doc.text("Right Eye", x, y - 2);
+        doc.text("Fundus", x, y - 2);
 
         // Draw border for transformed image
         doc.setDrawColor(0, 0, 0);
@@ -340,21 +347,21 @@ export const handleDownloadPDF = (patient, report, user) => {
   // ----------------- Disclaimer Section -----------------
   doc.setFont("helvetica", "bold");
   doc.setFontSize(12);
-  doc.text("Disclaimer", 105, pageHeight - 30, { align: "center" });
+  doc.text("Disclaimer", 105, pageHeight - 20, { align: "center" });
   doc.setLineWidth(0.025); // Thin line
   doc.line(
     55,
-    pageHeight - 29,
+    pageHeight - 19,
     doc.internal.pageSize.getWidth() - 55,
-    pageHeight - 29
+    pageHeight - 19
   );
   doc.setFont("helvetica", "italic");
   doc.setFontSize(8);
   doc.setFont("helvetica", "normal");
   doc.text(
-    "This report is generated as a collaborative effort between AI analysis and a qualified radiologist. The findings are to be used for diagnostic purposes in consultation with a licensed physician.",
+    "This is AI generated result.",
     105,
-    pageHeight - 25,
+    pageHeight - 15,
     { align: "center", maxWidth: 190 }
   );
 
