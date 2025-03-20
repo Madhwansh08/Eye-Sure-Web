@@ -85,6 +85,12 @@ const reportSchema = new Schema({
     type:String,
     trim:true
   },
+leftFundusFeedback:{
+  type:Schema.Types.Mixed,
+},
+rightFundusFeedback:{
+  type:Schema.Types.Mixed,
+},
   patientId: {
     type: Schema.Types.ObjectId,
     ref: 'Patient',

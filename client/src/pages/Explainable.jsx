@@ -14,6 +14,7 @@ import { initReportState, setTool } from "../redux/slices/annotationSlice";
 import store from "../redux/store";
 import RgbToggles from "../components/explainable/RgbToggles";
 import FeedbackForm from "../components/explainable/Feedback";
+import ZoomModal from "../components/explainable/ZoomModal";
 import { handleDownloadPDF } from "../components/analysis/Report";
 import RightPanelToggle from "../components/explainable/RightPanelToggle";
 
@@ -50,6 +51,9 @@ const Explainable = () => {
   const toggleButtonRef = useRef(null);
   const backButtonRef = useRef(null);
   const downloadReportRef = useRef(null); // Add reference for download report button
+
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalImage, setModalImage] = useState(null);
 
   useEffect(() => {
     const fetchReport = async () => {
@@ -148,16 +152,30 @@ const Explainable = () => {
     }
   };
 
-    const handleDownloadReport = () => {
-      handleDownloadPDF(patient, report, doctor.name);
-      console.log("patient", patient);
+  const handleDownloadReport = () => {
+    // Check if feedback exists for both eyes before downloading
+    if (
+      (!report.leftFundusFeedback || Object.keys(report.leftFundusFeedback).length === 0) &&
+      (!report.rightFundusFeedback || Object.keys(report.rightFundusFeedback).length === 0)
+    ) {
+      toast.error("Please fill in the feedback for the analysis before downloading the report.");
+      return;
+    }
+  
+   
+    handleDownloadPDF(patient, report, doctor.name);
+    console.log("Downloading report for:", patient);
+  };
+  
+
+    const handleImageClick = (imageSrc) => {
+      setModalImage(imageSrc);
+      setModalOpen(true);
     };
 
-  const handleExplainableAI = () => {
-    navigate(`/explainable/${reportId}`);
-  };
-
   const currentSideLabel = imagesData[carouselIndex]?.side === "left" ? "Left Eye" : "Right Eye";
+
+
 
   return (
     <div className="flex flex-col bg-primary h-screen overflow-hidden relative">
@@ -186,7 +204,7 @@ const Explainable = () => {
         {/* Left Column: Patient Demographics & History */}
         <div className="flex-1 bg-primary p-4 rounded-b-xl rounded-t-xl shadow overflow-auto">
          <RgbToggles adjustments={adjustments} handleRGBChange={handleRGBChange}/>
-         <FeedbackForm type={report?.analysisType} />
+         <FeedbackForm type={report?.analysisType} reportId={reportId} />
         </div>
 
 
@@ -240,13 +258,13 @@ const Explainable = () => {
               <div className="grid grid-cols-1 gap-4 mt-4">
                 {report.leftEyeClahe && (
                   <div className="flex flex-col items-center">
-                    <img src={report.leftEyeClahe} alt="Left Eye Clahe" className="w-[50%] object-contain" />
+                    <img src={report.leftEyeClahe} alt="Left Eye Clahe" className="w-[50%] object-contain" onClick={()=>handleImageClick(report.leftEyeClahe)} />
                     <span className="text-secondary mt-1 text-lg font-semibold">Left Eye Clahe</span>
                   </div>
                 )}
                 {report.rightEyeClahe && (
                   <div className="flex flex-col items-center">
-                    <img src={report.rightEyeClahe} alt="Right Eye Clahe" className="w-[50%] object-contain" />
+                    <img src={report.rightEyeClahe} alt="Right Eye Clahe" className="w-[50%] object-contain" onClick={()=>handleImageClick(report.rightEyeClahe)} />
                     <span className="text-secondary mt-1 text-lg font-semibold">Right Eye Clahe</span>
                   </div>
                 )}
@@ -260,21 +278,21 @@ const Explainable = () => {
                   <div className="text-xl font-bold bg-primary  rounded-3xl uppercase px-3 py-1">
                     Smart Heatmap Left Eye
                   </div>
-                  <img className="mt-5  object-contain" src={report.explainableAiLeftFundusImage} alt="Left Heatmap" />
+                  <img className="mt-5  object-contain" src={report.explainableAiLeftFundusImage} alt="Left Heatmap" onClick={()=>handleImageClick(report.explainableAiLeftFundusImage)}/>
                   <div className="text-xl font-bold bg-primary rounded-3xl uppercase mt-10 px-3 py-1">
                     Smart Heatmap Right Eye
                   </div>
-                  <img className="mt-5  object-contain" src={report.explainableAiRightFundusImage} alt="Right Heatmap" />
+                  <img className="mt-5  object-contain" src={report.explainableAiRightFundusImage} alt="Right Heatmap" onClick={()=>handleImageClick(report.explainableAiRightFundusImage)} />
                 </div>
               ) : report.analysisType === "Glaucoma" ? (
                 <div className="flex flex-col items-center text-center text-secondary">
                 
-                  <img className="  object-contain w-50"  src={report.contorLeftFundusImage} alt="Left Contour" />
+                  <img className="  object-contain w-50"  src={report.contorLeftFundusImage} alt="Left Contour" onClick={()=>handleImageClick(report.contorLeftFundusImage)} />
                   <div className="text-xl font-bold mt-2 px-3 py-1">
                     Left Eye Heatmap
                   </div>
                
-                  <img className="mt-2  object-contain w-50" src={report.contorRightFundusImage} alt="Right Contour" />
+                  <img className="mt-2  object-contain w-50" src={report.contorRightFundusImage} alt="Right Contour" onClick={()=>handleImageClick(report.contorRightFundusImage)} />
                   <div className="text-xl font-bold bg-primary mt-3 px-3 py-1">
                     Right Eye Heatmap
                   </div>
@@ -309,6 +327,8 @@ const Explainable = () => {
           )}
         </div>
       </div>
+      <ZoomModal isOpen={modalOpen} imageSrc={modalImage} onClose={() => setModalOpen(false)} />
+
       <Draggable nodeRef={backButtonRef}>
         <button
           ref={backButtonRef}

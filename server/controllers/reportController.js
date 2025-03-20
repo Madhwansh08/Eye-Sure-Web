@@ -448,6 +448,47 @@ exports.updateReportNote = async (req, res) => {
   }
 };
 
+exports.updateReportFeedback = async (req, res) => {
+  try {
+    const { reportId } = req.params;
+    const { analysisType, feedback } = req.body; // analysisType e.g., "DR", "Glaucoma", "Armd"
+
+    if (!reportId) {
+      return res.status(400).json({ message: "Report ID is required." });
+    }
+    if (!analysisType) {
+      return res.status(400).json({ message: "Analysis type is required." });
+    }
+    if (!feedback) {
+      return res.status(400).json({ message: "Feedback data is required." });
+    }
+
+    // Fetch the current report document to check the analysis type.
+    const reportDoc = await Report.findById(reportId);
+    if (!reportDoc) {
+      return res.status(404).json({ message: "Report not found." });
+    }
+    if (reportDoc.analysisType !== analysisType) {
+      return res.status(400).json({ message: "Analysis type mismatch." });
+    }
+
+    // Build the update object. We assume that the feedback is a nested object.
+    const update = {
+      leftFundusFeedback: feedback.leftFundusFeedback,
+      rightFundusFeedback: feedback.rightFundusFeedback
+    };
+
+    const updatedReport = await Report.findByIdAndUpdate(reportId, update, { new: true });
+    return res.status(200).json({
+      report: updatedReport,
+      message: "Feedback updated successfully."
+    });
+  } catch (error) {
+    console.error("Error updating report feedback:", error);
+    return res.status(500).json({ message: "Internal server error." });
+  }
+};
+
 
 
 exports.getReportById = async (req, res) => {

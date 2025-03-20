@@ -1,5 +1,8 @@
 import React, { useState } from "react";
 import { toast } from "react-toastify";
+import axios from "axios";
+import API_URL from "../../utils/config";
+import { useParams } from "react-router-dom";
 
 const FeedbackForm = ({ type }) => {
   const [formData, setFormData] = useState({
@@ -9,17 +12,48 @@ const FeedbackForm = ({ type }) => {
     rightSeverity: "",
   });
 
+  // Fetch reportId from URL params
+  const { reportId } = useParams();
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     console.log(name, value);
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    toast.success("Feedback submitted successfully");
-    console.log(formData);
+
+    // Build a structured feedback object
+    const feedbackPayload = {
+      analysisType: type,
+      feedback: {
+        leftFundusFeedback: {
+          classification: formData.leftFundus,
+          severity: formData.leftSeverity,
+        },
+        rightFundusFeedback: {
+          classification: formData.rightFundus,
+          severity: formData.rightSeverity,
+        },
+      },
+    };
+
+    try {
+      const response = await axios.patch(
+        `${API_URL}/api/report/${reportId}/feedback`,
+        feedbackPayload,
+        { withCredentials: true }
+      );
+      toast.success("Feedback submitted successfully");
+      console.log("Feedback updated:", response.data.report);
+    } catch (error) {
+      console.error("Error updating feedback:", error);
+      toast.error("Failed to update feedback");
+    }
   };
+
+
 
   return (
     <div className="max-w-xl mx-auto bg-primary p-6 rounded-lg border border-white px-6 py-3 mt-24">
@@ -28,7 +62,7 @@ const FeedbackForm = ({ type }) => {
           {type === "Armd" ? "ARMD" : type} Feedback Form
         </h2>
       </h2>
-      <form className="space-y-4">
+      <form className="space-y-4" onSubmit={handleSubmit}>
         {/* LEFT FUNDUS */}
         <div>
           <label className="block text-xl font-medium text-secondary">
@@ -70,7 +104,7 @@ const FeedbackForm = ({ type }) => {
               ► Severity:
             </label>
             <select
-              name="rightSeverity"
+              name="leftSeverity"
               value={formData.leftSeverity}
               onChange={handleChange}
               className="w-full p-2 mt-2 border rounded-md bg-secondary"
@@ -148,7 +182,7 @@ const FeedbackForm = ({ type }) => {
         {/* SUBMIT BUTTON */}
         <div className="flex justify-center items-center mt-8 mb-4">
           <button
-            onClick={handleSubmit}
+           type="submit"
             className="flex justify-center rounded-md bg-secondary px-4 py-2 text-lg font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
           >
             Submit
