@@ -23,7 +23,7 @@ export default function Demo() {
                     demo to see the future of diagnostics in action.
                   </p>
                   <div className="mt-8">
-                    <a href="https://www.youtube.com/watch?v=DC2z7H1wdKI" target="_blank" rel="noopener noreferrer">
+                    <a href="https://www.youtube.com/watch?v=q11_ZzSEp5I" target="_blank" rel="noopener noreferrer">
                       <button className="inline-block rounded-md border border-transparent bg-secondary px-8 py-3 font-medium text-secondary hover:bg-[#030811] hover:text-[#fdfdfd]">
                         Watch Full Demo
                       </button>
