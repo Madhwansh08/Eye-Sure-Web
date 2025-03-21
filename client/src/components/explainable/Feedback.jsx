@@ -4,7 +4,7 @@ import axios from "axios";
 import API_URL from "../../utils/config";
 import { useParams } from "react-router-dom";
 
-const FeedbackForm = ({ type }) => {
+const FeedbackForm = ({ type, reportId, setReport }) => {
   const [formData, setFormData] = useState({
     leftFundus: "",
     rightFundus: "",
@@ -12,19 +12,14 @@ const FeedbackForm = ({ type }) => {
     rightSeverity: "",
   });
 
-  // Fetch reportId from URL params
-  const { reportId } = useParams();
-
   const handleChange = (e) => {
     const { name, value } = e.target;
-    console.log(name, value);
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Build a structured feedback object
     const feedbackPayload = {
       analysisType: type,
       feedback: {
@@ -40,13 +35,18 @@ const FeedbackForm = ({ type }) => {
     };
 
     try {
-      const response = await axios.patch(
-        `${API_URL}/api/report/${reportId}/feedback`,
-        feedbackPayload,
-        { withCredentials: true }
-      );
+      await axios.patch(`${API_URL}/api/report/${reportId}/feedback`, feedbackPayload, {
+        withCredentials: true,
+      });
+    
+
+      // Fetch updated report to sync data
+      const updatedResponse = await axios.get(`${API_URL}/api/report/${reportId}`, {
+        withCredentials: true,
+      });
+
+      setReport(updatedResponse.data.report); // Update the report
       toast.success("Feedback submitted successfully");
-      console.log("Feedback updated:", response.data.report);
     } catch (error) {
       console.error("Error updating feedback:", error);
       toast.error("Failed to update feedback");

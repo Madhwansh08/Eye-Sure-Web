@@ -165,7 +165,7 @@ const Header = () => {
                   navigate("/dashboard/profile");
                   setIsDropdownOpen(false);
                 }}
-                className="flex items-center space-x-2 px-4 py-2 w-full text-sm text-secondary hover:bg-secondary"
+                className="flex items-center space-x-2 px-4 py-2 w-full text-sm text-secondary hover:bg-[#317d8a]"
               >
                 <FiUser className="w-5 h-5" />
                 <span>Profile Settings</span>

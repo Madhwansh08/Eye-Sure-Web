@@ -5,6 +5,7 @@ import AnnotationToolBar from "../components/analysis/AnnotationToolBar";
 import ImageToolBar from "../components/analysis/ImageToolBar";
 import KonvaCanvas from "../components/analysis/KonvaCanvas";
 import { FiArrowLeft, FiArrowRight, FiDownload } from "react-icons/fi";
+import { toast } from "react-toastify";
 import Draggable from "react-draggable";
 import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
@@ -152,20 +153,16 @@ const Explainable = () => {
     }
   };
 
-  const handleDownloadReport = () => {
-    // Check if feedback exists for both eyes before downloading
-    if (
-      (!report.leftFundusFeedback || Object.keys(report.leftFundusFeedback).length === 0) &&
-      (!report.rightFundusFeedback || Object.keys(report.rightFundusFeedback).length === 0)
-    ) {
-      toast.error("Please fill in the feedback for the analysis before downloading the report.");
+  const handleDownloadReport = async () => {
+    if (!report.leftFundusFeedback || !report.rightFundusFeedback) {
+      toast.error("Please fill the feedback form");
       return;
     }
-  
-   
+
     handleDownloadPDF(patient, report, doctor.name);
     console.log("Downloading report for:", patient);
   };
+  
   
 
     const handleImageClick = (imageSrc) => {
@@ -204,7 +201,7 @@ const Explainable = () => {
         {/* Left Column: Patient Demographics & History */}
         <div className="flex-1 bg-primary p-4 rounded-b-xl rounded-t-xl shadow overflow-auto">
          <RgbToggles adjustments={adjustments} handleRGBChange={handleRGBChange}/>
-         <FeedbackForm type={report?.analysisType} reportId={reportId} />
+         <FeedbackForm type={report?.analysisType} reportId={reportId} setReport={setReport} />
         </div>
 
 

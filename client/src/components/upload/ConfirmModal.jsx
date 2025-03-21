@@ -67,6 +67,7 @@ const ConfirmModal = ({ onCancel, patientId }) => {
 
       const { reportId } = response.data;
       toast.success("Report uploaded successfully!");
+    
       navigate(`/analysis/${reportId}`);
     } catch (error) {
       console.error("Error uploading report:", error);

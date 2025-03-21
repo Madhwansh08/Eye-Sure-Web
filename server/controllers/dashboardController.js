@@ -42,37 +42,108 @@ exports.getDashboardData = async (req, res) => {
 };
 
 exports.getDRDashboardData = async (req, res) => {
+  try {
+    const doctorId = req.doctor.id;
+    const patientIds = await Patient.find({ doctor: doctorId }).distinct('_id');
+    const { eye = "both" } = req.query;
+
+    const aggregationPipeline = [
+      { 
+        $match: { patientId: { $in: patientIds }, analysisType: "DR" } 
+      },
+      {
+        $facet: {
+          leftFundus: [
+            {
+              $group: {
+                _id: {
+                  day: { $dateToString: { format: "%Y-%m-%d", date: "$createdAt" } },
+                  status: "$leftFundusPrediction.primary_classification.class_name",
+                  eye: { $literal: "left" }
+                },
+                totalCount: { $sum: 1 }
+              }
+            }
+          ],
+          rightFundus: [
+            {
+              $group: {
+                _id: {
+                  day: { $dateToString: { format: "%Y-%m-%d", date: "$createdAt" } },
+                  status: "$rightFundusPrediction.primary_classification.class_name",
+                  eye: { $literal: "right" }
+                },
+                totalCount: { $sum: 1 }
+              }
+            }
+          ]
+        }
+      }
+    ];
+
+    const result = await Report.aggregate(aggregationPipeline);
+    const leftData = result[0].leftFundus;
+    const rightData = result[0].rightFundus;
+
+    const formattedData = {};
+    const combinedData = eye === "left" ? leftData : eye === "right" ? rightData : [...leftData, ...rightData];
+
+    combinedData.forEach((item) => {
+      const { day, status, eye } = item._id;
+      if (status !== "REF" && status !== "NON-REF") {
+        console.warn(`Unexpected status found: ${status}`);
+        return;
+      }
+
+      if (!formattedData[day]) {
+        formattedData[day] = { left: { REF: 0, 'NON-REF': 0 }, right: { REF: 0, 'NON-REF': 0 } };
+      }
+
+      formattedData[day][eye][status] += item.totalCount;
+    });
+
+    return res.status(200).json({ data: formattedData });
+  } catch (error) {
+    console.error("Error in getDRDashboardData", error);
+    return res.status(500).json({ message: "Server error" });
+  }
+};
+
+
+  
+
+  exports.getGlaucomaDashboardData = async (req, res) => {
     try {
       const doctorId = req.doctor.id;
       const patientIds = await Patient.find({ doctor: doctorId }).distinct('_id');
-      const { eye = "both" } = req.query; // Default to both eyes
+      const { eye = "both" } = req.query;
   
-      // Aggregation Pipeline with separate facets and adding an "eye" field.
+      // Aggregation Pipeline
       const aggregationPipeline = [
-        { 
-          $match: { patientId: { $in: patientIds }, analysisType: "DR" } 
+        {
+          $match: { patientId: { $in: patientIds }, analysisType: "Glaucoma" }
         },
         {
           $facet: {
-            leftFundus: [
+            leftEye: [
               {
                 $group: {
                   _id: {
                     day: { $dateToString: { format: "%Y-%m-%d", date: "$createdAt" } },
-                    fundus: "$leftFundusPrediction.predictions.primary_classification.class_name",
-                    eye: { $literal: "left" }  // mark left reports
+                    status: "$contorLeftGlaucomaStatus",
+                    eye: { $literal: "left" }
                   },
                   totalCount: { $sum: 1 },
                 }
               }
             ],
-            rightFundus: [
+            rightEye: [
               {
                 $group: {
                   _id: {
                     day: { $dateToString: { format: "%Y-%m-%d", date: "$createdAt" } },
-                    fundus: "$rightFundusPrediction.predictions.primary_classification.class_name",
-                    eye: { $literal: "right" } // mark right reports
+                    status: "$contorRightGlaucomaStatus",
+                    eye: { $literal: "right" }
                   },
                   totalCount: { $sum: 1 },
                 }
@@ -83,157 +154,109 @@ exports.getDRDashboardData = async (req, res) => {
       ];
   
       let result = await Report.aggregate(aggregationPipeline);
-      let leftData = result[0].leftFundus;
-      let rightData = result[0].rightFundus;
-      let filteredData;
+      let leftData = result[0].leftEye;
+      let rightData = result[0].rightEye;
   
-      if (eye === "left") {
-        filteredData = leftData;
-      } else if (eye === "right") {
-        filteredData = rightData;
-      } else {
-        filteredData = [...leftData, ...rightData]; // both eyes
-      }
+      const structuredResponse = {};
+      [leftData, rightData].forEach((data) => {
+        data.forEach((item) => {
+          const { day, status, eye } = item._id;
+          if (!structuredResponse[day]) {
+            structuredResponse[day] = { left: {}, right: {} };
+          }
+          if (!structuredResponse[day][eye][status]) {
+            structuredResponse[day][eye][status] = 0;
+          }
+          structuredResponse[day][eye][status] += item.totalCount;
+        });
+      });
   
-      return res.status(200).json({ data: filteredData });
+      return res.status(200).json({ data: structuredResponse });
     } catch (error) {
-      console.error("Error in getDRDashboardData", error);
+      console.error("Error in getGlaucomaDashboardData", error);
       return res.status(500).json({ message: "Server error" });
     }
   };
   
 
-  exports.getGlaucomaDashboardData = async (req, res) => {
-    try {
-        const doctorId = req.doctor.id;
-        const patientIds = await Patient.find({ doctor: doctorId }).distinct('_id');
-        const { eye = "both" } = req.query; // Default to both eyes
-
-        // Aggregation Pipeline
-        const aggregationPipeline = [
-            { 
-                $match: { patientId: { $in: patientIds }, analysisType: "Glaucoma" } 
-            },
-            {
-                $facet: {
-                    leftEye: [
-                        {
-                            $group: {
-                                _id: {
-                                    day: { $dateToString: { format: "%Y-%m-%d", date: "$createdAt" } },
-                                    status: "$contorLeftGlaucomaStatus",
-                                    eye: { $literal: "left" } // Mark left eye reports
-                                },
-                                totalCount: { $sum: 1 },
-                            }
-                        }
-                    ],
-                    rightEye: [
-                        {
-                            $group: {
-                                _id: {
-                                    day: { $dateToString: { format: "%Y-%m-%d", date: "$createdAt" } },
-                                    status: "$contorRightGlaucomaStatus",
-                                    eye: { $literal: "right" } // Mark right eye reports
-                                },
-                                totalCount: { $sum: 1 },
-                            }
-                        }
-                    ]
-                }
-            }
-        ];
-
-        let result = await Report.aggregate(aggregationPipeline);
-        let leftData = result[0].leftEye;
-        let rightData = result[0].rightEye;
-        let filteredData;
-
-        if (eye === "left") {
-            filteredData = leftData;
-        } else if (eye === "right") {
-            filteredData = rightData;
-        } else {
-            filteredData = [...leftData, ...rightData]; // Default: both eyes
-        }
-
-        return res.status(200).json({ data: filteredData });
-    } catch (error) {
-        console.error("Error in getGlaucomaDashboardData", error);
-        return res.status(500).json({ message: "Server error" });
-    }
-};
-
 
 exports.getArmdDashboardData = async (req, res) => {
-    try {
-        const doctorId = req.doctor.id;
-        const patientIds = await Patient.find({ doctor: doctorId }).distinct('_id');
-        const { eye = "both" } = req.query; // Default to both eyes
-
-        // Aggregation Pipeline
-        const aggregationPipeline = [
-            { 
-                $match: { patientId: { $in: patientIds }, analysisType: "Armd" } 
-            },
+  try {
+    const doctorId = req.doctor.id;
+    const patientIds = await Patient.find({ doctor: doctorId }).distinct('_id');
+    
+    const aggregationPipeline = [
+      { 
+        $match: { 
+          patientId: { $in: patientIds }, 
+          analysisType: "Armd" 
+        } 
+      },
+      {
+        $facet: {
+          leftEye: [
             {
-                $facet: {
-                    leftEye: [
-                        {
-                            $group: {
-                                _id: {
-                                    day: { $dateToString: { format: "%Y-%m-%d", date: "$createdAt" } },
-                                    status: {
-                                        $cond: {
-                                            if: { $eq: ["$leftFundusArmdPrediction", "1"] },
-                                            then: "ARMD Predicted",
-                                            else: "No ARMD"
-                                        }
-                                    },
-                                    eye: { $literal: "left" } // Mark left eye reports
-                                },
-                                totalCount: { $sum: 1 },
-                            }
-                        }
-                    ],
-                    rightEye: [
-                        {
-                            $group: {
-                                _id: {
-                                    day: { $dateToString: { format: "%Y-%m-%d", date: "$createdAt" } },
-                                    status: {
-                                        $cond: {
-                                            if: { $eq: ["$rightFundusArmdPrediction", "1"] },
-                                            then: "ARMD Predicted",
-                                            else: "No ARMD"
-                                        }
-                                    },
-                                    eye: { $literal: "right" } // Mark right eye reports
-                                },
-                                totalCount: { $sum: 1 },
-                            }
-                        }
+              $group: {
+                _id: {
+                  day: { $dateToString: { format: "%Y-%m-%d", date: "$createdAt" } },
+                  status: {
+                    $cond: [
+                      { $eq: ["$leftFundusArmdPrediction", "1"] },
+                      "ARMD Predicted",
+                      "No ARMD"
                     ]
-                }
+                  },
+                },
+                totalCount: { $sum: 1 },
+              }
             }
-        ];
-
-        let result = await Report.aggregate(aggregationPipeline);
-        let leftData = result[0].leftEye;
-        let rightData = result[0].rightEye;
-        let filteredData;
-
-        if (eye === "left") {
-            filteredData = leftData;
-        } else if (eye === "right") {
-            filteredData = rightData;
-        } else {
-            filteredData = [...leftData, ...rightData]; // Default: both eyes
+          ],
+          rightEye: [
+            {
+              $group: {
+                _id: {
+                  day: { $dateToString: { format: "%Y-%m-%d", date: "$createdAt" } },
+                  status: {
+                    $cond: [
+                      { $eq: ["$rightFundusArmdPrediction", "1"] },
+                      "ARMD Predicted",
+                      "No ARMD"
+                    ]
+                  },
+                },
+                totalCount: { $sum: 1 },
+              }
+            }
+          ]
         }
+      }
+    ];
 
-        return res.status(200).json({ data: filteredData });
-    } catch (error) {
-        console.error("Error in getArmdDashboardData", error);
-        return res.status(500).json({ message: "Server error" });
-    }
+    const result = await Report.aggregate(aggregationPipeline);
+    const formattedData = {};
+
+    // Format Left Eye Data
+    result[0].leftEye.forEach(({ _id, totalCount }) => {
+      const { day, status } = _id;
+      if (!formattedData[day]) {
+        formattedData[day] = { left: { ARMDPredicted: 0, NoARMD: 0 }, right: { ARMDPredicted: 0, NoARMD: 0 } };
+      }
+      formattedData[day].left[status === "ARMD Predicted" ? "ARMDPredicted" : "NoARMD"] += totalCount;
+    });
+
+    // Format Right Eye Data
+    result[0].rightEye.forEach(({ _id, totalCount }) => {
+      const { day, status } = _id;
+      if (!formattedData[day]) {
+        formattedData[day] = { left: { ARMDPredicted: 0, NoARMD: 0 }, right: { ARMDPredicted: 0, NoARMD: 0 } };
+      }
+      formattedData[day].right[status === "ARMD Predicted" ? "ARMDPredicted" : "NoARMD"] += totalCount;
+    });
+
+    return res.status(200).json({ data: formattedData });
+  } catch (error) {
+    console.error("Error in getArmdDashboardData", error);
+    return res.status(500).json({ message: "Server error" });
+  }
 };
+

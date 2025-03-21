@@ -255,7 +255,10 @@ const Analysis = () => {
             <PatientHistoryTable patientHistory={patientHistory} />
           </div>
 
-          <div className="mt-5 bottom-20">
+        
+
+          <div className="my-auto bottom-20">
+          <h1 className="text-primary font-semibold text-lg">Note</h1>
             <textarea
               id="note"
               className="w-full border-2 border-[#387AA4] text-secondary rounded-lg px-4 pt-6 pr-16 focus:outline-none bg-transparent"

@@ -94,6 +94,42 @@ exports.logoutDoctor = async (req, res) => {
   }
 };
 
+
+exports.getDoctor = async (req, res) => {
+  try {
+    const doctorId = req.doctor.id;
+
+    const doctor = await Doctor.findById(doctorId).select('-password -resetPasswordOTP -resetPasswordExpires');
+    if (!doctor) {
+      return res.status(404).json({ message: 'Doctor not found' });
+    }
+
+    res.status(200).json({ doctor });
+  } catch (error) {
+    console.error('Error fetching doctor details:', error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
+
+
+exports.updateDoctor = async (req, res) => {
+  try {
+    const doctorId = req.doctor.id;
+    const updates = req.body;
+
+    const doctor = await Doctor.findByIdAndUpdate(doctorId, updates, { new: true }).select('-password -resetPasswordOTP -resetPasswordExpires');
+    if (!doctor) {
+      return res.status(404).json({ message: 'Doctor not found' });
+    }
+    res.status(200).json({ message: 'Doctor updated successfully', doctor });
+  } catch (error) {
+    console.error('Error updating doctor details:', error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
+
+
+
 // Generate a 6-digit OTP
 const generateOTP = () => {
   return Math.floor(100000 + Math.random() * 900000).toString();

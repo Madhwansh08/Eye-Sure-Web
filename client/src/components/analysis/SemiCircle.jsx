@@ -89,6 +89,7 @@ const SemiCircle = ({ classNameGlaucoma = "", classNameDR = "" }) => {
           fill="white"
           fontSize="22"
           fontWeight="bold"
+        
         >
           {label}
         </text>

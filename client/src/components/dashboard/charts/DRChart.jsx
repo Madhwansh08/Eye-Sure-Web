@@ -1,108 +1,92 @@
 import React, { useEffect, useState } from "react";
 import Chart from "react-apexcharts";
+import axios from "axios";
+import API_URL from "../../../utils/config";
+import { toast } from "react-toastify";
 
-const DRChart = ({ drData, eyeFilter, setEyeFilter }) => {
-  // Always call hooks in the same order
+const DRChart = () => {
+  const [drData, setDrData] = useState({});
+  const [eyeFilter, setEyeFilter] = useState("both");
   const [chartSeries, setChartSeries] = useState([]);
   const [categories, setCategories] = useState([]);
 
   useEffect(() => {
-    if (!drData || drData.length === 0) {
+    const fetchDRData = async () => {
+      try {
+        const response = await axios.get(
+          `${API_URL}/api/dashboard/data/dr?eye=${eyeFilter}`,
+          { withCredentials: true }
+        );
+        setDrData(response.data.data);
+      } catch (error) {
+        console.error("Error fetching DR data:", error);
+        toast.error("Failed to load DR data");
+      }
+    };
+    fetchDRData();
+  }, [eyeFilter]);
+
+  useEffect(() => {
+    if (!drData || Object.keys(drData).length === 0) {
       setCategories([]);
       setChartSeries([]);
       return;
     }
 
-    // Filter the data based on the eye filter.
-    const filteredData = drData.filter((item) => {
-      if (eyeFilter === "both") return true;
-      return item._id.eye === eyeFilter; // Compare with the added "eye" field
-    });
-
-    // Extract unique dates for the X-axis.
-    const days = [...new Set(filteredData.map((item) => item._id.day))];
+    const days = Object.keys(drData);
     setCategories(days);
 
-    // Process data for REF and Non‑REF counts.
-    const refData = {};
-    const nonRefData = {};
+    const leftREF = days.map((day) => drData[day]?.left?.REF || 0);
+    const leftNonREF = days.map((day) => drData[day]?.left?.['NON-REF'] || 0);
+   
 
-    days.forEach((day) => {
-      refData[day] = 0;
-      nonRefData[day] = 0;
-    });
+    const rightREF = days.map((day) => drData[day]?.right?.REF || 0);
+    const rightNonREF = days.map((day) => drData[day]?.right?.['NON-REF'] || 0);
+  
 
-    filteredData.forEach((item) => {
-      const day = item._id.day;
-      // Use the "fundus" field to determine if the report is REF or not.
-      const fundus = item._id.fundus;
-      const count = item.totalCount;
+    const combinedSeries = [];
 
-      if (fundus === "REF") {
-        refData[day] += count;
-      } else {
-        nonRefData[day] += count;
-      }
-    });
+    if (eyeFilter === "left" || eyeFilter === "both") {
+      combinedSeries.push(
+        { name: "Left REF", data: leftREF },
+        { name: "Left Non-REF", data: leftNonREF },
+ 
+      );
+    }
 
-    setChartSeries([
-      { name: "REF", data: days.map((day) => refData[day] || 0) },
-      { name: "Non‑REF", data: days.map((day) => nonRefData[day] || 0) },
-    ]);
+    if (eyeFilter === "right" || eyeFilter === "both") {
+      combinedSeries.push(
+        { name: "Right REF", data: rightREF },
+        { name: "Right Non-REF", data: rightNonREF },
+   
+      );
+    }
+
+    setChartSeries(combinedSeries);
   }, [drData, eyeFilter]);
 
-  // Chart Configuration (same styling as before)
   const chartOptions = {
-    chart: {
-      type: "line",
-      height: 400,
-      zoom: { enabled: true },
-      toolbar: { show: true },
-      animations: { enabled: true },
-    },
-    stroke: {
-      curve: "smooth",
-      width: 3,
-    },
-    xaxis: {
-      categories,
-      labels: { rotate: -45 },
-    },
-    yaxis: {
-      title: { text: "Number of Cases" },
-    },
-    markers: {
-      size: 6,
-      hover: { size: 8 },
-    },
-    legend: {
-      position: "top",
-    },
-    tooltip: {
-      shared: true,
-      intersect: false,
-      y: { formatter: (val) => `${val} cases` },
-    },
+    chart: { type: "line", height: 400 },
+    stroke: { curve: "smooth", width: 3 },
+    xaxis: { categories, labels: { rotate: -45 } },
+    yaxis: { title: { text: "Number of Cases" } },
+    legend: { position: "top" },
   };
 
   return (
     <div className="p-4 bg-white rounded-lg shadow-md">
       <h2 className="text-2xl font-bold mb-4 text-center">DR Reports Overview</h2>
-
-      {/* Filter Controls */}
       <div className="flex justify-center space-x-4 mb-4">
         {["both", "left", "right"].map((type) => (
           <label key={type} className="flex items-center space-x-2">
             <input
               type="radio"
-              name="eyeFilter"
+              name="eyeFilterDR"
               value={type}
               checked={eyeFilter === type}
               onChange={() => setEyeFilter(type)}
             />
-            <span className="capitalize">
-              {type === "both" ? "Both Eyes" : `${type} Eye`}
-            </span>
+            <span>{type === "both" ? "Both Eyes" : `${type} Eye`}</span>
           </label>
         ))}
       </div>
