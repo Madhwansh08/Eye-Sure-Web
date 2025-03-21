@@ -5,6 +5,8 @@ const morgan=require('morgan');
 const helmet=require('helmet');
 const limiter = require('express-rate-limit');
 const compression=require('compression');
+const swaggerUI = require('swagger-ui-express');
+const swaggerDocs = require('./config/swagger');
 
 
 require('dotenv').config(); // Load environment variables
@@ -67,6 +69,8 @@ app.use('/api/contact', contactRoutes);
 
 const dashboardRoutes=require('./routes/dashboardRoutes')
 app.use('/api/dashboard' , dashboardRoutes)
+
+app.use("/docs", swaggerUI.serve, swaggerUI.setup(swaggerDocs));
 
 
 // Start the server
