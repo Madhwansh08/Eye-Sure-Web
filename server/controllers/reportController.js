@@ -103,47 +103,47 @@ const processDR = async (patientId, leftFile, rightFile) => {
 
 const processContorModel = async (patientId, leftFile, rightFile) => {
   const formData = new FormData();
-  formData.append('lefteye', leftFile.buffer, leftFile.originalname);
-  formData.append('righteye', rightFile.buffer, rightFile.originalname);
+  formData.append('left_eye', leftFile.buffer, leftFile.originalname);
+  formData.append('right_eye', rightFile.buffer, rightFile.originalname);
 
   const { data } = await axiosInstance.post(
-    `${process.env.AI_GLAUCOMA_URL}/predict`,
+    `${process.env.AI_GLAUCOMA_URL}/glaucoma_predict`,
     formData,
     { headers: formData.getHeaders() }
   );
 
   const [leftContourURL, rightContourURL] = await Promise.all([
-    data?.left_eye?.contour_image 
-      ? uploadBase64ImageToS3(patientId, 'left_contour', data.left_eye.contour_image)
+    data?.left_eye?.xai_results?.image 
+      ? uploadBase64ImageToS3(patientId, 'left_contour', data.left_eye.xai_results.image)
       : Promise.resolve(''),
-    data?.right_eye?.contour_image 
-      ? uploadBase64ImageToS3(patientId, 'right_contour', data.right_eye.contour_image)
+    data?.right_eye?.xai_results?.image 
+      ? uploadBase64ImageToS3(patientId, 'right_contour', data.right_eye.xai_results.image)
       : Promise.resolve('')
   ]);
 
   return {
     leftContourURL,
     rightContourURL,
-    leftVCDR: data?.left_eye?.VCDR,
-    rightVCDR: data?.right_eye?.VCDR,
-    leftGlaucomaStatus: data?.left_eye?.glaucoma_status,
-    rightGlaucomaStatus: data?.right_eye?.glaucoma_status
+    leftGlaucomaStatus: data?.left_eye?.primary_classification?.class_name,
+    rightGlaucomaStatus: data?.right_eye?.primary_classification?.class_name
   };
 };
 
-const processClaheModel = async (patientId, file) => {
+const processClaheModel = async (patientId, leftFile, rightFile) => {
   const formData = new FormData();
-  formData.append('file', file.buffer, file.originalname);
+  formData.append('left_eye', leftFile.buffer, leftFile.originalname);
+  formData.append('right_eye', rightFile.buffer, rightFile.originalname);
 
   const { data } = await axiosInstance.post(
-    `${process.env.AI_CLAHE_URL}/process/`,
+    `${process.env.AI_CLAHE_URL}/clahe_process`,
     formData,
     { headers: formData.getHeaders() }
   );
 
-  return data?.clahe_image 
-    ? uploadBase64ImageToS3(patientId, 'clahe', data.clahe_image)
-    : '';
+  return {
+    leftEyeClahe: data?.left_eye ? await uploadBase64ImageToS3(patientId, 'left', data.left_eye) : '',
+    rightEyeClahe: data?.right_eye ? await uploadBase64ImageToS3(patientId, 'right', data.right_eye) : ''
+  };
 };
 
 const processArmdModel = async (patientId, leftFile, rightFile) => {
@@ -200,13 +200,10 @@ exports.uploadDRReport = async (req, res) => {
         uploadImageToS3(patientId, 'left', leftFile),
         uploadImageToS3(patientId, 'right', rightFile)
       ]),
-      Promise.all([
-        processClaheModel(patientId, leftFile),
-        processClaheModel(patientId, rightFile)
-      ]),
+      processClaheModel(patientId, leftFile, rightFile),
       processDR(patientId, leftFile, rightFile)
     ]);
-
+    
     // Create a new report document
     const newReport = await Report.create({
       leftFundusImage: originalUrls[0],
@@ -214,10 +211,11 @@ exports.uploadDRReport = async (req, res) => {
       analysisType: "DR",
       explainableAiLeftFundusImage: drResults.left.xai_url,
       explainableAiRightFundusImage: drResults.right.xai_url,
-      leftEyeClahe: claheUrls[0],
-      rightEyeClahe: claheUrls[1],
-
-      // Store the classification & sub-classes under leftFundusPrediction, rightFundusPrediction
+    
+      // Correctly storing CLAHE images
+      leftEyeClahe: claheUrls.leftEyeClahe,
+      rightEyeClahe: claheUrls.rightEyeClahe,
+    
       leftFundusPrediction: {
         primary_classification: drResults.left.primary_classification,
         sub_classes: drResults.left.sub_classes
@@ -226,9 +224,10 @@ exports.uploadDRReport = async (req, res) => {
         primary_classification: drResults.right.primary_classification,
         sub_classes: drResults.right.sub_classes
       },
-
+    
       patientId
     });
+    
 
     // Update patient with the newly created report
     await Patient.findByIdAndUpdate(
@@ -265,6 +264,7 @@ exports.uploadGlaucomaReport = async (req, res) => {
     ) {
       return res.status(400).json({ message: "Please upload both left and right images" });
     }
+
     const leftFile = req.files.leftImage[0];
     const rightFile = req.files.rightImage[0];
 
@@ -279,10 +279,7 @@ exports.uploadGlaucomaReport = async (req, res) => {
         uploadImageToS3(patientId, 'right', rightFile)
       ]),
       processContorModel(patientId, leftFile, rightFile),
-      Promise.all([
-        processClaheModel(patientId, leftFile),
-        processClaheModel(patientId, rightFile)
-      ])
+      processClaheModel(patientId, leftFile, rightFile)
     ]);
 
     const newReport = await Report.create({
@@ -291,12 +288,10 @@ exports.uploadGlaucomaReport = async (req, res) => {
       analysisType: "Glaucoma",
       contorLeftFundusImage: contorData.leftContourURL,
       contorRightFundusImage: contorData.rightContourURL,
-      contorLeftVCDR: contorData.leftVCDR,
-      contorRightVCDR: contorData.rightVCDR,
       contorLeftGlaucomaStatus: contorData.leftGlaucomaStatus,
       contorRightGlaucomaStatus: contorData.rightGlaucomaStatus,
-      leftEyeClahe: claheUrls[0],
-      rightEyeClahe: claheUrls[1],
+      leftEyeClahe: claheUrls.leftEyeClahe,
+      rightEyeClahe: claheUrls.rightEyeClahe,
       patientId
     });
 
@@ -319,6 +314,8 @@ exports.uploadGlaucomaReport = async (req, res) => {
 };
 
 
+
+
 exports.uploadArmdReport = async (req, res) => {
   try {
     const { patientId, analysisType } = req.body;
@@ -335,6 +332,7 @@ exports.uploadArmdReport = async (req, res) => {
     ) {
       return res.status(400).json({ message: "Please upload both left and right images" });
     }
+
     const leftFile = req.files.leftImage[0];
     const rightFile = req.files.rightImage[0];
 
@@ -348,24 +346,23 @@ exports.uploadArmdReport = async (req, res) => {
         uploadImageToS3(patientId, 'left', leftFile),
         uploadImageToS3(patientId, 'right', rightFile)
       ]),
-      Promise.all([
-        processClaheModel(patientId, leftFile),
-        processClaheModel(patientId, rightFile)
-      ]),
+      processClaheModel(patientId, leftFile, rightFile),
       processArmdModel(patientId, leftFile, rightFile)
     ]);
 
+    // Create a new report document
     const newReport = await Report.create({
       leftFundusImage: originalUrls[0],
       rightFundusImage: originalUrls[1],
       analysisType: "Armd",
-      leftEyeClahe: claheUrls[0],
-      rightEyeClahe: claheUrls[1],
+      leftEyeClahe: claheUrls.leftEyeClahe,
+      rightEyeClahe: claheUrls.rightEyeClahe,
       leftFundusArmdPrediction: armdData.left_eye,
       rightFundusArmdPrediction: armdData.right_eye,
       patientId
     });
 
+    // Update patient with the newly created report
     await Patient.findByIdAndUpdate(
       patientId,
       { $push: { reports: newReport._id } },
@@ -383,6 +380,7 @@ exports.uploadArmdReport = async (req, res) => {
     return res.status(statusCode).json({ message });
   }
 };
+
 
 
 exports.updateReportById = async (req, res) => {

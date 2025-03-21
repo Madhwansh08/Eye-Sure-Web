@@ -55,8 +55,6 @@ const reportSchema = new Schema({
   },
   contorLeftFundusImage: { type: String, trim: true },
   contorRightFundusImage: { type: String, trim: true },
-  contorLeftVCDR: { type: Number },
-  contorRightVCDR: { type: Number },
   contorLeftGlaucomaStatus: { type: String, trim: true },
   contorRightGlaucomaStatus: { type: String, trim: true },
   leftEyeClahe: {
