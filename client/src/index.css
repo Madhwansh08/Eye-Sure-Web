@@ -9,6 +9,9 @@
     /* Light Mode Text Colors */
     --primary-text: #030811;        /* Light mode primary text color */
     --secondary-text: #000000;      /* Light mode secondary text color */
+
+    --primary-inverse: #030811;
+    --primary-text-inverse: #fdfdfd;
     
     /* Font Family */
     --font-family: 'Poppins', sans-serif;
@@ -29,6 +32,12 @@
     
     --primary-text: #387AA4;        /* Dark mode primary text color */
     --secondary-text: #fdfdfd;      /* Dark mode secondary text color */
+
+    --primary-inverse: #ffffff;
+
+    --primary-text-inverse: #030811;
+
+    
   }
 
   /* Apply gradient to text (Global for both modes) */
@@ -55,6 +64,12 @@
   }
   .font-custom {
     font-family: var(--font-family);
+  }
+  .bg-inverse {
+    background-color: var(--primary-inverse);
+  }
+  .text-inverse{
+    color: var(--primary-text-inverse);
   }
 
   

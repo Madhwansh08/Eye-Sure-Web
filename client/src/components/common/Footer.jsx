@@ -9,7 +9,7 @@ const Footer = ({scrollToFeatures}) => {
       <div className="px-4 mx-auto sm:px-6 lg:px-8 max-w-7xl">
         <div className="grid grid-cols-1 gap-x-5 gap-y-12 md:grid-cols-4 md:gap-x-12">
           <div>
-            <p className="text-base text-secondary font-bold">Company</p>
+            <p className="text-lg text-secondary font-bold">Company</p>
             <ul className="mt-8 space-y-4">
               <li>
                 <a
@@ -44,7 +44,7 @@ const Footer = ({scrollToFeatures}) => {
             </ul>
           </div>
           <div>
-            <p className="text-base text-secondary font-bold">Help</p>
+            <p className="text-lg text-secondary font-bold">Help</p>
             <ul className="mt-8 space-y-4">
               <li>
                 <a
@@ -80,7 +80,7 @@ const Footer = ({scrollToFeatures}) => {
             </ul>
           </div>
           <div>
-            <p className="text-base text-secondary font-bold">Experts Involved</p>
+            <p className="text-lg text-secondary font-bold">Experts Involved</p>
             <ul className="mt-8 space-y-4">
               <li>
                 <a
@@ -116,7 +116,7 @@ const Footer = ({scrollToFeatures}) => {
             </ul>
           </div>
           <div>
-            <p className="text-base text-secondary font-bold">Explore Other Products</p>
+            <p className="text-lg text-secondary font-bold">Explore Other Products</p>
             <ul className="mt-8 space-y-4">
               <li>
                 <a
@@ -146,7 +146,7 @@ const Footer = ({scrollToFeatures}) => {
                   className="text-base text-secondary transition-all duration-200 hover:text-opacity-80 focus:text-opacity-80"
                 >
                   {" "}
-                  EyeSure{" "}
+                  DicomPixel{" "}
                 </a>
               </li>
             </ul>
