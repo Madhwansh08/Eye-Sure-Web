@@ -2,6 +2,7 @@ const Doctor=require('../models/doctor');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const nodemailer = require("nodemailer");
+const validator = require('validator');
 const { hashPassword, comparePassword } = require('../helpers/authHelper');
 
 
@@ -12,22 +13,42 @@ exports.registerDoctor = async (req, res) => {
   try {
     const { name, email, password } = req.body;
 
+    // Basic validation
     if (!name || !email || !password) {
       return res.status(400).json({ message: 'Name, email, and password are required' });
     }
 
-    // Check if a doctor with the provided email already exists
+    // Validate email using validator.js
+    if (!validator.isEmail(email)) {
+      return res.status(400).json({ message: 'Invalid email format' });
+    }
+
+    // Password validation
+    if (
+      !validator.isStrongPassword(password, {
+        minLength: 8,
+        minLowercase: 1,
+        minUppercase: 1,
+        minNumbers: 1,
+        minSymbols: 1,
+      })
+    ) {
+      return res.status(400).json({
+        message:
+          'Password must be at least 8 characters long, contain one uppercase letter, one lowercase letter, one number, and one special character.',
+      });
+    }
+
+    // Check if the doctor already exists
     const existingDoctor = await Doctor.findOne({ email });
     if (existingDoctor) {
       return res.status(409).json({ message: 'Doctor with this email already exists' });
     }
 
-    // Hash the password before saving
+    // Hash the password
     const hashedPassword = await hashPassword(password);
 
-
-
-
+    // Save to DB
     const newDoctor = new Doctor({ name, email, password: hashedPassword });
     await newDoctor.save();
 

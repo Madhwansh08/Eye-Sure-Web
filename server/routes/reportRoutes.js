@@ -5,16 +5,6 @@ const { uploadReport, getReportById , getRecentReports, uploadDRReport, uploadGl
 const authMiddleware = require("../middleware/authMiddleware");
 const upload = require("../config/multer");
 
-// Use multer.fields to accept two files (one for left and one for right)
-// router.post(
-//   "/upload",
-//   authMiddleware,
-//   upload.fields([
-//     { name: "leftImage", maxCount: 1 },
-//     { name: "rightImage", maxCount: 1 }
-//   ]),
-//   uploadReport
-// );
 
 
 router.post(

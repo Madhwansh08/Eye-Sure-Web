@@ -15,7 +15,9 @@ const axiosInstance = axios.create({
 
 // Helper functions
 const uploadImageToS3 = async (patientId, side, file) => {
-  const key = `reports/${patientId}/${side}-${Date.now()}.jpg`;
+  const folderName = side === 'left' ? 'left_eye' : 'right_eye';
+  const key = `reports/${patientId}/${folderName}/${Date.now()}.jpg`;
+
   return uploadFile(
     process.env.S3_BUCKET_NAME,
     key,
@@ -26,7 +28,9 @@ const uploadImageToS3 = async (patientId, side, file) => {
 
 const uploadBase64ImageToS3 = async (patientId, side, base64Image) => {
   const buffer = Buffer.from(base64Image, 'base64');
-  const key = `reports/${patientId}/${side}-${Date.now()}.png`;
+  const folderName = side === 'left' ? 'left_eye' : 'right_eye';
+  const key = `reports/${patientId}/${folderName}/${Date.now()}.png`;
+
   return uploadFile(
     process.env.S3_BUCKET_NAME,
     key,
@@ -43,7 +47,7 @@ const processDR = async (patientId, leftFile, rightFile) => {
 
   // Call your AI endpoint
   const { data } = await axiosInstance.post(
-    'http://10.10.110.24:8317/predict/',
+    `${process.env.AI_DR_URL}/predict/`,
     formData,
     { headers: formData.getHeaders() }
   );
@@ -148,7 +152,7 @@ const processArmdModel = async (patientId, leftFile, rightFile) => {
   formData.append('right_eye', rightFile.buffer, rightFile.originalname);
 
   const { data } = await axiosInstance.post(
-    'http://10.10.110.24:8319/amd_predict/',
+    `${process.env.AI_ARMD_URL}/amd_predict/`,
     formData,
     { headers: formData.getHeaders() }
   );
@@ -191,9 +195,6 @@ exports.uploadDRReport = async (req, res) => {
       return res.status(404).json({ message: "Patient not found" });
     }
 
-    // 1) Upload original images to S3
-    // 2) Run optional CLAHE
-    // 3) Run the new DR process (processDR)
     const [originalUrls, claheUrls, drResults] = await Promise.all([
       Promise.all([
         uploadImageToS3(patientId, 'left', leftFile),
