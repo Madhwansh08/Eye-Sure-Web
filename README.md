@@ -13,7 +13,6 @@ Eye-Sure-Web is a web application designed to assist users in uploading and proc
 
 - **Frontend:** React, Tailwind CSS, Framer Motion
 - **Backend:** Node.js, Express
-- **Image Processing:** Jimp
 - **Cloud Storage:** AWS S3
 - **AI Model Integration:** Axios
 
