@@ -23,7 +23,7 @@ export default function Demo() {
                     demo to see the future of diagnostics in action.
                   </p>
                   <div className="mt-8">
-                    <a href="https://www.youtube.com/watch?v=q11_ZzSEp5I" target="_blank" rel="noopener noreferrer">
+                    <a href="https://merai-chennai.s3.ap-south-1.amazonaws.com/static/Opthalmvision.mp4" target="_blank" rel="noopener noreferrer">
                       <button className="inline-block rounded-md border border-transparent bg-secondary px-8 py-3 font-medium text-secondary hover:bg-[#030811] hover:text-[#fdfdfd]">
                         Watch Full Demo
                       </button>
@@ -49,7 +49,7 @@ export default function Demo() {
               onBlur={(e) => e.target.pause()}
             >
               <source
-                src="https://res.cloudinary.com/dh0kdktqr/video/upload/v1734981837/We_partner_Doctors_so_that_together_we_can_Bring_More_To_Life___Meril_Robotics_pmjmku.mp4"
+                src="https://merai-chennai.s3.ap-south-1.amazonaws.com/static/Opthalmvision.mp4"
                 type="video/mp4"
               />
             </video>
