@@ -13,7 +13,7 @@ export default function Demo() {
               <div className="mx-auto max-w-2xl py-24 lg:max-w-none lg:py-64">
                 <div className="lg:pr-16 lg:mr-12">
                   <h1 className="text-4xl font-bold tracking-tight text-secondary sm:text-5xl xl:text-6xl">
-                    Revolutionizing Healthcare with EyeSure
+                    Revolutionizing Healthcare with Ophthalmvision
                   </h1>
                   <p className="mt-4 text-xl pt-4 text-gray-400">
                     Explore how AI-powered solutions are transforming medical

@@ -20,7 +20,7 @@ export default function Hero({ scrollToFeatures, scrollToDemo }) {
           <div className="mx-auto max-w-xl z-50 lg:mx-0 lg:flex-auto">
             <h1 className="mt-10 text-pretty text-5xl font-semibold tracking-tight text-secondary sm:text-7xl">
               Early detection, Better Vision with{" "}
-              <span className="gradient-text">Eyesure</span>
+              <span className="gradient-text">Ophthalmvision</span>
             </h1>
             <p className="mt-8 text-pretty text-lg font-medium text-secondary sm:text-xl leading-8">
               AI-driven tools to help healthcare professionals analyze,

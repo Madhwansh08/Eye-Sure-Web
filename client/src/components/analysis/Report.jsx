@@ -53,7 +53,7 @@ export const handleDownloadPDF = (patient, report, user) => {
   };
   y -= 5;
   // ----------------- Report Title -----------------
-  doc.text("EyeSure Medical Report", 105, y, { align: "center" });
+  doc.text("Ophthalmvision Medical Report", 105, y, { align: "center" });
   y += 4;
 
   // Add Header Divider (Centered)

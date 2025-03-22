@@ -4,7 +4,7 @@ import user from "../../assets/download.jpeg"
 const testimonials = [
   {
     quote:
-      "Eyesure has been a game-changer in my practice. As a general physician, early detection is key, and this AI-powered tool helps me identify retinal diseases with confidence before referring patients to specialists.",
+      "Ophthalmvision has been a game-changer in my practice. As a general physician, early detection is key, and this AI-powered tool helps me identify retinal diseases with confidence before referring patients to specialists.",
     name: "Dr. Rohan Malhotra",
     designation: "MBBS, General Physician",
     image: user,
@@ -18,14 +18,14 @@ const testimonials = [
   },
   {
     quote:
-      "Diabetic retinopathy and glaucoma can be silent threats, and early detection is crucial. Eyesure’s AI-driven insights and detailed reports have significantly improved my efficiency in diagnosing and managing these conditions.",
+      "Diabetic retinopathy and glaucoma can be silent threats, and early detection is crucial. Opthalmvision’s AI-driven insights and detailed reports have significantly improved my efficiency in diagnosing and managing these conditions.",
     name: "Dr. Sneha Patel",
     designation: "Optometrist",
     image: user,
   },
   {
     quote:
-      "I often see patients with systemic diseases that impact eye health. Eyesure helps me quickly assess retinal images and detect potential issues early, making referrals more precise and timely.",
+      "I often see patients with systemic diseases that impact eye health. Ophthalmvision helps me quickly assess retinal images and detect potential issues early, making referrals more precise and timely.",
     name: "Dr. Manish Verma",
     designation: "MBBS, Internal Medicine",
     image: user,

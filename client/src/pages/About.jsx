@@ -178,16 +178,16 @@ export default function About() {
               transition={{ delay: 0.4, duration: 0.6 }}
               className="text-inverse text-lg"
             >
-              "Eyesure is an AI-powered retinal disease detection platform
+              "Ophthalmvision is an AI-powered retinal disease detection platform
               designed to assist doctors in diagnosing diabetic retinopathy,
               glaucoma, and AMD with high precision. By leveraging advanced AI,
-              Eyesure enables early detection, reducing misdiagnosis and
+              Ophthalmvision enables early detection, reducing misdiagnosis and
               improving patient outcomes. Traditional methods can be slow and
-              error-prone—Eyesure revolutionizes the process with real-time
+              error-prone—Ophthalmvision revolutionizes the process with real-time
               image analysis, allowing doctors to refine AI insights and
               generate automated diagnosis reports. With seamless image
               acquisition, interactive diagnostics, and AI-driven accuracy,
-              Eyesure enhances clinical efficiency, ensuring faster and more
+              Ophthalmvision enhances clinical efficiency, ensuring faster and more
               confident diagnoses."
             </motion.p>
             <motion.div
@@ -213,7 +213,7 @@ export default function About() {
               Our Mission
             </h2>
             <p className="mx-auto mt-6 text-lg/8 text-inverse text-justify">
-              Eyesure envisions a world where advanced AI-driven retinal
+              Ophthalmvision envisions a world where advanced AI-driven retinal
               diagnostics empower healthcare professionals to detect and manage
               vision-threatening diseases with unparalleled accuracy and
               efficiency. By integrating cutting-edge artificial intelligence
@@ -245,7 +245,7 @@ export default function About() {
               Our Vision
             </h2>
             <p className="mx-auto mt-6  text-lg/8 text-gray-800 text-justify text-inverse">
-              At Eyesure, our mission is to empower doctors with AI-enhanced
+              At Ophthalmvision, our mission is to empower doctors with AI-enhanced
               diagnostic tools that streamline retinal disease detection and
               improve clinical decision-making. We are committed to providing
               high-resolution imaging, advanced AI analysis, and interactive
@@ -275,7 +275,7 @@ export default function About() {
       {/* Why Choose Us? */}
       <div className="w-full flex flex-col items-center justify-center mt-40">
         <h2 className="t w-[70%] text-7xl font-bold text-left mb-12 text-secondary">
-          Why Choose EyeSure?
+          Why Choose Ophthalmvision?
         </h2>
         <div className="flex w-[70%] items-center justify-center gap-y-20">
           <div className="w-1/2 mx-auto p-4 z-10">
