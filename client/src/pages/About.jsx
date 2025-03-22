@@ -6,68 +6,9 @@ import { ChevronDownIcon, ChevronUpIcon } from "@heroicons/react/24/outline";
 import Header from "../components/common/Header";
 import Footer from "../components/common/Footer";
 import NuvaLogo from "../assets/Nuva Logo.mp4";
-import aiicon from "../assets/aiicon.gif";
-import bilakhia from "../assets/bilakhia-removebg-preview.png";
+import meril from "../assets/meril.jpg"
+import herogif from "../assets/herogif.gif";
 
-const timeline = [
-  {
-    name: "Founded company",
-    description:
-      "Nihil aut nam. Dignissimos a pariatur et quos omnis. Aspernatur asperiores et dolorem dolorem optio voluptate repudiandae.",
-    date: "Aug 2021",
-    dateTime: "2021-08",
-  },
-  {
-    name: "Secured $65m in funding",
-    description:
-      "Provident quia ut esse. Vero vel eos repudiandae aspernatur. Cumque minima impedit sapiente a architecto nihil.",
-    date: "Dec 2021",
-    dateTime: "2021-12",
-  },
-  {
-    name: "Released beta",
-    description:
-      "Sunt perspiciatis incidunt. Non necessitatibus aliquid. Consequatur ut officiis earum eum quia facilis. Hic deleniti dolorem quia et.",
-    date: "Feb 2022",
-    dateTime: "2022-02",
-  },
-  {
-    name: "Global launch of product",
-    description:
-      "Ut ipsa sint distinctio quod itaque nam qui. Possimus aut unde id architecto voluptatem hic aut pariatur velit.",
-    date: "Dec 2022",
-    dateTime: "2022-12",
-  },
-];
-const jobOpenings = [
-  {
-    id: 1,
-    role: "Full-time designer",
-    href: "#",
-    description:
-      "Quos sunt ad dolore ullam qui. Enim et quisquam dicta molestias. Corrupti quo voluptatum eligendi autem labore.",
-    salary: "$75,000 USD",
-    location: "San Francisco, CA",
-  },
-  {
-    id: 2,
-    role: "Laravel developer",
-    href: "#",
-    description:
-      "Et veniam et officia dolorum rerum. Et voluptas consequatur magni sapiente amet voluptates dolorum. Ut porro aut eveniet.",
-    salary: "$125,000 USD",
-    location: "San Francisco, CA",
-  },
-  {
-    id: 3,
-    role: "React Native developer",
-    href: "#",
-    description:
-      "Veniam ipsam nisi quas architecto eos non voluptatem in nemo. Est occaecati nihil omnis delectus illum est.",
-    salary: "$105,000 USD",
-    location: "San Francisco, CA",
-  },
-];
 
 const accordionData = [
   {
@@ -113,35 +54,6 @@ export default function About() {
   return (
     <div className="bg-primary relative">
       {/* Header */}
-      <svg
-        aria-hidden="true"
-        className="absolute inset-0 z-10 size-full stroke-white/10 [mask-image:radial-gradient(100%_100%_at_top_right,white,transparent)]"
-      >
-        <defs>
-          <pattern
-            x="50%"
-            y={-1}
-            id="983e3e4c-de6d-4c3f-8d64-b9761d1534cc"
-            width={200}
-            height={200}
-            patternUnits="userSpaceOnUse"
-          >
-            <path d="M.5 200V.5H200" fill="none" />
-          </pattern>
-        </defs>
-        <svg x="50%" y={-1} className="overflow-visible fill-gray-800/20">
-          <path
-            d="M-200 0h201v201h-201Z M600 0h201v201h-201Z M-400 600h201v201h-201Z M200 800h201v201h-201Z"
-            strokeWidth={0}
-          />
-        </svg>
-        <rect
-          fill="url(#983e3e4c-de6d-4c3f-8d64-b9761d1534cc)"
-          width="100%"
-          height="100%"
-          strokeWidth={0}
-        />
-      </svg>
       <div className="relative inset-0 h-[70vh]">
         <video
           autoPlay
@@ -162,7 +74,7 @@ export default function About() {
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, ease: "easeOut" }}
-            className="w-[70%] mx-auto p-6 text-center rounded-2xl bg-inverse shadow-lg shadow-[#387AA4]"
+            className="w-[70%] mx-auto p-6 text-center rounded-2xl bg-inverse shadow-lg shadow-[#387AA4] py-16"
           >
             <motion.h2
               initial={{ opacity: 0, y: -20 }}
@@ -194,7 +106,7 @@ export default function About() {
               initial={{ scale: 0.8, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               transition={{ delay: 0.6, duration: 0.6 }}
-              className="mt-6 p-4 bg-[#387AA4] text-white rounded-xl"
+              className="mt-6 px-4 py-2 bg-[#387AA4] text-white rounded-xl inline-block"
             >
               <p className="font-medium text-xl">
                 AI-powered insights, seamless diagnostics, and enhanced clinical
@@ -273,7 +185,7 @@ export default function About() {
       </div>
 
       {/* Why Choose Us? */}
-      <div className="w-full flex flex-col items-center justify-center mt-40">
+      <div className="w-full flex flex-col items-center justify-center mt-40 mb-16">
         <h2 className="t w-[70%] text-7xl font-bold text-left mb-12 text-secondary">
           Why Choose EyeSure?
         </h2>
@@ -315,7 +227,7 @@ export default function About() {
             </div>
           </div>
           <div className="w-1/2">
-            <img src={aiicon} alt="gif" className="ml-20" />
+            <img src={herogif} alt="gif" className="ml-40 w-[500px]" />
           </div>
         </div>
       </div>
@@ -343,12 +255,11 @@ export default function About() {
               </div>
               <img
                 alt=""
-                src={bilakhia}
-                className=" w-full max-w-lg rounded-2xl object-cover sm:mt-16 lg:mt-0 lg:max-w-none xl:row-span-2 xl:row-end-2"
+                src={meril}
+                className=" w-full max-w-lg rounded-2xl object-cover sm:mt-16 lg:mt-20 lg:max-w-none xl:row-span-2 xl:row-end-2 ml-44"
               />
             </div>
           </div>
-          {/* <div className="absolute inset-x-0 bottom-0 -z-10 h-24 bg-gradient-to-t from-white sm:h-32" /> */}
         </div>
       </main>
 
