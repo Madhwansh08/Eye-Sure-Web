@@ -51,7 +51,7 @@ export const Contact = () => {
       }
 
       const response = await axios.post(
-        'http://localhost:9000/api/contact/submit',
+        'http://13.232.205.62:9000/api/contact/submit',
         formData,
         {
           headers: {
@@ -121,10 +121,10 @@ export const Contact = () => {
                   </dt>
                   <dd>
                     <a
-                      href="mailto:merai.helpdesk@gmail.com"
+                      href="mailto:helpdesk.nuvoai@gmail.com"
                       className="hover:text-secondary"
                     >
-                      merai.helpdesk@gmail.com
+                      helpdesk.nuvoai@gmail.com
                     </a>
                   </dd>
                 </div>

@@ -6,8 +6,8 @@ import { ChevronDownIcon, ChevronUpIcon } from "@heroicons/react/24/outline";
 import Header from "../components/common/Header";
 import Footer from "../components/common/Footer";
 import NuvaLogo from "../assets/Nuva Logo.mp4";
-import aiicon from "../assets/aiicon.gif";
-import bilakhia from "../assets/bilakhia-removebg-preview.png";
+import aiicon from "../assets/Nuvo logo Icone.png";
+import bilakhia from "../assets/Meril.jpg";
 
 const timeline = [
   {

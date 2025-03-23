@@ -59,7 +59,7 @@ Eye-Sure-Web is a web application designed to assist users in uploading and proc
     - Create a `.env` file in the `client` directory.
     - Add the server URL:
       ```env
-      VITE_BASE_URL=http://localhost:your_server_port
+      VITE_BASE_URL=http://13.232.205.62:your_server_port
       ```
 
 ## Usage
@@ -77,6 +77,6 @@ Eye-Sure-Web is a web application designed to assist users in uploading and proc
     ```
 
 3. **Access the Application:**
-    - Open your browser and navigate to `http://localhost:5173` (or your configured port).
+    - Open your browser and navigate to `http://13.232.205.62:5173` (or your configured port).
 
 

@@ -5,6 +5,8 @@ const morgan=require('morgan');
 const helmet=require('helmet');
 const limiter = require('express-rate-limit');
 const compression=require('compression');
+const swaggerUI = require('swagger-ui-express');
+const swaggerDocs = require('./config/swagger');
 
 
 require('dotenv').config(); // Load environment variables
@@ -16,15 +18,13 @@ connectDB();
 const app = express();
 const port = process.env.PORT || 9000;
 
-
+// Health Check Endpoint
+app.get('/health', (req, res) => {
+  res.status(200).json({ status: "healthy", timestamp: new Date().toISOString() });
+});
 
 // Middleware
-app.use(cors(
-    {
-        origin: "http://localhost:5173",
-        credentials: true
-    }
-));
+app.use(cors());
 app.use(morgan('dev'));
 app.use(express.json());
 app.use(cookieParser());
@@ -68,8 +68,10 @@ app.use('/api/contact', contactRoutes);
 const dashboardRoutes=require('./routes/dashboardRoutes')
 app.use('/api/dashboard' , dashboardRoutes)
 
+app.use("/docs", swaggerUI.serve, swaggerUI.setup(swaggerDocs));
+
 
 // Start the server
-app.listen(port, () => {
-  console.log(`Server is running on http://localhost:${port}`);
+app.listen(port, "0.0.0.0", () => {
+  console.log(`Server is running on port ${port}`);
 });

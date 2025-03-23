@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  frontend:
+    # Build frontend Dockerfile
+    build: ./client
+    container_name: eyesure-frontend
+    # Explicitly map EC2 port 5173 to frontend container port 5173
+    ports:
+      - "5173:5173"
+    env_file:
+      - ./client/.env
+    networks:
+      - app-network
+    restart: always
+
+  backend:
+    # Build backend Dockerfile
+    build: ./server
+    container_name: eyesure-backend
+    ports:
+      - "9000:9000"
+    env_file:
+      - ./server/.env
+    networks:
+      - app-network
+    restart: always
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+networks:
+  app-network:
+    driver: bridge
