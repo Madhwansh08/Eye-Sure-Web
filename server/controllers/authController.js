@@ -86,7 +86,7 @@ exports.loginDoctor = async (req, res) => {
     // Store the token in an HTTP-only cookie
     res.cookie('token', token, {
       httpOnly: true,
-      // secure: process.env.NODE_ENV === 'production', // enable in production with HTTPS
+      secure: process.env.NODE_ENV === 'production', // enable in production with HTTPS
       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days in milliseconds
     });
 
@@ -106,7 +106,7 @@ exports.logoutDoctor = async (req, res) => {
     // Clear the token cookie
     res.clearCookie('token', {
       httpOnly: true,
-      // secure: process.env.NODE_ENV === 'production'
+      secure: process.env.NODE_ENV === 'production'
     });
     res.status(200).json({ message: 'Logout successful' });
   } catch (error) {
