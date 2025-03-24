@@ -157,12 +157,16 @@ const processArmdModel = async (patientId, leftFile, rightFile) => {
     { headers: formData.getHeaders() }
   );
 
-  // Map the response to the expected structure
+  // Convert ARMD/Non-ARMD to "1" or "0"
+  const mapClassification = (classification) =>
+    classification === "ARMD" ? "1" : "0";
+
   return {
-    left_eye: data.left_eye_prediction,
-    right_eye: data.right_eye_prediction
+    left_eye: mapClassification(data.left_eye.primary_classification.class_name),
+    right_eye: mapClassification(data.right_eye.primary_classification.class_name),
   };
 };
+
 
 
 

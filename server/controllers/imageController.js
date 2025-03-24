@@ -16,7 +16,7 @@ exports.uploadImages = async (req, res) => {
     formData.append("file", file.buffer, file.originalname);
 
     // Post to the external prediction API.
-    const response = await axios.post(`${process.env.AI_PREDICT_URL}/predict/`, formData, {
+    const response = await axios.post(`${process.env.AI_PREDICT_URL}/verification`, formData, {
       headers: {
         ...formData.getHeaders(),
       },
