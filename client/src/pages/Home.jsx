@@ -16,6 +16,7 @@ import Footer from "../components/common/Footer";
 
 const Home = () => {
   const featuresRef = useRef(null);
+  const contactRef=useRef(null);
   const demoRef = useRef(null);
 
   // Initialize AOS for animations
@@ -57,6 +58,13 @@ const Home = () => {
   const scrollToFeatures = useCallback(
     throttle(() => {
       featuresRef.current?.scrollIntoView({ behavior: "smooth" });
+    }, 1000),
+    []
+  );
+
+  const scrollToContact = useCallback(
+    throttle(() => {
+      contactRef.current?.scrollIntoView({ behavior: "smooth" });
     }, 1000),
     []
   );
@@ -150,10 +158,10 @@ const Home = () => {
       <section ref={demoRef}>
         <Demo />
       </section>
-      <section>
+      <section ref={contactRef}>
         <Contact />
       </section>
-      <Footer scrollToFeatures={scrollToFeatures}/>
+      <Footer scrollToFeatures={scrollToFeatures} scrollToContact={scrollToContact}/>
     </div>
   );
 };

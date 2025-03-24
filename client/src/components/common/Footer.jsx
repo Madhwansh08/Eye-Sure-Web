@@ -2,8 +2,9 @@
 
 import React from "react";
 import LogoImage from "../../assets/logo.png";
+import pdf from '../../assets/T&C and PP - Eyesure.pdf';
 
-const Footer = ({scrollToFeatures}) => {
+const Footer = ({scrollToFeatures , scrollToContact}) => {
   return (
     <section className="py-10 bg-primary sm:pt-16 lg:pt-24">
       <div className="px-4 mx-auto sm:px-6 lg:px-8 max-w-7xl">
@@ -31,37 +32,29 @@ const Footer = ({scrollToFeatures}) => {
                 </button>
               </li>
 
-              <li>
-                <a
-                  href="/career"
-                  title="Career"
-                  className="text-base text-secondary transition-all duration-200 hover:text-opacity-80 focus:text-opacity-80"
-                >
-                  {" "}
-                  Career{" "}
-                </a>
-              </li>
+      
             </ul>
           </div>
           <div>
             <p className="text-lg text-secondary font-bold">Help</p>
             <ul className="mt-8 space-y-4">
               <li>
-                <a
-                  href="/customer-support"
-                  title="Customer Support"
+                <button
+                 onClick={scrollToContact}
+        
                   className="text-base text-secondary transition-all duration-200 hover:text-opacity-80 focus:text-opacity-80"
                 >
                   {" "}
                   Customer Support{" "}
-                </a>
+                </button>
               </li>
 
               <li>
                 <a
-                  href="/terms-conditions"
+                  href={pdf}
+                  target="_blank"
                   title="Terms & Conditions"
-                  className="text-base text-secondary transition-all duration-200 hover:text-opacity-80 focus:text-opacity-80"
+                  className="text-base dark:text-[#F2EBE3] text-[#fdfdfd] transition-all duration-200 hover:text-opacity-80 focus:text-opacity-80"
                 >
                   {" "}
                   Terms &amp; Conditions{" "}
@@ -69,9 +62,10 @@ const Footer = ({scrollToFeatures}) => {
               </li>
               <li>
                 <a
-                  href="/privacy-policy"
+                  href={pdf}
+                  target="_blank"
                   title="Privacy Policy"
-                  className="text-base text-secondary transition-all duration-200 hover:text-opacity-80 focus:text-opacity-80"
+                  className="text-base dark:text-[#F2EBE3] text-[#fdfdfd] transition-all duration-200 hover:text-opacity-80 focus:text-opacity-80"
                 >
                   {" "}
                   Privacy Policy{" "}
@@ -84,29 +78,18 @@ const Footer = ({scrollToFeatures}) => {
             <ul className="mt-8 space-y-4">
               <li>
                 <a
-                  href="/free-ebooks"
-                  title="Free eBooks"
+               
                   className="text-base text-secondary transition-all duration-200 hover:text-opacity-80 focus:text-opacity-80"
                 >
                   {" "}
                   Ophthalmologist{" "}
                 </a>
               </li>
-              <li>
-                <a
-                  href="/demo-tutorial"
-                  title="Demo Tutorial"
-                  className="text-base text-secondary transition-all duration-200 hover:text-opacity-80 focus:text-opacity-80"
-                >
-                  {" "}
-                  Pulmonary Specialist{" "}
-                </a>
-              </li>
+            
 
               <li>
                 <a
-                  href="/youtube-playlist"
-                  title="YouTube Playlist"
+            
                   className="text-base text-secondary transition-all duration-200 hover:text-opacity-80 focus:text-opacity-80"
                 >
                   {" "}
@@ -120,8 +103,7 @@ const Footer = ({scrollToFeatures}) => {
             <ul className="mt-8 space-y-4">
               <li>
                 <a
-                  href="/free-ebooks"
-                  title="Free eBooks"
+               
                   className="text-base text-secondary transition-all duration-200 hover:text-opacity-80 focus:text-opacity-80"
                 >
                   {" "}
@@ -130,8 +112,7 @@ const Footer = ({scrollToFeatures}) => {
               </li>
               <li>
                 <a
-                  href="/demo-tutorial"
-                  title="Demo Tutorial"
+                 
                   className="text-base text-secondary transition-all duration-200 hover:text-opacity-80 focus:text-opacity-80"
                 >
                   {" "}
@@ -141,8 +122,7 @@ const Footer = ({scrollToFeatures}) => {
 
               <li>
                 <a
-                  href="/youtube-playlist"
-                  title="YouTube Playlist"
+               
                   className="text-base text-secondary transition-all duration-200 hover:text-opacity-80 focus:text-opacity-80"
                 >
                   {" "}
