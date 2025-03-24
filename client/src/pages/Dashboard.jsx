@@ -45,9 +45,9 @@ const Dashboard = () => {
           >
             <XMarkIcon className="h-6 w-6" />
           </button>
-          <div className="flex items-center justify-center h-16 border-b border-gray-300 dark:border-gray-700">
+          <div className="flex items-center justify-center h-16 border-b border-gray-400">
             <button onClick={() => navigate('/')} className="h-8">
-              <img src={Logo} alt="Logo" className="h-8 invert dark:invert-0" />
+              <img src={Logo} alt="Logo" className="h-8 " />
             </button>
           </div>
           <nav className="flex-1 px-4 py-6 space-y-4 overflow-auto">
@@ -74,10 +74,10 @@ const Dashboard = () => {
       </div>
 
       {/* Desktop Sidebar */}
-      <div className="hidden lg:flex lg:w-64 lg:flex-col dark:bg-[#030811] bg-[#fdfdfd] dark:text-white text-[#030811]">
-        <div className="flex items-center justify-center h-16 border-b border-gray-300 dark:border-gray-700">
+      <div className="hidden lg:flex lg:w-64 lg:flex-col bg-primary text-secondary">
+        <div className="flex items-center justify-center h-16 border-b border-gray-700 ">
           <button onClick={() => navigate('/')} className="h-8 mr-5 pr-5">
-            <img src={Logo} alt="Logo" className="h-8 invert dark:invert-0" />
+            <img src={Logo} alt="Logo" className="h-8 hover:cursor-pointer hover:animate-pulse " />
           </button>
         </div>
         <nav className="flex-1 px-4 py-6 space-y-4 overflow-auto">
@@ -88,8 +88,8 @@ const Dashboard = () => {
               className={() =>
                 classNames(
                   location.pathname === item.path
-                    ? "bg-[#387AA4] text-[#f2ebe3]"
-                    : "text-black dark:text-[#f2ebe3] hover:bg-[#387AA4] hover:text-white",
+                    ? "bg-[#387AA4] text-[#fdfdfd]"
+                    : "text-secondary hover:bg-[#387AA4] hover:text-white",
                   "flex items-center gap-x-3 px-3 py-2 rounded-md"
                 )
               }
@@ -104,7 +104,7 @@ const Dashboard = () => {
       {/* Main Content */}
       <div className="flex-1 flex flex-col overflow-hidden">
         {/* Header */}
-        <header className="sticky top-0 z-10 flex items-center justify-between h-10 shadow px-4 sm:px-6 lg:px-8 bg-black dark:bg-white">
+        <header className="sticky top-0 z-10 flex items-center justify-between h-10 shadow px-4 sm:px-6 lg:px-8 bg-white">
           <button
             className="text-[#030811] lg:hidden"
             onClick={() => setSidebarOpen(true)}
@@ -113,7 +113,7 @@ const Dashboard = () => {
           </button>
         </header>
         {/* Main Section */}
-        <main className="flex-1 overflow-y-auto p-6 bg-[#000000] dark:bg-[#ffffff]">
+        <main className="flex-1 overflow-y-auto p-6 bg-white">
           <Outlet />
         </main>
       </div>

@@ -175,7 +175,7 @@ const Explainable = () => {
 
 
   return (
-    <div className="flex flex-col bg-primary h-screen overflow-hidden relative">
+    <div className="flex flex-col bg-primary min-h-screen  overflow-hidden relative">
       <Header />
       {toolbarMode === "annotation" ? (
         <AnnotationToolBar
@@ -245,7 +245,7 @@ const Explainable = () => {
           )}
         </div>
 
-        <div className="flex-1 bg-primary p-4 h-screen rounded shadow flex flex-col items-center overflow-auto">
+        <div className="flex-1 bg-primary p-4 min-h-screen rounded shadow flex flex-col items-center overflow-auto">
           <div className="mt-10 pt-5">
           <RightPanelToggle activeTab={rightPanelTab} setActiveTab={setRightPanelTab} />
           </div>

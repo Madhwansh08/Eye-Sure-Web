@@ -118,10 +118,10 @@ const PatientModal = ({ onClose, patientId }) => {
                 className="mt-1 w-full border rounded text-secondary px-3 py-2"
                 required
               >
-                <option value="">Select...</option>
-                <option value="male">Male</option>
-                <option value="female">Female</option>
-                <option value="other">Other</option>
+               <option value="" className="text-inverse">Select...</option>
+                <option value="male" className="text-inverse">Male</option>
+                <option value="female" className="text-inverse">Female</option>
+                <option value="other" className="text-inverse">Other</option>
               </select>
             </div>
             <div>

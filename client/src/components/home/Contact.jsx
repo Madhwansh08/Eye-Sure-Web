@@ -104,10 +104,10 @@ export const Contact = () => {
             <div className="mx-auto max-w-xl lg:mx-0 lg:max-w-lg">
               <div className="absolute inset-y-0 left-0 -z-10 w-full overflow-hidden bg-[#030811] ring-1 ring-gray-900/10 lg:w-1/2">
               </div>
-              <h2 className="text-pretty text-4xl font-semibold tracking-tight text-secondary sm:text-5xl">
+              <h2 className="text-pretty text-4xl font-semibold tracking-tight text-[#fdfdfd] sm:text-5xl">
                 Get in touch
               </h2>
-              <p className="mt-6 text-lg/8 text-secondary">
+              <p className="mt-6 text-lg/8 text-[#fdfdfd]">
               Need assistance? Our support team is here to help. Reach out with any questions or concerns, and we'll get back to you promptly.
               </p>
               <dl className="mt-10 space-y-4 text-base/7 text-gray-600">
@@ -141,7 +141,7 @@ export const Contact = () => {
                 <div>
                   <label
                     htmlFor="first-name"
-                    className="block text-sm/6 font-semibold text-secondary"
+                    className="block text-sm/6 font-semibold text-[#fdfdfd] "
                   >
                     First name
                   </label>
@@ -160,7 +160,7 @@ export const Contact = () => {
                 <div>
                   <label
                     htmlFor="last-name"
-                    className="block text-sm/6 font-semibold text-secondary"
+                    className="block text-sm/6 font-semibold text-[#fdfdfd]"
                   >
                     Last name
                   </label>
@@ -179,7 +179,7 @@ export const Contact = () => {
                 <div className="sm:col-span-2">
                   <label
                     htmlFor="email"
-                    className="block text-sm/6 font-semibold text-secondary"
+                    className="block text-sm/6 font-semibold text-[#fdfdfd]"
                   >
                     Email
                   </label>
@@ -198,7 +198,7 @@ export const Contact = () => {
                 <div className="sm:col-span-2">
                   <label
                     htmlFor="phone-number"
-                    className="block text-sm/6 font-semibold text-secondary"
+                    className="block text-sm/6 font-semibold text-[#fdfdfd]"
                   >
                     Phone number
                   </label>
@@ -217,7 +217,7 @@ export const Contact = () => {
                 <div className="sm:col-span-2">
                   <label
                     htmlFor="message"
-                    className="block text-sm/6 font-semibold text-secondary"
+                    className="block text-sm/6 font-semibold text-[#fdfdfd]"
                   >
                     Message
                   </label>
@@ -237,7 +237,7 @@ export const Contact = () => {
               <div className="mt-8 flex justify-end">
                 <button
                   type="submit"
-                  className="rounded-md bg-secondary px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-[#030811] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                  className="rounded-md bg-[#31848a] px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-[#030811] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                 >
                   {loading ? "Sending..." : "Send message"}
                 </button>
@@ -369,7 +369,7 @@ const DragCloseDrawer = ({ open, setOpen, children }) => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           onClick={handleClose}
-          className="fixed inset-0 z-50 dark:bg-[#030811]/70 bg-[#fdfdfd]/70"
+          className="fixed inset-0 z-50 bg-[#fdfdfd]/70"
         >
           <motion.div
             id="drawer"

@@ -60,7 +60,7 @@ const CropModal = ({ image, side, onCropSave, onClose }) => {
           <button className="px-4 py-2 bg-primary rounded" onClick={onClose}>
             Cancel
           </button>
-          <button className="px-4 py-2 bg-secondary text-white rounded" onClick={handleSave}>
+          <button className="px-4 py-2 bg-secondary text-white rounded hover:cursor-pointer" onClick={handleSave}>
             Save Crop
           </button>
         </div>
